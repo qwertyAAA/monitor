@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = 'ud%@&3#9@zntn7^mfv!%1!w&bowh+i5q0pel6vteya_cr2rf^7'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -70,7 +68,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'monitor.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
@@ -82,12 +79,12 @@ WSGI_APPLICATION = 'monitor.wsgi.application'
 # }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',  # 数据的类型 MySQL oracle
-        'HOST': 'localhost',  # 数据库的地址
+        'ENGINE': 'django.db.backends.mysql',  # 数据库的类型
+        'HOST': '10.25.116.62',  # 数据库的地址
         'PORT': 3306,
-        'NAME': 'Text',
+        'NAME': 'monitor',
         'USER': 'root',
-        'PASSWORD': '123456'
+        'PASSWORD': '123456',
     }
 }
 
@@ -109,11 +106,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-Hans'
 
 TIME_ZONE = 'UTC'
 
@@ -123,8 +119,21 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# 缓存数据库配置，LOCATION这一项需要更改
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://10.25.116.62:6379/0",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+# Session 的引擎：db+缓存
+SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
