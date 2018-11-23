@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from mail import views as mali_vi
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^template/', mali_vi.template),
 ]
