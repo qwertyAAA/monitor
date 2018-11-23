@@ -76,8 +76,12 @@ WSGI_APPLICATION = 'monitor.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',  # 数据库的类型
+        'HOST': '10.25.116.62',  # 数据库的地址
+        'PORT': 3306,
+        'NAME': 'monitor',
+        'USER': 'root',
+        'PASSWORD': '123456',
     }
 }
 
