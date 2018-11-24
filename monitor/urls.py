@@ -16,8 +16,12 @@ Including another URLconf
 from xadmin.service.xadmin import x_admin_site as site
 from django.conf.urls import url, include
 from user_management import urls as user_management_url
+from account.views import *
 urlpatterns = [
     url(r'^xadmin/', site.urls),
     url(r'^user_management/', include(user_management_url)),
+    url(r'^login/$', login, name="login"),
+    url(r'^register/$', register, name="register"),
+    url(r'^logout/$', logout, name="logout"),
 ]
 
