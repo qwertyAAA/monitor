@@ -1,0 +1,96 @@
+{% extends "MOM.html" %}
+{% block employee_info %}
+    <div align="center">
+        <h2><strong>搜索员工信息列表</strong></h2>
+    </div>
+
+    <div class="col-md-offset-1">
+
+
+     <div  class="col-md-offset-10">
+        <h3><strong >搜索员工</strong></h3>
+
+     </div >
+
+        <div  class="col-md-offset-7">
+
+             <form  action=" /employee_management/search_employee/" method="post" class="form-inline">
+                  {% csrf_token %}
+            <div class="form-group">
+                <input type="text" class="form-control" name="search_key" id="value" placeholder="在此输入查询"/>
+
+            </div>
+
+            <div class="form-group">
+                <select class="form-control" id="key" name="choice_title">
+{#                    <option>员工编号</option>#}
+                    <option value="员工姓名">员工姓名</option>
+                    <option value="职位名称">职位名称</option>
+                    <option value="职务级别">职务级别</option>
+
+                </select>
+            </div>
+            <button type="submit" id="select_user" class="btn btn-info" style="width: 100px;">查询</button>
+
+           </form>
+
+
+        </div>
+
+
+        <hr/>
+        <div>
+            搜索员工信息列表
+            <table class="table table-hover table-bordered">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>员工ID</th>
+                    <th>员工姓名</th>
+                    <th>员工薪资</th>
+                    <th>员工状态</th>
+                     <th>员工职务级别</th>
+                     <th>员工部门</th>
+                    <th>操作</th>
+                </tr>
+                <tbody>
+                {% for staff in staff_list %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ staff.id}}</td>
+                       <td>{{ staff.staff_name }}</td>
+                        <td>{{ staff.staff_salary }}</td>
+                        <td>{{ staff.staff_state }}</td>
+                        <td>{{ staff.staff_job_level }}</td>
+                        <td>
+                            {% for deparment in staff.department.all %}
+                            <p>{{ deparment.department_name }}</p>
+                            {% endfor %}
+                        </td>
+
+                        <td>
+
+                                <a href="/employee_management/delete_employee/?id={{ staff.pk }}" class="btn btn-danger">删除</a>
+
+
+                                <a href="/employee_management/edit_employee/{{ staff.pk }}" class="btn btn-warning">编辑</a>
+                               <a href="/employee_management/details_employee/{{ staff.pk }}" class="btn btn-warning">详情</a>
+
+
+
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+
+                </thead>
+
+            </table>
+        </div>
+     <div class="form-group">
+         <a href="/employee_management/employee_info/" class="btn btn-primary btn-lg" style="width: 200px;"> 返回上一页</a>
+          <a href="/employee_management/main//" class="btn btn-warning btn-lg" style="width: 200px;" > 返回首页</a>
+
+     </div>
+    </div>
+{% endblock %}
