@@ -13,9 +13,11 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import url, include
 from xadmin.service.xadmin import x_admin_site as site
-
+from user_management import urls as user_management_url
 urlpatterns = [
     url(r'^xadmin/', site.urls),
+    url(r'^user_management/', include(user_management_url)),
 ]
+
