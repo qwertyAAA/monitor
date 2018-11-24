@@ -1,0 +1,8 @@
+{% extends 'rbac/base.html' %}
+
+{% block content %}
+      <h4>角色列表</h4>
+        {% for role in role_list %}
+            <p>{{ role }}</p>
+        {% endfor %}
+{% endblock %}

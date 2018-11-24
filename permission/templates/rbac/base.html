@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <title>Title</title>
+    <style>
+        .header{
+            width: 100%;
+            height: 50px;
+            background-color: #336699;
+        }
+        .menu{
+            background-color: cadetblue;
+            position: fixed;
+            top:50px;
+            left: 0px;
+            bottom: 0px;
+            width: 200px;
+
+        }
+        .content{
+
+            position: fixed;
+            top:50px;
+            right: 0px;
+            bottom: 0px;
+            left: 200px;
+            overflow: auto;
+            padding: 20px;
+
+
+        }
+
+        .menubtn{
+           font-size:25px;
+            padding: 30px 0;
+            text-align: center;
+            color: black;
+        }
+
+
+
+
+    </style>
+</head>
+<body>
+<div class="header"></div>
+
+
+<div class="container">
+   {% load my_tags %}
+    <div class="menu">
+       {% get_meun request %}
+    </div>
+    <div class="content">
+       {% block content %}
+
+        {% endblock %}
+
+    </div>
+
+</div>
+</body>
+</html>
