@@ -35,6 +35,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'xadmin.apps.XadminConfig',
+    'testApp.apps.TestappConfig',
+
 ]
 
 MIDDLEWARE = [
@@ -45,6 +48,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'middlewares.xadminMiddleware.CheckXadminAuth',
+    'middlewares.xadminMiddleware.CheckXadminLogin',
 ]
 
 ROOT_URLCONF = 'monitor.urls'
