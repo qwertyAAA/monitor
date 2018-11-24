@@ -124,6 +124,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATIC_FILES = [
+    os.path.join(BASE_DIR, "static")
+]
+
 # 缓存数据库配置，LOCATION这一项需要更改
 CACHES = {
     "default": {
