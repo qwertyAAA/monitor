@@ -1,0 +1,81 @@
+{% extends "MOM.html" %}
+{% block add_employee %}
+    <div align="center">
+        <h2><strong>员工信息编辑</strong></h2>
+    </div>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+{#    <br/>#}
+{#    <br/>#}
+{#    <br/>#}
+    <div class="col-md-offset-4">
+
+                <hr/>
+                <form action="" method="post" class="form-horizontal">
+                    {% csrf_token %}
+                <input type="text" name="id" value="{{ staff.id }}" style="display: none">
+                    <div class="form-group">
+                        <label for="username" class="col-sm-2 control-label">员工姓名：</label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control" id="emname" name="emname" placeholder="李刚" value="{{ edit_staff.staff_name }}">
+                        </div>
+                    </div>
+
+                <div class="form-group">
+                        <label for="username" class="col-sm-2 control-label">用户名：</label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control" id="username" name="username" placeholder="崔照旭" value="{{ edit_staff.user.username }}">
+                        </div>
+                    </div>
+                <div class="form-group">
+                        <label for="username" class="col-sm-2 control-label">职务名称：</label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control" id="staff_job" name="staff_job" placeholder="业务" value="{{ edit_staff.staff_job }}">
+                 </div>
+                    </div>
+                <div class="form-group">
+                        <label for="username" class="col-sm-2 control-label">职务级别：</label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control" id="staff_job_level" name="staff_job_level" placeholder="总经理"value="{{ edit_staff.staff_job_level }}" >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="username" class="col-sm-2 control-label">员工薪资：</label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control" id="staff_salary" name="staff_salary" placeholder="15000" value="{{ edit_staff.staff_salary }}">
+                        </div>
+                    </div>
+                    <br/>
+
+                    <div class="form-group">
+                        <label for="username" class="col-sm-2 control-label">员工部门：</label>
+                        <div class="col-sm-5">
+
+{#                            <input type="text" class="form-control" id="department_id_list" name="department_id_list" placeholder="市场部">#}
+
+                            <select name="department_id_list" id="department_id_list"  multiple>
+                                {% for department in result %}}
+                                {% if edit_staff.department in department %}
+                                  <option  selected value="{{ department.pk }}">{{ department.department_name }}</option>
+                                {% else %}
+                                  <option value="{{ department.pk }}">{{ department.department_name }}</option>
+                                {% endif %}
+                                {% endfor %}
+                              </select>
+                        </div>
+                    </div>
+                    <br/>
+
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary btn-lg" style="width: 200px;" value="保存"/>
+{#                        <a href="/employee_management/employee_info/" class="btn btn-warning btn-lg" style="width: 200px;">取消</a>#}
+{#                        <input type="reset" class="btn btn-warning btn-lg" style="width: 200px;" value="取消"/>#}
+                         <a href="/employee_management/employee_info/" class="btn btn-primary btn-lg" style="width: 200px;"> 返回上一页</a>
+{#                          <a href="/employee_management/main//" class="btn btn-warning btn-lg" style="width: 200px;" > 返回首页</a>#}
+                    </div>
+                </form>
+    </div>
+{% endblock %}
