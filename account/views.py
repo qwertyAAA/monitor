@@ -17,3 +17,7 @@ def logout(request):
 
 def forget_pwd(request):
     pass
+
+
+def index(request):
+    return render(request, "base.html")
