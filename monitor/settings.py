@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'organization',
     'xadmin.apps.XadminConfig',
     'user_management',
     'testApp.apps.TestappConfig',
