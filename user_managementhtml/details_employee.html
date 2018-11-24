@@ -1,0 +1,89 @@
+{% extends "MOM.html" %}
+{% block add_employee %}
+    <div align="center">
+        <h2><strong>员工&nbsp{{ edit_staff.staff_name }}&nbsp的信息详情</strong></h2>
+    </div>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+{#    <br/>#}
+{#    <br/>#}
+{#    <br/>#}
+    <div class="col-md-offset-3">
+
+                <hr/>
+                <form action="" method="post" class="form-horizontal">
+                    {% csrf_token %}
+                <input type="text" name="id" value="{{ edit_staff.id }}" style="display: none">
+                    <div class="form-group" >
+                        <label for="username" class="col-sm-3 control-label" >员工姓名：{{ edit_staff.staff_name }}</label>
+
+                    </div>
+                 <div class="form-group">
+                        <label for="username" class="col-sm-3 control-label">员工工号：{{ edit_staff.id }}</label>
+
+                    </div>
+                <div class="form-group">
+                        <label for="username" class="col-sm-3 control-label">员工是否在职：{{ edit_staff.staff_state }}</label>
+
+                    </div>
+
+                <div class="form-group">
+                        <label for="username" class="col-sm-3 control-label">用户名：{{ edit_staff.user.username }}</label>
+
+                    </div>
+                 <div class="form-group">
+                        <label for="username" class="col-sm-3 control-label">用户ID：{{ edit_staff.user.id }}</label>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="username" class="col-sm-5 control-label">用户邮箱：{{ edit_staff.user.email}}</label>
+
+                    </div>
+                <div class="form-group">
+                        <label for="username" class="col-sm-3 control-label">职务名称：{{ edit_staff.staff_job }}</label>
+
+                    </div>
+
+                <div class="form-group">
+                        <label for="username" class="col-sm-3 control-label">职务级别：{{ edit_staff.staff_job_level }}</label>
+{#                        <div class="col-sm-5">#}
+{#                            <input type="text" class="form-control" id="staff_job_level" name="staff_job_level" placeholder="123456"value="{{ edit_staff.staff_job_level }}" >#}
+{#                        </div>#}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="username" class="col-sm-3 control-label">员工薪资：{{ edit_staff.staff_salary }}</label>
+{#                        <div class="col-sm-5">#}
+{#                            <input type="text" class="form-control" id="staff_salary" name="staff_salary" placeholder="15000" value="{{ edit_staff.staff_job_level }}">#}
+{#                        </div>#}
+                    </div>
+                    <br/>
+
+                    <div class="form-group">
+
+                        <div class="col-sm-7">
+
+                                 员工所属部门：
+                                {% for department in result %}
+
+                                &nbsp{{ department.department_name }} &nbsp:
+
+                                {% endfor %}
+
+                        </div>
+                    </div>
+                    <br/>
+
+                    <div class="form-group">
+                        <a class="btn btn-primary btn-lg" style="width: 200px;" href="/employee_management/employee_info/"> 返回上一页</a>
+                         <a class="btn btn-warning btn-lg" style="width: 200px;" href="/employee_management/main/"> 返回上首页</a>
+
+
+                    </div>
+
+                </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends "MOM.html" %}
+{% block employee_info %}
+    <div align="center">
+        <h2><strong>员工信息列表</strong></h2>
+    </div>
+
+    <div class="col-md-offset-1">
+        <div>
+            <a href="/employee_management/add_employee/" class="btn btn-primary" style="width: 100px;">新增员工</a>
+        </div>
+
+
+        <div class="col-md-offset-11">
+            <a href="/employee_management/search_employee/" class="btn btn-primary btn-lg"
+               style="width: 100px;">员工搜索</a>
+
+        </div>
+
+        <hr/>
+        <div>
+
+            员工户信息列表:
+            <form action="/employee_management/batch_employee/" method="post">
+            {% csrf_token %}
+
+         <select name="action" id="" style="width: 200px; padding:5px 8px;   display: inline-block">
+
+                 <option value="------">--------</option>
+                <option value="批量删除">批量删除</option>
+
+
+
+            </select>
+            <button type="submit" class="btn btn-info">点击执行</button>
+
+            <table class="table table-hover table-bordered">
+                <thead>
+                <tr>
+                    <th>全选<input type="checkbox" id="choice"></th>
+                    <th>序号</th>
+                    <th>员工ID</th>
+                    <th>员工姓名</th>
+                     <th>其用户姓名</th>
+                    <th>员工薪资</th>
+                    <th>员工状态</th>
+                    <th>员工职务级别</th>
+                    <th>员工部门</th>
+                    <th>操作</th>
+                </tr>
+                <tbody>
+                {% for staff in staff_list %}
+                    <tr>
+                        <td><input type="checkbox" class='choice_item' name='select_pk' id="choice" value='{{ staff.pk}}'></td>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ staff.id }}</td>
+                        <td>{{ staff.staff_name }}</td>
+                        <td>{{ staff.user.username}}</td>
+                        <td>{{ staff.staff_salary }}</td>
+                        <td>{{ staff.staff_state }}</td>
+                        <td>{{ staff.staff_job_level }}</td>
+                        <td>
+                            {% for deparment in staff.department.all %}
+                                <p>{{ deparment.department_name }}</p>
+                            {% endfor %}
+                        </td>
+
+                        <td>
+
+                            <a href="/employee_management/delete_employee/?id={{ staff.pk }}"
+                               class="btn btn-danger">删除</a>
+
+
+                            <a href="/employee_management/edit_employee/{{ staff.pk }}" class="btn btn-warning">编辑</a>
+                            <a href="/employee_management/details_employee/{{ staff.pk }}"
+                               class="btn btn-warning">详情</a>
+
+
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+
+                </thead>
+
+            </table>
+
+            </form>
+        <div>
+            {% include 'employee_management/checkdata_page.html' %}
+        </div>
+
+        </div>
+    </div>
+    <script>
+
+        $('#choice').click(function () {
+
+            if (($(this)).prop("checked")) {
+
+                $(".choice_item").prop("checked", true)
+
+            }
+            else {
+                $(".choice_item").prop("checked", false)
+            }
+
+
+        })
+
+
+    </script>
+{% endblock %}
