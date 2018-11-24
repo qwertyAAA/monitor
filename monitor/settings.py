@@ -36,6 +36,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'organization',
+    'xadmin.apps.XadminConfig',
+    'user_management',
+    'testApp.apps.TestappConfig',
 ]
 
 MIDDLEWARE = [
@@ -46,6 +49,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'middlewares.xadminMiddleware.CheckXadminAuth',
+    'middlewares.xadminMiddleware.CheckXadminLogin',
 ]
 
 ROOT_URLCONF = 'monitor.urls'
@@ -68,9 +73,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'monitor.wsgi.application'
-
-# Database
-# https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -117,8 +119,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC_URL = '/static/'
-
 # 缓存数据库配置，LOCATION这一项需要更改
 CACHES = {
     "default": {
@@ -132,3 +132,13 @@ CACHES = {
 
 # Session 的引擎：db+缓存
 SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
+
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+# media配置，用户上传的文件都默认存放到当前文件夹下
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
