@@ -12,16 +12,27 @@ class ModelXAdmin(object):
     def __init__(self, model, site):
         self.model = model
         self.x_admin_site = site
+        self.fields = self.model._meta.fields
 
     def view(self, request):
-        data_list = self.model.objects.all()
+        qs = self.model.objects.all()
+        data_list = []
+        for obj in qs:
+            data = []
+            for field in self.fields:
+                data.append(getattr(obj, field.verbose_name))
+            data_list.append(data)
         link = self.model._meta.app_label + "/" + self.model._meta.model_name + "/"
+        field_names = []
+        for field in self.fields:
+            field_names.append(field.verbose_name)
         return render(
             request,
             "xadmin/list_view.html",
             {
                 "data_list": data_list,
-                "link": link
+                "link": link,
+                "field_names": field_names
             }
         )
 
