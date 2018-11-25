@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block content %}
+    <script src="/static/js/jquery-2.1.4.min.js">
+    </script>
+    <div class="container">
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <div align="center">
+            <h2><strong>欢迎来到后台管理系统!</strong></h2>
+        </div>
+        <br/>
+        <br/>
+        <br/>
+        <div class="col-md-offset-1">
+            <form class="form-inline">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="text" class="form-control" id="keyword" style="width: 300px;"
+                           placeholder="在这里输入需要管理的表名(支持模糊查询)"/>
+                </div>
+                <div class="form-group">
+                </div>
+                <button type="button" id="search_models" class="btn btn-info">查询</button>
+            </form>
+            <hr/>
+            <div>
+                <table class="table table-hover table-bordered">
+                    <thead>
+                    <tr>
+                        <th>需要管理的表(app名/model名)</th>
+                    </tr>
+                    </thead>
+                    <tbody id="models">
+                    <tr name='table_item'>
+                        {% for link in links %}
+                            <td>
+                                <a href="/xadmin/{{ link }}">{{ link }}</a>
+                            </td>
+                        {% endfor %}
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            $("#search_models").click(function () {
+                $("#models").html("")
+                $.ajax({
+                    url: "/xadmin/search_models/",
+                    type: "post",
+                    data: {
+                        "keyword": $("#keyword").val(),
+                        "csrfmiddlewaretoken": "{{ csrf_token }}"
+                    },
+                    success: function (data) {
+                        if (data.status) {
+                            $("#models").append(data.html)
+                        }
+                        else {
+                            alert("请输入内容！")
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}

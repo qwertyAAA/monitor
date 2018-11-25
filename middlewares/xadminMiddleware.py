@@ -18,3 +18,4 @@ class CheckXadminPermission(MiddlewareMixin):
                 return render(request, "xadmin/xadmin_permission.html", {"error_msg": error_msg})
             return
         return
+

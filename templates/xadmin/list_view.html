@@ -1,12 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    {% for item in data_list %}
-        {{ item }}<br />
-    {% endfor %}
-</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+    <br/>
+    <br/>
+    <br/>
+    <div align="center">
+        <h2><strong>数据列表</strong></h2>
+    </div>
+    <div class="col-md-offset-1">
+        <div>
+            <a href="{{ link }}add" class="btn btn-info" style="width: 100px;">添加数据</a>
+        </div>
+        <hr/>
+        <div>
+            <table class="table table-hover table-bordered">
+                <thead>
+
+                </thead>
+            </table>
+        </div>
+    </div>
+{% endblock %}
