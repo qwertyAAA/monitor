@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'user_management.apps.UserManagementConfig',
     'testApp.apps.TestappConfig',
     'permission',
+    'menu_management'
 ]
 
 MIDDLEWARE = [
