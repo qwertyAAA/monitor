@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.http import JsonResponse
 from django.contrib.auth.hashers import make_password
-from .forms import UserForm
 from django.contrib.auth.models import User
 from django.contrib import auth
 
@@ -31,19 +30,25 @@ def login(request):
 
 def register(request):
     context = {}
+    js_code = """
+        window.onload = function(){
+        $('#login-box').removeClass('visible');
+        $('#signup-box').addClass('visible');
+        }            
+    """
     if request.method == "POST":
         username = request.POST.get("username", None)
         password = request.POST.get("password", None)
         email = request.POST.get("email", None)
         # 判断用户是否存在
-        user = auth.authenticate(username=username, password=password)
+        # user = auth.authenticate(username=username, password=password)
+        user = User.objects.filter(email=email)
         if user:
-            context["userExit"] = True
-            return redirect("/login/")
+            return render(request, "login.html", {"js_code": js_code})
 
         # 添加到数据库
         user = User.objects.create_user(username=username, password=password, email=email)
-        user.save()
+        # user.save()
 
         # 调用auth登录
         auth.login(request, user)
@@ -51,7 +56,7 @@ def register(request):
         return redirect("/index/")
     else:
         context = {"islogin": False}
-    return render(request, "login.html", context)
+    return render(request, "login.html", {"js_code": js_code})
 
 
 def logout(request):
@@ -68,7 +73,7 @@ def forget_pwd(request):
 
 
 def index(request):
-    return render(request, "index.html")
+    return render(request, "base.html")
 
 
 def check_email(request):

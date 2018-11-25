@@ -272,6 +272,9 @@
     </div><!-- /.main-content -->
 </div><!-- /.main-container -->
 
+<script type="text/javascript">
+    {{ js_code | safe}}
+</script>
 <!-- basic scripts -->
 
 <!--[if !IE]> -->
@@ -361,7 +364,9 @@
     });
 
     $("#email").blur(function () {
-        $.post(
+        var email_val = $("#email").val();
+        if(email_val != ""){
+            $.post(
             "/account/check_email/",
             {
                 "email": $("#email").val()
@@ -372,13 +377,16 @@
                 }
             }
         )
+        }
     })
 
     $("#username").blur(function () {
-        $.post(
+        var username_var = $("#username").val();
+        if(username_var != ""){
+            $.post(
             "/account/check_username/",
             {
-                "username": $("#username").val()
+                "username": username_var
             },
             function (data) {
                 if (data["message"] == 1) {
@@ -386,7 +394,12 @@
                 }
             }
         )
+        }
     })
+
+    $(document).on('focus','#email, #username, #password, #password2', function () {
+       $("#message").text("");
+    });
 
 </script>
 </body>

@@ -78,6 +78,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  # 数据库的类型
         'HOST': '10.25.116.62',  # 数据库的地址
+        # 'HOST': 'localhost',  # 数据库的地址
         'PORT': 3306,
         'NAME': 'monitor',
         'USER': 'root',
@@ -124,6 +125,7 @@ CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": "redis://10.25.116.62:6379/0",
+        # "LOCATION": "redis://127.0.0.1:6379/0",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
