@@ -1,5 +1,7 @@
 from django.conf.urls import url
 from django.shortcuts import render, redirect, HttpResponse
+from django.http import JsonResponse
+from django.db.models import Q
 
 
 class ModelXAdmin(object):
@@ -13,16 +15,24 @@ class ModelXAdmin(object):
 
     def view(self, request):
         data_list = self.model.objects.all()
-        return render(request, "xadmin/list_view.html", {"data_list": data_list})
+        link = self.model._meta.app_label + "/" + self.model._meta.model_name + "/"
+        return render(
+            request,
+            "xadmin/list_view.html",
+            {
+                "data_list": data_list,
+                "link": link
+            }
+        )
 
     def add(self, request):
-        return render(request, "xadmin/add_view.html")
+        pass
 
     def update(self, request, id):
-        return render(request, "xadmin/update_view.html")
+        pass
 
     def delete(self, request, id):
-        return render(request, "xadmin/delete_view.html")
+        pass
 
     def get_urls(self):
         temp = []
@@ -44,10 +54,10 @@ class XAdminSite(object):
         用于扩展django的admin模块的功能
     """
 
-    def __init__(self, name='admin'):
+    def __init__(self):
         self._registry = {}  # model_class class -> admin_class instance
 
-    def register(self, model, admin_class=None, **options):
+    def register(self, model, admin_class=None):
         """
             用指定的管理类注册给定的app.models的类
             被注册的应该是一个类，而不是一个对象
@@ -64,11 +74,39 @@ class XAdminSite(object):
             app_name = model._meta.app_label
             model_name = model._meta.model_name
             temp.append(url(r'^{0}/{1}/'.format(app_name, model_name), admin_class.urls2))
+            temp.append(url(r'^$', self.index))
+            temp.append(url(r'^search_models/', self.search_models))
         return temp
 
     @property
     def urls(self):
         return self.get_urls(), None, None
+
+    def index(self, request):
+        links = []
+        for model in self._registry.keys():
+            links.append(model._meta.app_label + "/" + model._meta.model_name)
+        return render(request, "xadmin/xadmin_index.html", {"links": links})
+
+    def search_models(self, request):
+        if request.is_ajax():
+            keyword = request.POST.get("keyword")
+            ret = {"status": False, "html": ""}
+            if not len(keyword):
+                return JsonResponse(ret)
+            ret["status"] = True
+            for model in self._registry.keys():
+                model_name = model._meta.model_name
+                app_label = model._meta.app_label
+                if model_name.find(keyword) != -1:
+                    ret["html"] += """
+                        <tr>
+                            <td>
+                                <a href="/xadmin/{0}/{1}">{0}/{1}</a>
+                            </td>
+                        </tr>
+                    """.format(app_label, model_name)
+            return JsonResponse(ret)
 
 
 x_admin_site = XAdminSite()
