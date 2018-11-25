@@ -12,11 +12,54 @@
         </div>
         <hr/>
         <div>
-            <table class="table table-hover table-bordered">
-                <thead>
-
-                </thead>
-            </table>
+            <form class="form-row">
+                {% csrf_token %}
+                <table class="table table-hover table-bordered">
+                    <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" class="form-group" id="all"/>
+                        </th>
+                        {% for field_name in field_names %}
+                            <th>
+                                <span id="{{ field_name }}">{{ field_name }}</span>
+                            </th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for data in data_list %}
+                        <tr>
+                            <td>
+                                <input type="checkbox" class="form-group check_item"/>
+                            </td>
+                            {% for item in data %}
+                                <td>
+                                    <span id="data" my_data="{{ item }}">{{ item }}</span>
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <div class="form-group " align="center">
+                    <button type="button" class="btn btn-success" id="save">保存</button>
+                    <button type="reset" class="btn btn-default">取消</button>
+                </div>
+            </form>
         </div>
     </div>
+    <script>
+        $(function () {
+            $("#data").click(function () {
+                var my_data = $(this).attr("my_data")
+                $(this).parent().html("")
+                $(this).parent().append("<input type='text' " +
+                    "class='form-group' " +
+                    "value='" + my_data +
+                    "'" + "placeholder='" + my_data +
+                    "'/>")
+            });
+        });
+    </script>
 {% endblock %}
