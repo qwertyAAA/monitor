@@ -4,17 +4,16 @@ from menu_management import models
 import json
 from django.apps import apps
 import redis
+from permission import models as per_models
 # Create your views here.
 
 
-def get_menu():
-    # # 得到当前app下面的data类
-    # menu_class = apps.get_model('data_manage', 'Data')
-    # # 得到data类中的所有字段
-    # menu_fields = menu_class._meta.fields
-    # menu_list = []
-    # for i in menu_fields:
-    #     menu_list.append(i.verbose_name)
-    menu_list=['test1','test2','test3']
-    menu_str=json.dumps(menu_list)
-    print(menu_str)
+def get_menu(request):
+    first_menu=[]
+    per_group=per_models.PermissionGroup.objects.all()
+    for i in per_group:
+        if i.id!=999:
+            first_menu.append(i.title)
+    print(first_menu)
+
+get_menu()
