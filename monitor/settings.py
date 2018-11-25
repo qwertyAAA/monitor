@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'user_management.apps.UserManagementConfig',
     'testApp.apps.TestappConfig',
     'permission',
+    'menu_management'
 ]
 
 MIDDLEWARE = [
@@ -52,7 +53,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'middlewares.xadminMiddleware.CheckXadminAuth',
     'middlewares.xadminMiddleware.CheckXadminLogin',
-    'permission.service.rbac.ValidPermission',
+    # 'permission.service.rbac.ValidPermission',
 ]
 
 ROOT_URLCONF = 'monitor.urls'
