@@ -1,6 +1,32 @@
 {% extends "base.html" %}
 {% block content %}
     <script src="/static/js/jquery-2.1.4.min.js"></script>
+    <script src="/static/js/check_box.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var flag = false
+            $("#check_all").click(function () {
+                if (flag) {
+                    flag = false
+                    $(".check_item").attr("checked", flag)
+                }
+                else {
+                    flag = true
+                    $(".check_item").attr("checked", flag)
+                }
+            });
+            // $(".check_item").click(function () {
+            //     var check_flag = true;
+            //     $(this).each(function () {
+            //         if (!$(this).attr("checked")) {
+            //             check_flag = false;
+            //         }
+            //     });
+            //     $("#check_all").attr("checked", check_flag)
+            // });
+        });
+
+    </script>
     <br/>
     <br/>
     <br/>
@@ -27,7 +53,7 @@
             <table class="table table-hover table-bordered">
                 <thead>
                 <th>
-                    <input type="checkbox" class="form-group" id="check_all"/>
+                    <input type="checkbox" id="check_all"/>
                 </th>
                 {% for field_name in field_names %}
                     <th>
@@ -39,7 +65,7 @@
                 {% for data in data_list %}
                     <tr>
                         <td>
-                            <input type="checkbox" class="form-group check_item"/>
+                            <input type="checkbox" class="check_item"/>
                         </td>
                         {% for item in data %}
                             <td>
@@ -57,25 +83,23 @@
         </div>
     </div>
     <script>
-        $(function () {
-            $("#search_data").click(function () {
-                $("#data").html("")
-                $.ajax({
-                    url: "search_data/",
-                    type: "post",
-                    data: {
-                        "keyword": $("#keyword").val(),
-                        "csrfmiddlewaretoken": "{{ csrf_token }}"
-                    },
-                    success: function (data) {
-                        if (data.status) {
-                            $("#data").append(data.html)
-                        }
-                        else {
-                            alert("请输入内容！")
-                        }
+        $("#search_data").click(function () {
+            $("#data").html("")
+            $.ajax({
+                url: "search_data/",
+                type: "post",
+                data: {
+                    "keyword": $("#keyword").val(),
+                    "csrfmiddlewaretoken": "{{ csrf_token }}"
+                },
+                success: function (data) {
+                    if (data.status) {
+                        $("#data").append(data.html)
                     }
-                });
+                    else {
+                        alert("请输入内容！")
+                    }
+                }
             });
         });
     </script>

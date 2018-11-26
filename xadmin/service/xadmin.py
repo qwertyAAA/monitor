@@ -66,7 +66,7 @@ class ModelXAdmin(object):
                 ret["html"] += """
                     <tr>
                         <td>
-                            <input type="checkbox" class="form-group check_item"/>
+                            <input type="checkbox" class="check_item"/>
                         </td>
                 """
                 for item in data:
@@ -82,6 +82,7 @@ class ModelXAdmin(object):
                 </td>
                 </tr>
                 """.format(data[0])
+            print(ret["html"])
             return JsonResponse(ret)
 
     def get_urls(self):
