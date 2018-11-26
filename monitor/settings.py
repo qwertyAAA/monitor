@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'testApp.apps.TestappConfig',
     'permission',
     'menu_management',
-    'testApp01.apps.Testapp01Config',
 ]
 
 MIDDLEWARE = [
