@@ -48,7 +48,6 @@ def register(request):
 
         # 添加到数据库
         user = User.objects.create_user(username=username, password=password, email=email)
-        # user.save()
 
         # 调用auth登录
         auth.login(request, user)
@@ -73,7 +72,7 @@ def forget_pwd(request):
 
 
 def index(request):
-    return render(request, "base.html")
+    return render(request, "index.html")
 
 
 def check_email(request):
@@ -100,3 +99,5 @@ def check_username(request):
             else:
                 data["message"] = 0
     return JsonResponse(data)
+
+
