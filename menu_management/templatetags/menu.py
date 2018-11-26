@@ -15,9 +15,9 @@ def get_menu():
         for i in per_group:
             #id=999对应的是增删改查的权限组不应该在菜单里面出现
             if i.id!=999 and i.is_del==False:
-                menu=models.First_Menu.objects.create(title=i.title)
+                menu=models.First_Menu.objects.create(title=i.title,action=i.title)
                 # first_menu.append(i)
                 for j in i.permission_set.all():
-                    models.Second_Menu.objects.create(title=j.title,first_menu_id=menu.nid,url=j.url)
+                    models.Second_Menu.objects.create(title=j.title,first_menu_id=menu.nid,url=j.url,action=j.title)
     first_menu=models.First_Menu.objects.all()
     return {'first_menu':first_menu}
