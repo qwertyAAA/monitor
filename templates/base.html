@@ -168,7 +168,13 @@
                     <a href="#"><i class="fa fa-fw fa-file"></i> Empty Page</a>
                 </li>
             </ul>
+        </ul><!-- /.nav-list -->
+        {% load menu %}
+        {% get_menu %}
 
+        <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+            <i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state"
+               data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
         </div>
 
     </nav>
