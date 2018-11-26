@@ -72,7 +72,8 @@
                     {#"csrfmiddlewaretoken": {% csrf_token %}.val()#}
                 },
                 success:function (data) {
-                    $('#mtbody').append(data.li)
+                    $('#mtbody').append(data.li);
+                    $('#main-menu').append(data)
                 }
             })
         })
