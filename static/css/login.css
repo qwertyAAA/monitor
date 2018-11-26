@@ -1,4 +1,7 @@
 #message{
-    text-align: center;
-    color: red
+    color: red;
+}
+
+#login_result{
+    color: red;
 }
