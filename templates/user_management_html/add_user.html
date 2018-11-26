@@ -1,77 +1,95 @@
-{% extends "MOM.html" %}
-{% block add_employee %}
+{% extends "user_info.html" %}
+{% block content %}
     <div align="center">
-        <h2><strong>增加员工</strong></h2>
+         <p class="btn btn-default" style="width: 120px;height: 30px">增 &nbsp加&nbsp用&nbsp户</p>
     </div>
     <br/>
     <br/>
     <br/>
     <br/>
-{#    <br/>#}
-{#    <br/>#}
-{#    <br/>#}
+
     <div class="col-md-offset-4">
 
-                <hr/>
-                <form action="" method="post" class="form-horizontal">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="username" class="col-sm-2 control-label">员工姓名：</label>
-                        <div class="col-sm-5">
-                            <input type="text" class="form-control" id="emname" name="emname" placeholder="李刚">
-                        </div>
-                    </div>
+        <hr/>
+        <form action="" method="post" class="form-horizontal">
+            {% csrf_token %}
 
-                <div class="form-group">
-                        <label for="username" class="col-sm-2 control-label">用户名：</label>
-                        <div class="col-sm-5">
-                            <input type="text" class="form-control" id="username" name="username" placeholder="崔照旭">
-                        </div>
-                    </div>
-                <div class="form-group">
-                        <label for="username" class="col-sm-2 control-label">职务名称：</label>
-                        <div class="col-sm-5">
-                            <input type="text" class="form-control" id="staff_job" name="staff_job" placeholder="业务">
-                        </div>
-                    </div>
-                <div class="form-group">
-                        <label for="username" class="col-sm-2 control-label">职务级别：</label>
-                        <div class="col-sm-5">
-                            <input type="text" class="form-control" id="staff_job_level" name="staff_job_level" placeholder="经理">
-                        </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="username" class="col-sm-2 control-label">员工薪资：</label>
-                        <div class="col-sm-5">
-                            <input type="text" class="form-control" id="staff_salary" name="staff_salary" placeholder="15000">
-                        </div>
-                    </div>
-                    <br/>
+            <div class="form-group">
+                <label for="username" class="col-sm-2 control-label">用户名：</label>
+                <div class="col-sm-5">
+                    <input type="text" class="form-control" id="username" name="username" placeholder="崔照旭">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="username" class="col-sm-2 control-label">姓名：</label>
+                <div class="col-sm-5">
+                    <input type="text" class="form-control" id="username" name="username" placeholder="崔照旭">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="username" class="col-sm-2 control-label">编号：</label>
+                <div class="col-sm-5">
+                    <input type="text" class="form-control" id="staff_job" name="staff_job" placeholder="业务">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="username" class="col-sm-2 control-label">密码：</label>
+                <div class="col-sm-5">
+                    <input type="text" class="form-control" id="staff_job_level" name="staff_job_level"
+                           placeholder="经理">
+                </div>
+            </div>
 
-                    <div class="form-group">
-                        <label for="username" class="col-sm-2 control-label">员工部门：</label>
-                        <div class="col-sm-5">
+            <div class="form-group">
+                <label for="username" class="col-sm-2 control-label">员工薪资：</label>
+                <div class="col-sm-5">
+                    <input type="text" class="form-control" id="staff_salary" name="staff_salary" placeholder="15000">
+                </div>
+            </div>
 
-{#                            <input type="text" class="form-control" id="department_id_list" name="department_id_list" placeholder="市场部">#}
+            <div class="form-group">
+                <label for="username" class="col-sm-2 control-label">手机号：</label>
+                <div class="col-sm-5">
+                    <input type="text" class="form-control" id="staff_salary" name="staff_salary" placeholder="15000">
+                </div>
+            </div>
+             <div class="form-group">
+                <label for="username" class="col-sm-2 control-label">邮箱：</label>
+                <div class="col-sm-5">
+                    <input type="text" class="form-control" id="staff_salary" name="staff_salary" placeholder="15000">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="username" class="col-sm-2 control-label">备注：</label>
+                <div class="col-sm-5">
+                    <input type="text" class="form-control" id="staff_salary" name="staff_salary" placeholder="15000">
+                </div>
+            </div>
+            <br/>
 
-                            <select name="department_id_list" id="department_id_list"  multiple>
-                                {% for department in department_list %}
+            <div class="form-group">
+                <label for="username" class="col-sm-2 control-label">角色：</label>
+                <div class="col-sm-5">
 
-                                  <option value="{{ department.pk }}">{{ department.department_name }}</option>
 
-                                {% endfor %}
-                              </select>
-                        </div>
-                    </div>
-                    <br/>
+                    <select name="department_id_list" id="department_id_list" multiple>
+                        {% for department in department_list %}
 
-                    <div class="form-group">
-                        <input type="submit" class="btn btn-primary btn-lg" style="width: 200px;" value="保存"/>
-                        <a href="/employee_management/employee_info/" class="btn btn-primary btn-lg" style="width: 200px;"> 取消返回</a>
-{#                        <a href="/employee_management/employee_info/" class="btn btn-primary btn-lg" style="width: 200px;"> 返回上一页</a>#}
-{#                        <input type="reset" class="btn btn-warning btn-lg" style="width: 200px;" value="取消"/>#}
-                    </div>
-                </form>
+                            <option value="{{ department.pk }}">{{ department.department_name }}</option>
+
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <br/>
+
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary btn-lg" style="width: 200px;" value="保存"/>
+                <a href="/employee_management/employee_info/" class="btn btn-primary btn-lg" style="width: 200px;">
+                    取消返回</a>
+
+            </div>
+        </form>
     </div>
 {% endblock %}

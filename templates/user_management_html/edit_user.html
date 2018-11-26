@@ -1,30 +1,22 @@
-{% extends "MOM.html" %}
-{% block add_employee %}
-    <div align="center">
-        <h2><strong>员工信息编辑</strong></h2>
-    </div>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-{#    <br/>#}
-{#    <br/>#}
-{#    <br/>#}
-    <div class="col-md-offset-4">
+{% extends "base.html" %}
+{% block content  %}
 
-                <hr/>
+
+    <div class="col-md-offset-1">
+
+
                 <form action="" method="post" class="form-horizontal">
                     {% csrf_token %}
-                <input type="text" name="id" value="{{ staff.id }}" style="display: none">
+                <input type="text" name="id" value="{{ user.id }}" style="display: none">
                     <div class="form-group">
-                        <label for="username" class="col-sm-2 control-label">员工姓名：</label>
+                        <label for="username" class="col-sm-2 control-label">用户名：</label>
                         <div class="col-sm-5">
                             <input type="text" class="form-control" id="emname" name="emname" placeholder="李刚" value="{{ edit_staff.staff_name }}">
                         </div>
                     </div>
 
-                <div class="form-group">
-                        <label for="username" class="col-sm-2 control-label">用户名：</label>
+                   <div class="form-group">
+                        <label for="username" class="col-sm-2 control-label">编号：</label>
                         <div class="col-sm-5">
                             <input type="text" class="form-control" id="username" name="username" placeholder="崔照旭" value="{{ edit_staff.user.username }}">
                         </div>
@@ -67,7 +59,7 @@
                               </select>
                         </div>
                     </div>
-                    <br/>
+
 
                     <div class="form-group">
                         <input type="submit" class="btn btn-primary btn-lg" style="width: 200px;" value="保存"/>

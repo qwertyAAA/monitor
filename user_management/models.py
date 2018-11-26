@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+
+
 # 用户模型.
 # 第一种：采用的继承方式扩展用户信息（本系统采用）
 # 扩展：关联的方式去扩展用户信息
@@ -16,6 +18,3 @@ class UserInfo(models.Model):
     user_id_card = models.CharField(max_length=20, unique=True, verbose_name="身份证号")
     user_image = models.ImageField(upload_to="image", default="image/default.jpg", verbose_name="头像")
     user = models.OneToOneField(to=User)
-
-
-
