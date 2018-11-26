@@ -2,17 +2,27 @@ from django.conf.urls import url
 from django.shortcuts import render, redirect, HttpResponse
 from django.http import JsonResponse
 from django.db.models import Q
+from django import forms
 
 
 class ModelXAdmin(object):
     """
         封装给定模型的所有管理选项和功能
     """
+    field_names = []
 
     def __init__(self, model, site):
         self.model = model
         self.x_admin_site = site
-        self.fields = self.model._meta.fields
+        if self.field_names:
+            self.fields = []
+            # 借助python的特性实现的查找功能，时间复杂度为O(n)
+            for field in self.model._meta.fields:
+                if field.name == self.field_names[0]:
+                    self.fields.append(field)
+                    self.field_names.pop()
+        else:
+            self.fields = [field for field in self.model._meta.fields]
 
     def view(self, request):
         qs = self.model.objects.all()
@@ -22,6 +32,7 @@ class ModelXAdmin(object):
             for field in self.fields:
                 data.append(getattr(obj, field.name))
             data_list.append(data)
+        print("!!!!!!!!!!", self.fields, type(self.fields))
         field_names = []
         for field in self.fields:
             field_names.append(field.verbose_name)
@@ -35,8 +46,37 @@ class ModelXAdmin(object):
             }
         )
 
+    def get_form(self, request=None):
+        """
+        用于获取一个XAdminFrom对象
+
+
+
+        :param request: 当前请求（请求的方式必须是POST）
+        :return: 一个XAdminFrom对象
+        """
+
+        class XAdminFrom(forms.ModelForm):
+            class Meta:
+                model = self.model
+                fields = [field.name for field in self.fields]
+
+        if request:
+            form = XAdminFrom(request.POST)
+            # XAdminFrom的构造函数的instance我觉得是一个django.db.models.Model的实例，但传入这个实例后竟然需要在Meta中再次配置这个实例,而且配置无效。
+            # 因此，我选择在这个方法里创建一个form类，并实例form对象。
+        else:
+            form = XAdminFrom()
+        return form
+
     def add(self, request):
-        pass
+        form = self.get_form()
+        if request.method == "POST":
+            form = self.get_form(request)
+            if form.is_valid():
+                form.save()
+            return redirect("/xadmin/{0}/{1}/".format(self.model._meta.app_label, self.model._meta.model_name))
+        return render(request, "xadmin/add_view.html", locals())
 
     def update(self, request, id):
         pass
@@ -82,7 +122,6 @@ class ModelXAdmin(object):
                 </td>
                 </tr>
                 """.format(data[0])
-            print(ret["html"])
             return JsonResponse(ret)
 
     def get_urls(self):
@@ -138,7 +177,7 @@ class XAdminSite(object):
         links = []
         for model in self._registry.keys():
             links.append(model._meta.app_label + "/" + model._meta.model_name)
-        return render(request, "xadmin/xadmin_index.html", {"links": links})
+        return render(request, "xadmin/xadmin_index.html", locals())
 
     def search_models(self, request):
         if request.is_ajax():
