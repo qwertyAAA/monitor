@@ -2,31 +2,6 @@
 {% block content %}
     <script src="/static/js/jquery-2.1.4.min.js"></script>
     <script src="/static/js/check_box.js"></script>
-    <script type="text/javascript">
-        $(function () {
-            var flag = false
-            $("#check_all").click(function () {
-                if (flag) {
-                    flag = false
-                    $(".check_item").attr("checked", flag)
-                }
-                else {
-                    flag = true
-                    $(".check_item").attr("checked", flag)
-                }
-            });
-            // $(".check_item").click(function () {
-            //     var check_flag = true;
-            //     $(this).each(function () {
-            //         if (!$(this).attr("checked")) {
-            //             check_flag = false;
-            //         }
-            //     });
-            //     $("#check_all").attr("checked", check_flag)
-            // });
-        });
-
-    </script>
     <br/>
     <br/>
     <br/>
