@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'user_management.apps.UserManagementConfig',
     'testApp.apps.TestappConfig',
     'permission',
-    'menu_management'
+    'menu_management',
+    'testApp01.apps.Testapp01Config',
 ]
 
 MIDDLEWARE = [
@@ -88,6 +89,17 @@ DATABASES = {
         'PASSWORD': '123456',
     }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',  # 数据库的类型
+#         # 'HOST': '10.25.116.62',  # 数据库的地址
+#         'HOST': 'localhost',  # 数据库的地址
+#         'PORT': 3306,
+#         'NAME': 'monitor',
+#         'USER': 'root',
+#         'PASSWORD': '123456',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators

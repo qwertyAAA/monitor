@@ -20,9 +20,8 @@ class ModelXAdmin(object):
         for obj in qs:
             data = []
             for field in self.fields:
-                data.append(getattr(obj, field.verbose_name))
+                data.append(getattr(obj, field.name))
             data_list.append(data)
-        link = self.model._meta.app_label + "/" + self.model._meta.model_name + "/"
         field_names = []
         for field in self.fields:
             field_names.append(field.verbose_name)
@@ -30,8 +29,8 @@ class ModelXAdmin(object):
             request,
             "xadmin/list_view.html",
             {
+                "model_name": self.model._meta.model_name,
                 "data_list": data_list,
-                "link": link,
                 "field_names": field_names
             }
         )
@@ -45,12 +44,53 @@ class ModelXAdmin(object):
     def delete(self, request, id):
         pass
 
+    def search_data(self, request):
+        if request.is_ajax():
+            keyword = request.POST.get("keyword")
+            ret = {"status": False, "html": ""}
+            if not len(keyword):
+                return JsonResponse(ret)
+            ret["status"] = True
+            q = Q()
+            q.connector = "or"
+            for field in self.fields:
+                q.children.append((field.verbose_name + "__icontains", keyword))
+            qs = self.model.objects.filter(q)
+            data_list = []
+            for obj in qs:
+                data = []
+                for field in self.fields:
+                    data.append(getattr(obj, field.verbose_name))
+                data_list.append(data)
+            for data in data_list:
+                ret["html"] += """
+                    <tr>
+                        <td>
+                            <input type="checkbox" class="form-group check_item"/>
+                        </td>
+                """
+                for item in data:
+                    ret["html"] += """
+                        <td>
+                            <span>{}</span>
+                        </td>
+                    """.format(item)
+                ret["html"] += """
+                <td>
+                    <a href="{0}/update" class="btn btn-info">修改</a>
+                    <a href="{0}/delete" class="btn btn-danger">删除</a>
+                </td>
+                </tr>
+                """.format(data[0])
+            return JsonResponse(ret)
+
     def get_urls(self):
         temp = []
         temp.append(url(r'^$', self.view))
         temp.append(url(r'add/$', self.add))
         temp.append(url(r'^(\d+)/change/$', self.update))
         temp.append(url(r'^(\d+)/delete/$', self.delete))
+        temp.append(url(r'^search_data/', self.search_data))
         return temp
 
     @property
