@@ -1,64 +1,81 @@
 {% extends "base.html" %}
 {% block content %}
+    <script src="/static/js/jquery-2.1.4.min.js"></script>
     <br/>
     <br/>
     <br/>
     <div align="center">
-        <h2><strong>数据列表</strong></h2>
+        <h2><strong>{{ model_name }}表</strong></h2>
     </div>
     <div class="col-md-offset-1">
         <div>
-            <a href="{{ link }}add" class="btn btn-info" style="width: 100px;">添加数据</a>
+            <a href="add/" class="btn btn-info" style="width: 100px;">添加数据</a>
         </div>
+        <form class="form-inline">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="text" class="form-control" id="keyword" style="width: 300px;"
+                       placeholder="在这里输入需要管理的数据信息(支持模糊查询)"/>
+            </div>
+            <div class="form-group">
+            </div>
+            <button type="button" id="search_data" class="btn btn-info">查询</button>
+        </form>
+
         <hr/>
         <div>
-            <form class="form-row">
-                {% csrf_token %}
-                <table class="table table-hover table-bordered">
-                    <thead>
+            <table class="table table-hover table-bordered">
+                <thead>
+                <th>
+                    <input type="checkbox" class="form-group" id="check_all"/>
+                </th>
+                {% for field_name in field_names %}
+                    <th>
+                        <span>{{ field_name }}</span>
+                    </th>
+                {% endfor %}
+                </thead>
+                <tbody id="data">
+                {% for data in data_list %}
                     <tr>
-                        <th>
-                            <input type="checkbox" class="form-group" id="all"/>
-                        </th>
-                        {% for field_name in field_names %}
-                            <th>
-                                <span id="{{ field_name }}">{{ field_name }}</span>
-                            </th>
-                        {% endfor %}
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for data in data_list %}
-                        <tr>
+                        <td>
+                            <input type="checkbox" class="form-group check_item"/>
+                        </td>
+                        {% for item in data %}
                             <td>
-                                <input type="checkbox" class="form-group check_item"/>
+                                <span>{{ item }}</span>
                             </td>
-                            {% for item in data %}
-                                <td>
-                                    <span id="data" my_data="{{ item }}">{{ item }}</span>
-                                </td>
-                            {% endfor %}
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-                <div class="form-group " align="center">
-                    <button type="button" class="btn btn-success" id="save">保存</button>
-                    <button type="reset" class="btn btn-default">取消</button>
-                </div>
-            </form>
+                        {% endfor %}
+                        <td>
+                            <a href="{{ data.0 }}/update" class="btn btn-info">修改</a>
+                            <a href="{{ data.0 }}/delete" class="btn btn-danger">删除</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
     <script>
         $(function () {
-            $("#data").click(function () {
-                var my_data = $(this).attr("my_data")
-                $(this).parent().html("")
-                $(this).parent().append("<input type='text' " +
-                    "class='form-group' " +
-                    "value='" + my_data +
-                    "'" + "placeholder='" + my_data +
-                    "'/>")
+            $("#search_data").click(function () {
+                $("#data").html("")
+                $.ajax({
+                    url: "search_data/",
+                    type: "post",
+                    data: {
+                        "keyword": $("#keyword").val(),
+                        "csrfmiddlewaretoken": "{{ csrf_token }}"
+                    },
+                    success: function (data) {
+                        if (data.status) {
+                            $("#data").append(data.html)
+                        }
+                        else {
+                            alert("请输入内容！")
+                        }
+                    }
+                });
             });
         });
     </script>
