@@ -1,0 +1,72 @@
+{#<ul class="nav nav-list">#}
+{#    <li class="active">#}
+{#        <a href="/index/">#}
+{#            <i class="menu-icon fa fa-tachometer"></i>#}
+{#            <span class="menu-text"> 后台首页 </span>#}
+{#        </a>#}
+{##}
+{#        <b class="arrow"></b>#}
+{#        {% for first in first_menu %}#}
+{#            <li class="">#}
+{#                <a href="#" class="dropdown-toggle">#}
+{#                    <i class="{{ first.ico }}"></i>#}
+{#                    <span class="menu-text"> {{ first.title }} </span>#}
+{##}
+{#                    <b class="arrow fa fa-angle-down"></b>#}
+{#                </a>#}
+{##}
+{#                <b class="arrow"></b>#}
+{##}
+{#                <ul class="submenu">#}
+{#                    {% for second in first.second_menu_set.all %}#}
+{#                        <li class="">#}
+{#                            <a href="{{ second.url }}">#}
+{#                                <i class="{{ second.ico }}"></i>#}
+{#                                {{ second.title }}#}
+{#                            </a>#}
+{#                            <b class="arrow"></b>#}
+{#                        </li>#}
+{#                    {% endfor %}#}
+{#                </ul>#}
+{#            </li>#}
+{#        {% endfor %}#}
+{#</ul><!-- /.nav-list -->#}
+
+
+<nav class="navbar-default navbar-side" role="navigation">
+    <!--<div id="sideNav" href=""><i class="fa fa-caret-right"></i></div>-->
+    <div class="sidebar-collapse">
+        <ul class="nav" id="main-menu">
+
+            <li>
+                <a class="active-menu" href="/index/"><i class="fa fa-dashboard"></i> 后台首页 </a>
+            </li>
+            {% for first in first_menu %}
+                <li>
+                    <a href="#"><i class="fa fa-sitemap"></i> {{ first.title }}<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        {% for second in first.second_menu_set.all %}
+                            <li>
+                                <a class="mysecond" href="{{ second.url }}">{{ second.title }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+{#            <li>#}
+{#                <a href="#"><i class="fa fa-fw fa-file"></i> Empty Page</a>#}
+{#            </li>#}
+        </ul>
+    </div>
+
+    <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+        <i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state"
+           data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+    </div>
+
+</nav>
+{#<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">#}
+{#    <i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state"#}
+{#       data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>#}
+{#</div>#}
+

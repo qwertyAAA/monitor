@@ -123,7 +123,8 @@
             {% else %}
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
-                        <i class="fa fa-user fa-fw"></i> {{ request.user.username }}&nbsp;<i class="fa fa-caret-down"></i>
+                        <i class="fa fa-user fa-fw"></i> {{ request.user.username }}&nbsp;<i
+                            class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
                         <li><a href="#"><i class="fa fa-user fa-fw"></i> 资料修改 </a>
@@ -142,36 +143,9 @@
         </ul>
     </nav>
     <!--/. NAV TOP  -->
-    <nav class="navbar-default navbar-side" role="navigation">
-        <!--<div id="sideNav" href=""><i class="fa fa-caret-right"></i></div>-->
-        <div class="sidebar-collapse">
-            <ul class="nav" id="main-menu">
-
-                <li>
-                    <a class="active-menu" href="/index/"><i class="fa fa-dashboard"></i> 后台首页 </a>
-                </li>
-                <li>
-                    <a href="#"><i class="fa fa-sitemap"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level">
-                        <li>
-                            <a class="mysecond" href="#">Second Level Link</a>
-                        </li>
-                        <li>
-                            <a class="mysecond" href="#">Second Level Link</a>
-                        </li>
-                        <li>
-                            <a class="mysecond" href="#">Second Level Link</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#"><i class="fa fa-fw fa-file"></i> Empty Page</a>
-                </li>
-            </ul>
-
-        </div>
-
-    </nav>
+{   #菜单#}
+    {% load menu %}
+    {% get_menu %}
     <!-- /. NAV SIDE  -->
     <div id="page-wrapper">
         <div id="page-inner">
@@ -207,10 +181,11 @@
 <script>
     $('.mysecond').mouseenter(function () {
         $(this).css('color', 'yellow')
-    })
+    });
     $('.mysecond').mouseleave(function () {
         $(this).css('color', 'white')
-    })
+    });
+    
 </script>
 
 </body>

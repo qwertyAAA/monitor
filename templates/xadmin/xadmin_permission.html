@@ -14,7 +14,13 @@
         <br/>
         <br/>
         <br/>
-        <a href="/login/" class="btn btn-info">去登陆</a>
-        <a href="/index/" class="btn btn-default">返回主页</a>
+        {% if error_msg == "sorry, 您没有管理权限！" %}
+            <a href="/login/" class="btn btn-info">重新登陆</a>
+            <a href="/index/" class="btn btn-default">返回主页</a>
+        {% endif %}
+        {% if error_msg == "请您先登陆！" %}
+            <a href="/login/" class="btn btn-info">去登陆</a>
+            <a href="/index/" class="btn btn-default">返回主页</a>
+        {% endif %}
     </div>
 {% endblock %}
