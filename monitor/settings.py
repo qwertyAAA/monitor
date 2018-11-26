@@ -50,7 +50,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'middlewares.xadminMiddleware.CheckXadminAuth',
-    'middlewares.xadminMiddleware.CheckXadminLogin',
+    # 'middlewares.xadminMiddleware.CheckXadminLogin',
 ]
 
 ROOT_URLCONF = 'monitor.urls'

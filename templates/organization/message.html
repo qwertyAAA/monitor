@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block css %}
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/static/organization/jquery-3.3.1.min.js"></script>
+    <script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>名称</th>
+                <th>英文</th>
+                <th>编码</th>
+                <th>负责人</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for foo in obj %}
+                <tr>
+                    <td>{{ foo.name }}</td>
+                    <td>{{ foo.en_name }}</td>
+                    <td>{{ foo.code }}</td>
+                    <td>{{ foo.user }}</td>
+                    <td>
+                        <a class="btn btn-sm btn-success" href="">编辑</a>
+                        <a class="btn btn-sm btn-success" href="">删除</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <p>暂无内容</p>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
