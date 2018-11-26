@@ -1,0 +1,10 @@
+
+.mail_modal {
+    width: 1000px;
+    position: absolute;
+    right: 1px;
+}
+
+th {
+    text-align: center;
+}
