@@ -1,12 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    {% for item in data_list %}
-        {{ item }}<br />
-    {% endfor %}
-</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+    <br/>
+    <br/>
+    <br/>
+    <div align="center">
+        <h2><strong>数据列表</strong></h2>
+    </div>
+    <div class="col-md-offset-1">
+        <div>
+            <a href="{{ link }}add" class="btn btn-info" style="width: 100px;">添加数据</a>
+        </div>
+        <hr/>
+        <div>
+            <form class="form-row">
+                {% csrf_token %}
+                <table class="table table-hover table-bordered">
+                    <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" class="form-group" id="all"/>
+                        </th>
+                        {% for field_name in field_names %}
+                            <th>
+                                <span id="{{ field_name }}">{{ field_name }}</span>
+                            </th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for data in data_list %}
+                        <tr>
+                            <td>
+                                <input type="checkbox" class="form-group check_item"/>
+                            </td>
+                            {% for item in data %}
+                                <td>
+                                    <span id="data" my_data="{{ item }}">{{ item }}</span>
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <div class="form-group " align="center">
+                    <button type="button" class="btn btn-success" id="save">保存</button>
+                    <button type="reset" class="btn btn-default">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            $("#data").click(function () {
+                var my_data = $(this).attr("my_data")
+                $(this).parent().html("")
+                $(this).parent().append("<input type='text' " +
+                    "class='form-group' " +
+                    "value='" + my_data +
+                    "'" + "placeholder='" + my_data +
+                    "'/>")
+            });
+        });
+    </script>
+{% endblock %}
