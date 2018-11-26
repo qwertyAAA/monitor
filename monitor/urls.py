@@ -22,10 +22,13 @@ from django.conf.urls import url, include
 from user_management import urls as user_management_url
 from account.views import *
 from account import urls as account_urls
+from permission import urls as permission_url
 urlpatterns = [
     url(r'^xadmin/', site.urls),
     url(r'^user_management/', include(user_management_url)),
+    url(r'^permission/', include(user_management_url)),
     url(r'^account/', include(account_urls)),
+    url(r'^permission/', include(permission_url)),
     url(r'^login/$', login, name="login"),
     url(r'^register/$', register, name="register"),
     url(r'^logout/$', logout, name="logout"),

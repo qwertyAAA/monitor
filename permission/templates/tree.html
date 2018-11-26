@@ -1,0 +1,92 @@
+<div class="modal fade " style="left: 30%;top: 20%" id="myModal3" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width: 35%">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">请选择权限</h4>
+            </div>
+            <form action="/permission/role_group_permission/{{ role_group_id }}/" method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <ul style="list-style: none">
+                        <a class="button btn btn-info" onclick="SelectAll()">全选</a>
+                        <a class="button btn btn-info" onclick="noSelectAll()">全不选</a>
+                        {% for permission_group in permission_group_list %}
+                            <li>
+                                <input type="checkbox" class="first_group" flag="{{ permission_group.title }}"
+                                       name="choose" value="{{ permission_group.title }}">
+                                <span><a class="role_group">{{ permission_group.title }}</a></span>
+                                <ul style="list-style: none">
+                                    {% for permission in permission_group.permission_set.all %}
+                                        <li>
+                                            <input type="checkbox" value="{{ permission.title }}" name="choose" flag="{{ permission_group.title }}">
+                                            <span id="permission">{{ permission.title }}</span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+<script src="/static/jquery-3.3.1.min.js"></script>
+<script>
+    function SelectAll() {
+        var checkboxs = document.getElementsByName("choose");
+        for (var i = 0; i < checkboxs.length; i++) {
+            var e = checkboxs[i];
+            e.checked = true;
+        }
+    }
+</script>
+<script>
+    function noSelectAll() {
+        var checkboxs = document.getElementsByName("choose");
+        for (var i = 0; i < checkboxs.length; i++) {
+            var e = checkboxs[i];
+            e.checked = false;
+        }
+    }
+</script>
+<script type="text/javascript">
+var a = 1;
+    $(".first_group").click(function () {
+        var attrs = $(this).attr('flag');
+        if (a%2) {
+            $('input[flag="' + attrs + '"]').attr('checked', true);
+            a++;
+        }
+        else {
+            $('input[flag="' + attrs + '"]').attr('checked', false);
+            a++;
+        }
+
+
+    });
+
+</script>
+<script type="text/javascript">
+    var a = 1
+    $(".role_group").click(function () {
+        if (a == 1) {
+            $(this).parent().next().css("display", "none");
+            a = 0;
+        }
+        else if (a == 0) {
+            $(this).parent().next().css("display", "block");
+            a = 1;
+        }
+
+    });
+
+</script>

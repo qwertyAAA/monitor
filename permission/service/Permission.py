@@ -14,38 +14,43 @@ def init_permission(user_obj, request):
 
     # 方案2 user  url[]  action[]  groupid
     # {1:{urls:[],actions:[]}}
-    permissons = user_obj.roles.all().values("permissions__url", "permissions__action",
-                                             'permissions__group_id').distinct()
 
-    # print(permissons)
+    #获取该user对象的所有角色的所有权限
+    permisson = user_obj.role_set.all().values("permissions__url", "permissions__action",'permissions__group_id').distinct()
+    print(user_obj.role_set.all())
+    print("该用户的权限信息如下：")
+    print(permisson)
+    print("**"*10)
 
-    permissons_dict = {}
+    permisson_dict = {}
 
-    for item in permissons:
+    for item in permisson:
         gid = item.get('permissions__group_id')
 
-        if not gid in permissons_dict:
+        if not gid in permisson_dict:
 
-            permissons_dict[gid] = {
+            permisson_dict[gid] = {
                 "urls": [item.get('permissions__url'), ],
                 'actions': [item.get("permissions__action"), ]
-
             }
         else:
-            permissons_dict[gid]['urls'].append(item.get('permissions__url'))
-            permissons_dict[gid]['actions'].append(item.get('permissions__action'))
+            permisson_dict[gid]['urls'].append(item.get('permissions__url'))
+            permisson_dict[gid]['actions'].append(item.get('permissions__action'))
 
-    # print(permissons_dict)
+    #根据权限组id  得到该角色的权限分组 {1:{urls:[],actions:[]}}
+    print(permisson_dict)
+    print("**" * 10)
 
-    request.session['permisson_dict'] = permissons_dict
+    #放入session中
+    request.session['permisson_dict'] = permisson_dict
 
     # 左侧菜单
-
-    permission_menu = user_obj.roles.all().values('permissions__url', 'permissions__action',
+    #获取该用户的所有权限信息
+    permission_menu = user_obj.role_set.all().values('permissions__url', 'permissions__action',
                                                   'permissions__group__title').distinct()
-
+    print("**" * 10)
     print(permission_menu)
-
+    print("**" * 10)
     menu_permission_list = []
 
     for item in permission_menu:

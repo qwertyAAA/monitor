@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <h1>用户角色管理</h1>
+            <form action="/permission/user_role/" method="post" class="form-horizontal" enctype="multipart/form-data">
+                {% csrf_token %}
+                用户<select id="user" name="user">
+                    {% for user in user_list %}
+                        <option value="{{ user.pk }}">{{ user.username }}</option>
+                    {% endfor %}
+                </select>
+                角色<select id="role" name="role" multiple>
+                    {% for role in role_list %}
+                        <option value="{{ role.pk }}">{{ role.title }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-primary ">
+                    保存
+                </button>
+
+
+
+
+            </form>
+        </div>
+    </div>
+{% endblock %}

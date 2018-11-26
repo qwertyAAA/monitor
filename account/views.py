@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.http import JsonResponse
 from django.contrib.auth.hashers import make_password
-from .forms import UserForm
+from permission.models import Role
 from django.contrib.auth.models import User
 from django.contrib import auth
-
+from permission.service.Permission import init_permission
 
 def login(request):
     context = {}
@@ -14,6 +14,11 @@ def login(request):
         user = auth.authenticate(username=username, password=password)
         if user:
             auth.login(request, user)
+            request.session['user_id']=user.pk
+            #将user对象传入permission方法，获取该user的所有权限url及后继权限处理
+            init_permission(user, request)
+
+
             return redirect("/index/")
         else:
             context = {
