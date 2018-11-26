@@ -21,6 +21,7 @@ from xadmin.service.xadmin import x_admin_site as site
 from django.conf.urls import url, include
 from user_management import urls as user_management_url
 from account.views import *
+from organization import urls as organization_urls
 from account import urls as account_urls
 from menu_management import urls as menu_urls
 urlpatterns = [
@@ -34,10 +35,10 @@ urlpatterns = [
     url(r'^base/', mali_vi.base),
     url(r'^fhsms/', mali_vi.fhsms),
     url(r'^pictures/', mali_vi.pictures),
+    url(r'^organization/', include(organization_urls)),
     # media的相关的路由设置
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
     url(r'^upload/', mali_vi.upload),
-
     url(r'^$', index),
     url(r'^index/$', index),
 ]
