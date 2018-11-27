@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'mail',
     'organization',
     'xadmin.apps.XadminConfig',
     'user_management.apps.UserManagementConfig',
@@ -143,7 +144,23 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
-# media配置，用户上传的文件都默认存放到当前文件夹下
 
+# media配置，用户上传的文件都默认存放到当前文件夹下
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+# 配置邮箱发邮件的相关功能
+"""
+不可删除
+"""
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# smtp服务的邮箱服务器 我用的是163
+EMAIL_HOST = 'smtp.163.com'
+# smtp服务固定的端口是25
+EMAIL_PORT = 25
+# 发送邮件的邮箱
+EMAIL_HOST_USER = '18388627773@163.com'
+# 在邮箱中设置的客户端授权密码
+EMAIL_HOST_PASSWORD = '163mail'
+# 收件人看到的发件人 <此处要和发送邮件的邮箱相同>
+EMAIL_FROM = '18388627773@163.com'
