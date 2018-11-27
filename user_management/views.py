@@ -16,7 +16,7 @@ from django.apps import apps
 # from .models import *
 from django import forms
 from django.forms import widgets
-
+from permission.models import Role
 from django.forms import ModelForm
 def motai(request):
     return render(request,"user_management_html/motai.html")
@@ -64,10 +64,15 @@ def main(request):
 
 def user_info(request):
     user_list=models.UserInfo.objects.all()
+    user_role_dict = {}
+    for user in user_list:
+        rolelist = Role.objects.filter(user__userinfo=user)
+        user_role_dict[user] = rolelist
+
     page = Page(user_list, request, 10, 10)
     sum = page.Sum()
 
-    return render(request, "user_management_html/user_info.html",{'user_list':sum[0],'page_html':sum[1]})
+    return render(request, "user_management_html/user_info.html",{'user_list':sum[0],'page_html':sum[1],"user_role_dict":user_role_dict})
 
 
 
@@ -107,7 +112,9 @@ def delete_user(request, num):
 
     if num:
         '''  对于删除先删除第三张表再删除作者表 id  注意页面的格式问题'''
-        del_obj = models.UserInfo.objects.get(id=num)
+        del_obj = models.UserInfo.objects.filter(id=num)
+        print(del_obj)
+        print(num)
         del_obj.delete()
 
         return redirect('/user_management/user_info/')
