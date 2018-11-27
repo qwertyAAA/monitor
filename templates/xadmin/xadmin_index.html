@@ -33,13 +33,13 @@
                     </tr>
                     </thead>
                     <tbody id="models">
-                    <tr name='table_item'>
-                        {% for link in links %}
+                    {% for link in links %}
+                        <tr name='table_item'>
                             <td>
                                 <a href="/xadmin/{{ link }}">{{ link }}</a>
                             </td>
-                        {% endfor %}
-                    </tr>
+                        </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
             </div>

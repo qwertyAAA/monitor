@@ -1,10 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+    <script src="/static/js/jquery-2.1.4.min.js"></script>
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    <div class="col-sm-5">
+                        {{ field }}
+                    </div>
+                </div>
+            {% endfor %}
+        <div class="form-group">
+            <button type="submit" class="btn btn-info col-md-offset-2" style="width: 200px;">保存</button>
+            <button type="reset" class="btn btn-warning" style="width: 200px;">取消</button>
+        </div>
+    </form>
+    <script>
+        $(function () {
+            $("form div input").addClass("form-control");
+            $("form div label").addClass("col-sm-2 control-label");
+        });
+    </script>
+{% endblock %}
