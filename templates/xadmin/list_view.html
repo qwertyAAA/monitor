@@ -2,6 +2,7 @@
 {% block content %}
     <script src="/static/js/jquery-2.1.4.min.js"></script>
     <script src="/static/js/check_box.js"></script>
+    <script src="/static/js/sweetalert.min.js"></script>
     <br/>
     <br/>
     <br/>
@@ -11,11 +12,13 @@
     <div class="col-md-offset-1">
         <div>
             <a href="add/" class="btn btn-info" style="width: 100px;">添加数据</a>
+            <button class="btn btn-danger" id="batch_delete" style="width: 100px;">批量删除</button>
         </div>
+        <br/>
         <form class="form-inline">
             {% csrf_token %}
             <div class="form-group">
-                <input type="text" class="form-control" id="keyword" style="width: 300px;"
+                <input type="text" class="form-control" id="keyword" style="width: 400px;"
                        placeholder="在这里输入需要管理的数据信息(支持模糊查询)"/>
             </div>
             <div class="form-group">
@@ -25,6 +28,7 @@
 
         <hr/>
         <div>
+            {% csrf_token %}
             <table class="table table-hover table-bordered">
                 <thead>
                 <th>
@@ -40,16 +44,18 @@
                 {% for data in data_list %}
                     <tr>
                         <td>
-                            <input type="checkbox" class="check_item"/>
+                            <input type="checkbox" class="check_item" delete_id="{{ data.0 }}"/>
                         </td>
                         {% for item in data %}
                             <td>
-                                <span>{{ item }}</span>
+                                <span>{{ item | slice:":20" }}</span>
                             </td>
                         {% endfor %}
                         <td>
+                            {#                            #}
+                            {#                            <a href="{{ data.0 }}/delete" class="btn btn-danger">删除</a>#}
                             <a href="{{ data.0 }}/update" class="btn btn-info">修改</a>
-                            <a href="{{ data.0 }}/delete" class="btn btn-danger">删除</a>
+                            <button class="btn btn-danger for_delete" delete_id="{{ data.0 }}">删除</button>
                         </td>
                     </tr>
                 {% endfor %}
@@ -58,13 +64,99 @@
         </div>
     </div>
     <script>
+        $("body").delegate(".for_delete", "click", function () {
+            swal({
+                title: "确定删除吗?",
+                text: "一旦删除，数据将无法找回",
+                icon: "warning",
+                buttons: ["还是算了", "删了就删了"],
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        var url = $(this).attr("delete_id") + "/delete";
+                        $.ajax({
+                            url: url,
+                            type: "get",
+                            sucess: function (data) {
+                                if (data.status)
+                                    window.location.reload()
+                            }
+                        });
+                        swal("你的文件已经被删除了！", {
+                            icon: "success",
+                        });
+                    } else {
+                        swal("数据还是安全的！");
+                    }
+                });
+        });
+        $("body").delegate("#batch_delete", "click", function () {
+            var delete_id_list = [];
+            $(".check_item").each(function () {
+                if ($(this).prop("checked")) {
+                    var delete_id = $(this).attr("delete_id");
+                    delete_id_list.push(delete_id);
+                }
+
+            });
+            if (!delete_id_list.length) {
+                swal({
+                    title: "没有选中数据！",
+                    text: "请先选择要删除的数据",
+                    icon: "error",
+                    button: "好的"
+                });
+                return;
+            }
+
+            swal({
+                title: "确定删除吗?",
+                text: "一旦删除，数据将无法找回",
+                icon: "warning",
+                buttons: ["还是算了", "删了就删了"],
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        swal("你的文件已经被删除了！", {
+                            icon: "success",
+                        });
+                        $.ajax({
+                            url: "batch_delete/",
+                            type: "post",
+                            traditional: true,
+                            data: {
+                                "delete_id_list": delete_id_list,
+                                "csrfmiddlewaretoken": "{{ csrf_token }}"
+                            },
+                            success: function (data) {
+                                if (data.status)
+                                    window.location.reload()
+                            }
+                        });
+                    } else {
+                        swal("数据还是安全的！");
+                    }
+                });
+        });
         $("#search_data").click(function () {
             $("#data").html("")
+            var keyword = $("#keyword").val();
+            if (!keyword.length) {
+                swal({
+                    title: "搜索框没有数据！",
+                    text: "请先在搜索框输入数据",
+                    icon: "error",
+                    button: "好的"
+                });
+                return;
+            }
             $.ajax({
                 url: "search_data/",
                 type: "post",
                 data: {
-                    "keyword": $("#keyword").val(),
+                    "keyword": keyword,
                     "csrfmiddlewaretoken": "{{ csrf_token }}"
                 },
                 success: function (data) {
@@ -72,7 +164,7 @@
                         $("#data").append(data.html)
                     }
                     else {
-                        alert("请输入内容！")
+                        alert("出现了未知错误！请联系开发者：qwerty")
                     }
                 }
             });

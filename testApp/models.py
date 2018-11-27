@@ -12,6 +12,6 @@ class TestTable(models.Model):
 
 class TestTable1(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=32)
-    password = models.CharField(max_length=32)
-    address = models.CharField(max_length=32)
+    name = models.CharField(max_length=32, verbose_name="名字")
+    password = models.CharField(max_length=32, verbose_name="密码")
+    address = models.CharField(max_length=32, verbose_name="地址")

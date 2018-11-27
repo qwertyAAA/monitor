@@ -16,6 +16,3 @@ class UserInfo(models.Model):
     user_id_card = models.CharField(max_length=20, unique=True, verbose_name="身份证号")
     user_image = models.ImageField(upload_to="image", default="image/default.jpg", verbose_name="头像")
     user = models.OneToOneField(to=User)
-
-
-
