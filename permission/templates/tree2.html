@@ -1,0 +1,31 @@
+<div class="modal fade " style="left: 30%;top: 20%" id="myModal4" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width: 35%">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">该组权限如下：</h4>
+            </div>
+            <div class="modal-body">
+            {% comment %}
+            查看组权限，从后台得到该组的所欲权限集合，根据action 的 list 判断是否是顶级菜单
+            如果是，foo.title直接显示。然后再次在其下边 for循环找到次级菜单的title
+            {% endcomment %}
+                {% for foo in role_group_permissions %}
+                    {% if foo.action == 'list' %}
+                        <h2>{{ foo.title }}</h2>
+                        {% for f2 in role_group_permissions %}
+                            {% if f2.group.title == foo.title %}
+                               <h4 class="center"> {{ f2.title }}</h4>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
