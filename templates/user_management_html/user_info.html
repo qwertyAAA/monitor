@@ -4,7 +4,7 @@
 
     </div>
 
-    <div class="col-md-offset-1">
+    <div>
 
 
         <div>
@@ -39,7 +39,7 @@
                                                                                         class="ace-icon fa fa-cloud-upload bigger-110 nav-search-icon blue"></i></a>
                 </td>
             </form>
-            <table class="table table-hover table-bordered" >
+            <table class="table table-hover table-bordered">
 
 
                 <thead>
@@ -73,45 +73,189 @@
                         <td>{{ forloop.counter }}</td>
                         <td>{{ user.id }}</td>
                         <td>{{ user.user.username }}</td>
-                        <td>{{ user.user.first_name }}{{ user.user.last_name }}</td>
+                        <td>{{ user.user_name }}</td>
 
-                        <td style="width: 50px">
-                            <select class="form-group">
+                        <td style="width: 80px">
 
-                                {% for role in role_list %}
-                                    <option>
-                                        <span style="font-size: 2px "> {{ role.title }}</span>
-                                    </option>
-                                {% endfor %}
 
-                            </select>
+                            {% for role in role_list %}
+
+                                <span style="font-size: 2px "> {{ role.title }}:</span>
+
+                            {% endfor %}
+
 
                         </td>
                         <td style="width: 50px">{{ user.user_age }}</td>
 
                         <!-- 操作界面 -->
                         <td>
-                            <a title="发送电子邮件" style="text-decoration:none;cursor:pointer;"
-                               onclick="sendEmail('{{ user.user.email }}');"> {{ user.user.email }}&nbsp;<i
+                            <a title="发送电子邮件" style="text-decoration:none;cursor:pointer; "
+                               onclick="sendEmail('{{ user.user.email }}');" > {{ user.user.email }}&nbsp;<i
                                     class="ace-icon fa fa-envelope-o"></i></a>
 
 
                         </td>
-                        <td style="width: 90px"> {{ user.user.last_login }} </td>
+                        <td style="width: 200px"> {{ user.user.last_login }} </td>
 
 
-                        <td style="width: 50px">{{ user.user_recent_ip }}</td>
+                        <td style="width: 90px">{{ user.user_recent_ip }}</td>
 
 
                         <td style="width: 150px">
 
 
-                            <a class="btn btn-xs btn-info" title="发送站内信" onclick="sendFhsms('lisi');">
+                            <!-- 详情信息start0 -->
+                            <a class="btn btn-xs btn-info" onclick="searchs();" title="检索" data-toggle="modal"
+                               data-target="#xqmyModal{{ forloop.counter }}">
+                                <i id="nav-search-icon"
+                                   class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i>
+                            </a>
+
+                            <div class="modal fade" id="xqmyModal{{ forloop.counter }}" tabindex="-1"
+                                 role="dialog"
+                                 aria-labelledby="myModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close"><span aria-hidden="true"></span>
+                                            </button>
+                                        </div>
+
+                                        <div class="modal-body">
+
+                                            <!-- 查看员工start-->
+                                            <div align="center">
+                                                <p class="btn btn-default" style="width: 200px;height: 40px">
+                                                    {{ user.user.username }}&nbsp用&nbsp户 &nbsp的&nbsp详&nbsp细&nbsp信&nbsp 息</p>
+                                            </div>
+                                            <hr/>
+
+
+                                            <div class="col-md-offset-1">
+
+
+                                                {% csrf_token %}
+
+                                                <div class="form-group">
+                                                    <input class="form-control" type="text"
+                                                           placeholder="用户名：&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{{ user.user.username }}"
+                                                           readonly>
+                                                </div>
+
+
+                                                <div class="form-group">
+                                                    <input class="form-control" type="text"
+                                                           placeholder="姓名：&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{{ user.user_name }}"
+                                                           readonly>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <input class="form-control" type="text"
+                                                           placeholder="编号：&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp {{ user.user_number }}"
+                                                           readonly>
+                                                </div>
+
+
+                                                <div class="form-group">
+                                                    <input class="form-control" type="text"
+                                                           placeholder="年限：&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp {{ user.user_stay_years }}"
+                                                           readonly>
+                                                </div>
+
+
+                                                <div class="form-group">
+                                                    <input class="form-control" type="text"
+                                                           placeholder="手机号：&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp {{ user.user_phone }}"
+                                                           readonly>
+                                                </div>
+
+
+                                                <div class="form-group">
+                                                    <input class="form-control" type="text"
+                                                           placeholder="年龄：&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp {{ user.user_age }}"
+                                                           readonly>
+                                                </div>
+
+
+                                                <div class="form-group">
+                                                    <input class="form-control" type="text"
+                                                           placeholder="身份ID：&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp {{ user.user_id_card }}"
+                                                           readonly>
+                                                </div>
+
+
+                                                <div class="form-group">
+                                                    <input class="form-control" type="text"
+                                                           placeholder="备注：&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp {{ user.user_remarks }}"
+                                                           readonly>
+                                                </div>
+
+
+                                                <div class="form-group">
+                                                    <input class="form-control" type="text"
+                                                           placeholder="地址：&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp {{ user.user_address }}"
+                                                           readonly>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <input class="form-control" type="text"
+                                                           placeholder="性别：&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp {{ user.user_gender }}"
+                                                           readonly>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <input class="form-control" type="text"
+                                                           placeholder="邮箱：&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp {{ user.user.email }}"
+                                                           readonly>
+                                                </div>
+
+
+                                                <div class="form-group">
+
+
+
+
+                                                        {% for role in   user.user.role_set.all  %}
+                                                             <input class="form-control" type="text"
+                                                           placeholder="角色：&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp {{ role.title }}"
+                                                           readonly>
+
+                                                        {%  endfor %}
+
+
+
+
+                                                </div>
+                                            <hr/>
+                                                <div class="modal-footer">
+
+                                                    <a href="/user_management/user_info/"
+                                                       class="btn btn-danger">退出</a>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                        <!--查看员工end -->
+
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                            <!-- 详情信息 end0 -->
+
+                            <a class="btn btn-xs btn-info" title="发送站内信">
                                 <i class="ace-icon fa fa-envelope-o bigger-120" title="发送站内信"></i>
                             </a>
-                            <a class="btn btn-xs btn-warning" title="发送短信" onclick="sendSms('15153203821');">
-                                <i class="ace-icon fa fa-envelope-o bigger-120" title="发送短信"></i>
-                            </a>
+
+
                             <!-- 编辑模态框-->
 
                             <a class="btn btn-xs btn-success" title="编辑" data-toggle="modal"
@@ -133,7 +277,7 @@
 
                                         <div class="modal-body">
 
-                                            <!-- 编辑员工-->
+                                            <!-- 编辑员工start-->
                                             <div align="center">
                                                 <p class="btn btn-default" style="width: 200px;height: 40px">修
                                                     &nbsp改&nbsp {{ user.user.username }}&nbsp用&nbsp户 &nbsp信&nbsp 息</p>
@@ -144,16 +288,17 @@
                                             <div class="col-md-offset-1">
 
 
-                                                <form action="" method="post" class="form-horizontal">
+                                                <form action="/user_management/edit_user/{{ user.pk }}/" method="post"
+                                                      class="form-horizontal">
                                                     {% csrf_token %}
-                                                    <input type="text" name="id" value="{{ user.id }}"
+                                                    <input type="text" name="id" value="{{ user.pk }}"
                                                            style="display: none">
                                                     <div class="form-group">
                                                         <label for="username"
                                                                class="col-sm-2 control-label">用户名：</label>
                                                         <div class="col-sm-5">
-                                                            <input type="text" class="form-control" id="emname"
-                                                                   name="emname" placeholder="李刚"
+                                                            <input type="text" class="form-control" id="username"
+                                                                   name="username" placeholder="李刚"
                                                                    value="{{ user.user.username }}">
                                                         </div>
                                                     </div>
@@ -161,57 +306,41 @@
                                                     <div class="form-group">
                                                         <label for="username" class="col-sm-2 control-label">姓名：</label>
                                                         <div class="col-sm-5">
-                                                            <input type="text" class="form-control" id="username"
-                                                                   name="username" placeholder="崔照旭"
-                                                                   value="
-
-
-
-
-
-
-                                                                           {{ user.user.first_name }}{{ user.user.last_name }}">
+                                                            <input type="text" class="form-control" id="user_name"
+                                                                   name="user_name" placeholder="崔照旭"
+                                                                   value="{{ user.user_name }}">
                                                         </div>
                                                     </div>
                                                     <hr/>
-                                                    <div class="form-group">
-                                                        <label for="username"
-                                                               class="col-sm-2 control-label">编号：</label>
-                                                        <div class="col-sm-5">
-                                                            <input type="text" class="form-control" id="staff_job"
-                                                                   name="staff_job" placeholder="业务"
-                                                                   value="{{ user.id }}">
-                                                        </div>
-                                                    </div>
-                                                    <hr/>
-                                                    <div class="form-group">
-                                                        <label for="username"
-                                                               class="col-sm-2 control-label">密码：</label>
-                                                        <div class="col-sm-5">
-                                                            <input type="text" class="form-control" id="staff_job_level"
-                                                                   name="staff_job_level" placeholder="总经理"
-                                                                   value="{{ user.user.password }}">
-                                                        </div>
-                                                    </div>
-                                                    <hr/>
-
                                                     <div class="form-group">
                                                         <label for="username"
                                                                class="col-sm-2 control-label">手机号：</label>
                                                         <div class="col-sm-5">
-                                                            <input type="text" class="form-control" id="staff_salary"
-                                                                   name="staff_salary" placeholder="15000"
-                                                                   value="{{ user.user.phone }}">
+                                                            <input type="text" class="form-control" id="user_phone"
+                                                                   name="user_phone" placeholder="110"
+                                                                   value="{{ user.user_phone }}">
                                                         </div>
                                                     </div>
                                                     <hr/>
                                                     <div class="form-group">
                                                         <label for="username"
-                                                               class="col-sm-2 control-label">邮箱：</label>
+                                                               class="col-sm-2 control-label">年龄：</label>
                                                         <div class="col-sm-5">
-                                                            <input type="text" class="form-control" id="staff_salary"
-                                                                   name="staff_salary" placeholder="15000"
-                                                                   value="{{ user.user.email }}">
+                                                            <input type="text" class="form-control" id="user_age"
+                                                                   name="user_age" placeholder="18"
+                                                                   value="{{ user.user_age }}">
+                                                        </div>
+                                                    </div>
+                                                    <hr/>
+
+
+                                                    <div class="form-group">
+                                                        <label for="username"
+                                                               class="col-sm-2 control-label">身份ID：</label>
+                                                        <div class="col-sm-5">
+                                                            <input type="text" class="form-control" id="user_id_card"
+                                                                   name="user_id_card" placeholder="15000"
+                                                                   value="{{ user.user_id_card }}">
                                                         </div>
                                                     </div>
                                                     <hr/>
@@ -219,55 +348,62 @@
                                                         <label for="username"
                                                                class="col-sm-2 control-label">备注：</label>
                                                         <div class="col-sm-5">
-                                                            <input type="text" class="form-control" id="staff_salary"
-                                                                   name="staff_salary" placeholder="15000"
+                                                            <input type="text" class="form-control" id="user_remarks"
+                                                                   name="user_remarks" placeholder="welcome new world"
                                                                    value="{{ user.user_remarks }}">
                                                         </div>
                                                     </div>
                                                     <hr/>
-
+                                                    <div class="form-group">
+                                                        <label for="username"
+                                                               class="col-sm-2 control-label">住址：</label>
+                                                        <div class="col-sm-5">
+                                                            <input type="text" class="form-control" id="user_address"
+                                                                   name="user_address" placeholder="15000"
+                                                                   value="{{ user.user_address }}">
+                                                        </div>
+                                                    </div>
+                                                    <hr/>
                                                     <div class="form-group">
                                                         <label for="username"
                                                                class="col-sm-2 control-label">角色：</label>
                                                         <div class="col-sm-5">
+                                                            <select name="roles" id="roles " multiple>
+                                                                {% for role in roles_list %}
+                                                                    <option value="{{ role.pk }}">{{ role.title }}</option>
 
-                                                            {#                            <input type="text" class="form-control" id="department_id_list" name="department_id_list" placeholder="市场部">#}
-
-                                                            <select name="department_id_list" id="department_id_list"
-                                                                    multiple>
-                                                                {% for department in result %}}
-                                                                    {% if edit_staff.department in department %}
-                                                                        <option selected
-                                                                                value="{{ department.pk }}">{{ department.department_name }}</option>
-                                                                    {% else %}
-                                                                        <option value="{{ department.pk }}">{{ department.department_name }}</option>
-                                                                    {% endif %}
                                                                 {% endfor %}
+
                                                             </select>
+
                                                         </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+
+                                                        <a href="/user_management/user_info/"
+                                                           class="btn btn-danger">取消</a>
+                                                        <button type="submit" class="btn btn-default">
+                                                            保存
+                                                        </button>
                                                     </div>
                                                 </form>
                                             </div>
 
-                                            <!--编辑员工 -->
+
+                                            <!--编辑员工end -->
 
 
                                         </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">
-                                                取消
-                                            </button>
-                                            <a href="/user_management/add_user/"
-                                               class="btn btn-danger">确定保存</a>
-                                        </div>
+
+
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- 编辑模态框-->
+                            <!-- 编辑模态框end-->
 
 
-                            <!-- 删除模态框-->
+                            <!-- 删除模态框start-->
                             <a class="btn btn-xs btn-danger" title="删除" data-toggle="modal"
                                data-target="#myModal{{ forloop.counter }}">
                                 <i class="ace-icon fa fa-trash-o bigger-120" title="删除"></i>
@@ -305,8 +441,8 @@
                                 </div>
                             </div>
 
-                            <script>$('#myModal').modal('toggle')</script>
-                            <!-- 删除模态框-->
+                            {#                            <script>$('#myModal').modal('toggle')</script>#}
+                            <!-- 删除模态框end-->
                             <!-- 操作界面 -->
 
                         </td>
@@ -334,15 +470,7 @@
                      aria-labelledby="myModalLabel">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
-
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal"
-                                        aria-label="Close"><span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-
                             <div class="modal-body">
-
                                 <!-- 新增员工-->
                                 <div align="center">
                                     <p class="btn btn-default" style="width: 150px;height: 40px">增
@@ -351,38 +479,54 @@
 
                                 <div class="col-md-offset-1">
                                     <hr/>
-                                    <form action="" method="post" class="form-horizontal">
+                                    <form action="/user_management/add_user/" method="post" class="form-horizontal">
                                         {% csrf_token %}
                                         <div class="form-group">
-                                            <label for="username" class="col-sm-2 control-label">用户名：</label>
+                                            <label for="username" class="col-sm-2 control-label">请选择用户：</label>
                                             <div class="col-sm-5">
-                                                <input type="text" class="form-control" id="username" name="username"
-                                                       placeholder="在这里输入用户名">
+                                                <!-- 选择是根据name=“” 传递给后台的字段 里面的 取值是是value的值-->
+                                                <select name="user_id" id="titlelist" style="width: 200px">
+                                                    {% for user in  userlists %}
+
+                                                        <option value="{{ user.pk }}"> {{ user.username }}</option>
+
+                                                    {% endfor %}
+
+
+                                                </select>
+
                                             </div>
                                         </div>
-
                                         <div class="form-group">
                                             <label for="username" class="col-sm-2 control-label">姓名：</label>
                                             <div class="col-sm-5">
-                                                <input type="text" class="form-control" id="username" name="username"
-                                                       placeholder="请在这里输入姓名">
+                                                <input type="text" class="form-control" id="user_name" name="user_name"
+                                                       placeholder="在这里输入姓名">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="username" class="col-sm-2 control-label">身份证号：</label>
+                                            <div class="col-sm-5">
+                                                <input type="text" class="form-control" id="user_id_card"
+                                                       name="user_id_card" placeholder="请在这里输入身份证号">
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="username" class="col-sm-2 control-label">编号：</label>
+                                            <label for="username" class="col-sm-2 control-label">年限：</label>
                                             <div class="col-sm-5">
-                                                <input type="text" class="form-control" id="staff_job" name="staff_job"
-                                                       placeholder="请在这里输入编号">
+                                                <input type="text" class="form-control" id="user_stay_years"
+                                                       name="user_stay_years"
+                                                       placeholder="请在这里输入年限">
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="username" class="col-sm-2 control-label">密码：</label>
+                                            <label for="username" class="col-sm-2 control-label">性别：</label>
                                             <div class="col-sm-5">
-                                                <input type="text" class="form-control" id="staff_job_level"
-                                                       name="staff_job_level"
-                                                       placeholder="请在这里输入密码">
+                                                <input type="text" class="form-control" id="user_gender"
+                                                       name="user_gender"
+                                                       placeholder="请在这里输入性别">
                                             </div>
                                         </div>
 
@@ -390,61 +534,67 @@
                                         <div class="form-group">
                                             <label for="username" class="col-sm-2 control-label">手机号：</label>
                                             <div class="col-sm-5">
-                                                <input type="text" class="form-control" id="staff_salary"
-                                                       name="staff_salary" placeholder="请在这里输入手机号">
+                                                <input type="text" class="form-control" id="user_phone"
+                                                       name="user_phone" placeholder="请在这里输入手机号">
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="username" class="col-sm-2 control-label">邮箱：</label>
+                                            <label for="username" class="col-sm-2 control-label">年龄：</label>
                                             <div class="col-sm-5">
-                                                <input type="text" class="form-control" id="staff_salary"
-                                                       name="staff_salary" placeholder="请在这里输入邮箱">
+                                                <input type="text" class="form-control" id="user_age"
+                                                       name="user_age" placeholder="请在这里输入年龄">
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="username" class="col-sm-2 control-label">备注：</label>
                                             <div class="col-sm-5">
-                                                <input type="text" class="form-control" id="staff_salary"
-                                                       name="staff_salary" placeholder="请在这里输入备注信息">
+                                                <input type="text" class="form-control" id="user_remarks"
+                                                       name="user_remarks" placeholder="请在这里输入备注信息">
                                             </div>
                                         </div>
 
 
                                         <div class="form-group">
-                                            <label for="username" class="col-sm-2 control-label">角色：</label>
+                                            <label for="title" class="col-sm-2 control-label">角色：</label>
                                             <div class="col-sm-5">
-                                                <select name="department_id_list" id="department_id_list" multiple>
-                                                    {% for department in department_list %}
 
-                                                        <option value="{{ department.pk }}">{{ department.department_name }}</option>
+
+                                                <select name="titlelist" id="titlelist" multiple>
+                                                    {% for role in roles_list %}
+                                                        <option value="{{ role.pk }}">{{ role.title }}</option>
 
                                                     {% endfor %}
+
                                                 </select>
+
                                             </div>
                                         </div>
 
                                         <br/>
 
+                                        {#                                    </form>#}
+
+
+                                        <!--新增员工 -->
+
+                                        <!-- 对于模态框的使用一些按钮是无法乱改的 保存就是保存  取消就是取消 data-dismiss="modal"  就是取消   不用就删除掉再改 -->
+                                        <div class="modal-footer">
+
+                                            <a href="/user_management/user_info/"
+                                               class="btn btn-danger">取消</a>
+                                            <button type="submit" class="btn btn-default">
+                                                保存
+                                            </button>
+                                        </div>
                                     </form>
                                 </div>
-
-
-                                <!--新增员工 -->
-
-
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">
-                                    取消
-                                </button>
-                                <a href="/user_management/add_user/"
-                                   class="btn btn-danger">确定保存</a>
                             </div>
                         </div>
                     </div>
                 </div>
+
                 <!-- 新增员工 -->
                 <!-- 小功能下-->
                 <a class="btn btn-xs btn-info" title="发送站内信" onclick="sendFhsms('lisi');">
