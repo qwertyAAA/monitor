@@ -5,6 +5,10 @@
     <script src="/static/js/sweetalert.min.js"></script>
     <br/>
     <br/>
+    <div class="pull-right">
+    <a href="/xadmin/"><span>xadmin/</span></a><a href="/xadmin/{{ current_url }}">{{ current_url }}</a>
+    </div>
+    <br/>
     <br/>
     <div align="center">
         <h2><strong>{{ model_name }}表</strong></h2>
@@ -78,13 +82,10 @@
                         $.ajax({
                             url: url,
                             type: "get",
-                            sucess: function (data) {
+                            success: function (data) {
                                 if (data.status)
                                     window.location.reload()
                             }
-                        });
-                        swal("你的文件已经被删除了！", {
-                            icon: "success",
                         });
                     } else {
                         swal("数据还是安全的！");
@@ -98,7 +99,6 @@
                     var delete_id = $(this).attr("delete_id");
                     delete_id_list.push(delete_id);
                 }
-
             });
             if (!delete_id_list.length) {
                 swal({
@@ -109,7 +109,6 @@
                 });
                 return;
             }
-
             swal({
                 title: "确定删除吗?",
                 text: "一旦删除，数据将无法找回",
@@ -119,22 +118,19 @@
             })
                 .then((willDelete) => {
                     if (willDelete) {
-                        swal("你的文件已经被删除了！", {
-                            icon: "success",
-                        });
-                        $.ajax({
-                            url: "batch_delete/",
-                            type: "post",
-                            traditional: true,
-                            data: {
-                                "delete_id_list": delete_id_list,
-                                "csrfmiddlewaretoken": "{{ csrf_token }}"
-                            },
-                            success: function (data) {
-                                if (data.status)
-                                    window.location.reload()
-                            }
-                        });
+                            $.ajax({
+                                url: "batch_delete/",
+                                type: "post",
+                                traditional: true,
+                                data: {
+                                    "delete_id_list": delete_id_list,
+                                    "csrfmiddlewaretoken": "{{ csrf_token }}"
+                                },
+                                success: function (data) {
+                                    if (data.status)
+                                        window.location.reload()
+                                }
+                            });
                     } else {
                         swal("数据还是安全的！");
                     }
