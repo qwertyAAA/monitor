@@ -8,9 +8,11 @@ from django.contrib.auth.models import User
 class UserInfo(models.Model):
     user_address = models.CharField(max_length=32, null=True, verbose_name="地址")
     user_phone = models.CharField(max_length=16, unique=True, verbose_name="电话")
+    # user_department=models
     user_stay_years = models.IntegerField(null=True, verbose_name="年限")
     user_status = models.BooleanField(default=True, verbose_name="状态")
     user_gender = models.CharField(max_length=4, verbose_name="性别")
+    user_name = models.CharField(max_length=32,default='name', verbose_name="姓名")
     user_age = models.IntegerField(null=True, verbose_name="年龄")
     user_number = models.CharField(max_length=20, unique=True, verbose_name="编号")
     user_remarks = models.CharField(max_length=255, null=True, verbose_name="备注")

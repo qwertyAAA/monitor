@@ -27,35 +27,38 @@ def addtest(request):
     return render(request,"user_management_html/edit_user.html")
 def aadd_user(request):
     print('czx')
-
-
     if request.method == "POST":
-        emname = request.POST.get('emname')
-        username = request.POST.get('username')
-        staff_job = request.POST.get('staff_job')
-        staff_job_level = request.POST.get('staff_job_level')
+        user_id=request.POST.get('user_id')
+        user_name = request.POST.get('user_name')
+        user_id_card = request.POST.get('user_id_card')
+        user_stay_years = request.POST.get('user_stay_years')
+        user_gender = request.POST.get('user_gender')
+        user_phone=request.POST.get('user_phone')
+        user_age = request.POST.get('user_age')
+        user_remarks=request.POST.get('user_remarks')
+        titlelist = request.POST.getlist('titlelist')
+        user = models.User.objects.get(id=user_id)
 
-        staff_salary = request.POST.get('staff_salary')
-        department_id_list = request.POST.getlist('department_id_list')
-        user = models.User.objects.get(username=username)
-        print(user)
         UserInfo = models.UserInfo.objects.create(
-            staff_name=emname,
-            staff_salary=staff_salary,
-            staff_job=staff_job,
-            staff_job_level=staff_job_level,
+            user_name=user_name,
+            user_id_card=user_id_card,
+            user_stay_years=user_stay_years,
+            user_gender=user_gender,
+            user_phone=user_phone,
+            user_age=user_age,
+            user_remarks=user_remarks,
             user=user,
-
-
         )
-        UserInfo.department.set(department_id_list)
+        ''' 怎么向Role表里面添加信息'''
+        # UserInfo.user.role_set(titlelist)
+        UserInfo.user.role_set.add(*titlelist)
+        print("正确")
+        return redirect("/user_management/user_info/")
 
-        return redirect("/user_management/employee_info/")
 
-    department_list = models.Department.objects.all()
-    staff_list = models.UserInfo.objects.all()
 
-    return render(request, "user_management_html/add_user.html", locals())
+    print('cuiwu ')
+    return render(request, "user_management_html/user_info.html", locals())
 
 
 def main(request):
@@ -64,6 +67,11 @@ def main(request):
 
 def user_info(request):
     user_list=models.UserInfo.objects.all()
+    userlists=models.User.objects.all()
+    '''查询所有的用户对应的角色'''
+    roles_list=Role.objects.filter(user__userinfo__in=user_list)
+    roles_list=Role.objects.all()
+    # role
     user_role_dict = {}
     for user in user_list:
         rolelist = Role.objects.filter(user__userinfo=user)
@@ -72,40 +80,45 @@ def user_info(request):
     page = Page(user_list, request, 10, 10)
     sum = page.Sum()
 
-    return render(request, "user_management_html/user_info.html",{'user_list':sum[0],'page_html':sum[1],"user_role_dict":user_role_dict})
+    return render(request, "user_management_html/user_info.html",{'user_list':sum[0],'page_html':sum[1],"user_role_dict":user_role_dict,'userlists':userlists,'roles_list':roles_list})
 
 
 
-def edit_user(request, editemp_id):
-    edit_staff = models.UserInfo.objects.filter(pk=editemp_id).first()
+def edit_user(request, user_id):
+    print('编辑页面')
+    edit_user = models.UserInfo.objects.filter(pk=user_id).first()
     if request.method == "POST":
         new_id = request.POST.get('id')
-        new_emname = request.POST.get('emname')
+        new_user_name = request.POST.get('user_name')
         new_username = request.POST.get('username')
-        new_staff_job = request.POST.get('staff_job')
-        new_staff_job_level = request.POST.get('staff_job_level')
+        new_user_phone = request.POST.get('user_phone')
+        new_user_age = request.POST.get('user_age')
+        new_user_id_card = request.POST.get('user_id_card')
+        new_user_remarks=request.POST.get('user_remarks')
+        new_user_address=request.POST.get('user_address')
+        new_roles = request.POST.getlist('roles')
 
-        new_staff_salary = request.POST.get('staff_salary')
-        new_department_id_list = request.POST.getlist('department_id_list')
-
-        staffong = models.UserInfo.objects.filter(pk=editemp_id).update(
+        staffong = models.UserInfo.objects.filter(pk=user_id)
+        staffong.update(
             # id=new_id,
-            staff_name=new_emname,
-            staff_salary=new_staff_salary,
-            staff_job=new_staff_job,
-            staff_job_level=new_staff_job_level,
+            user_name=new_user_name,
+            user_phone=new_user_phone,
+            user_age=new_user_age,
+            user_id_card=new_user_id_card,
+            user_remarks=new_user_remarks,
+            user_address=new_user_address,
 
         )
-        staffobj = models.UserInfo.objects.filter(pk=editemp_id).first()
-        staffobj.department.set(new_department_id_list)
-
-        return render(request, "user_management/edit_user.html")
+        # userobj = models.UserInfo.objects.filter(pk=user_id).first()
+        # staffong.user.role_set.add(*new_roles)
+        print(new_roles)
+        staffong.first().user.role_set.set(new_roles)
+        print(staffong)
+        return redirect("/user_management/user_info/")
 
     ''' 第一次请求'''
 
-    result = models.Department.objects.all()
-
-    return render(request, "user_management/edit_user.html", locals())
+    return render(request, "user_management_html/user_info.html", locals())
 
 
 def delete_user(request, num):
@@ -113,8 +126,7 @@ def delete_user(request, num):
     if num:
         '''  对于删除先删除第三张表再删除作者表 id  注意页面的格式问题'''
         del_obj = models.UserInfo.objects.filter(id=num)
-        print(del_obj)
-        print(num)
+
         del_obj.delete()
 
         return redirect('/user_management/user_info/')

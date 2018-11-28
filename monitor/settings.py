@@ -80,12 +80,12 @@ WSGI_APPLICATION = 'monitor.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  # 数据库的类型
-        'HOST': '10.25.116.62',  # 数据库的地址
-        # 'HOST': 'localhost',  # 数据库的地址
+        # 'HOST': '10.25.116.62',  # 数据库的地址
+        'HOST': 'localhost',  # 数据库的地址
         'PORT': 3306,
-        'NAME': 'monitor',
+        'NAME': '7777',
         'USER': 'root',
-        'PASSWORD': '123456',
+        'PASSWORD': '',
     }
 }
 
