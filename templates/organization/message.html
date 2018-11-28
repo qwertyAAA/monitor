@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <script src="/static/organization/jquery-3.3.1.min.js"></script>
+    <div class="row">
+        <div class="col-sm-2">
+            <ul>
+                {% for foo in obj %}
+                    {% if not foo.top_department %}
+                        <li>
+                            <a>{{ foo.name }}</a>
+                            <ul>
+                                {% for i in obj %}
+                                    {% if i.top_department == foo %}
+                                        <li><a href="">{{ i.name }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endif %}
+                {% empty %}
+                    暂无内容
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-sm-10">
+            <div>
+                <input type="text">
+                <select>
+                    <option>本级</option>
+                    <option>全部</option>
+                </select>
+                <a class="btn btn-sm btn-info">搜索</a>
+            </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>名称</th>
+                    <th>英文</th>
+                    <th>编码</th>
+                    <th>负责人</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for foo in obj %}
+                    {% if not foo.top_department %}
+                        <tr>
+                            <td><a href="/organization/message/?id={{ foo.id }}">{{ foo.name }}</a></td>
+                            <td>{{ foo.en_name }}</td>
+                            <td>{{ foo.code }}</td>
+                            <td>{{ foo.user }}</td>
+                            <td>
+                                <button id="btn1" type="button" class="btn btn-sm btn-success"
+                                        {#                                    href="/organization/edit_dep/?id={{ foo.id }}"#}
+                                        edit_id="{{ foo.id }}"
+                                        data-toggle="modal" data-target="#myModal">编辑
+                                </button>
+                                <a type="button" class="btn btn-sm btn-success"
+                                   href="/organization/delete_dep/?id={{ foo.id }}"
+                                   data-toggle="modal"
+                                   data-target="#myModal">删除</a>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% empty %}
+                    <tr>
+                        <td class="text-center" colspan="5">暂无内容</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-sm btn-info"
+                    data-toggle="modal" data-target="#myModal">新增
+            </button>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">编辑信息</h4>
+                </div>
+
+                <form action="/organization/edit_dep/" method="post" class="form-horizontal">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="form-group" style="display: none">
+                            <label for="did" class="col-sm-2">id</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="did" class="form-control" id="did"
+                                       placeholder="ID">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="top_dep" class="col-sm-2">上级机构</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="top_dep" class="form-control" id="top_dep"
+                                       placeholder="请输入部门上级机构">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="dname" class="col-sm-2">名称</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="dname" class="form-control" id="dname"
+                                       placeholder="请输入名称">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="en_name" class="col-sm-2">英文名</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="en_name" class="form-control" id="en_name"
+                                       placeholder="请输入英文名">
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="code" class="col-sm-2">编码</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="code" class="form-control" id="code"
+                                       placeholder="请输入编码">
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="phone" class="col-sm-2">手机</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="phone" class="form-control" id="phone"
+                                       placeholder="请输入手机号码">
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="address" class="col-sm-2">地址</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="address" class="form-control" id="address"
+                                       placeholder="请输入地址">
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="func" class="col-sm-2">职能</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="func" class="form-control" id="func"
+                                       placeholder="请输入部门职能">
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="user" class="col-sm-2">负责人</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="user" class="form-control" id="user"
+                                       placeholder="请输入部门负责人">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="tips" class="col-sm-2">备注</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="tips" class="form-control" id="tips"
+                                       placeholder="备注">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="submit" class="btn btn-primary">提交</button>
+                    </div>
+                </form> <!--edit form-->
+
+
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            $(document).on('click', "#btn1", function () {
+                var id = $(this).attr("edit_id");
+                console.log(id);
+                $.ajax({
+                    url: "/organization/edit_dep/?id=" + id,
+                    type: "get",
+                    success: function (data) {
+                        if (data.top_dep) {
+                            $("#top_dep").val(data.top_dep);
+                        } else {
+                            $("#top_dep").attr('disabled', 'disabled');
+                            $("#top_dep").attr('placeholder', '此部门为顶级部门')
+                        }
+                        $("#did").val(data.did);
+                        $("#dname").val(data.name);
+                        $("#en_name").val(data.en_name);
+                        $("#code").val(data.code);
+                        $("#phone").val(data.phone);
+                        $("#address").val(data.address);
+                        $("#func").val(data.func);
+                        $("#tips").val(data.tips);
+                        $("#user").val(data.user);
+                    }
+                })
+            })
+        })
+    </script>
+{% endblock %}

@@ -1,0 +1,54 @@
+<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal{{ forloop.counter }}n">
+    删除
+</button>
+
+{% if i.second_menu_set.all %}
+    <div class="modal fade" id="myModal{{ forloop.counter }}n" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">删除菜单</h4>
+                </div>
+                    <div class="form-horizontal">
+                        <div class="modal-body">
+
+                            <h4>该目录下还有子菜单,需要先删除子菜单,请点击取消按钮。</h4>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="modal fade" id="myModal{{ forloop.counter }}n" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">删除菜单</h4>
+                </div>
+                <form action="/menu/del/first/{{ i.nid }}/" method="post">
+                    {% csrf_token %}
+                    <div class="form-horizontal">
+                        <div class="modal-body">
+                            <h4>您确定删除菜单吗?</h4>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="del_menu btn btn-warning">
+                                确定
+                            </button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endif %}

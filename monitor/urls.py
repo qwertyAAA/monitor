@@ -41,7 +41,6 @@ urlpatterns = [
     # media的相关的路由设置
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
     url(r'^upload/', mali_vi.upload),
-
     url(r'^$', index),
     url(r'^index/$', index),
 ]

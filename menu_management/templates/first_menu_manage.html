@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% csrf_token %}
+    <table class="table table-hover table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>
+                <input type="checkbox">
+            </th>
+            <th>编号</th>
+            <th>菜单名称</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody id="mtbody">
+        {% for i in  menu_list %}
+            <tr>
+                <td>
+                    <input type="checkbox">
+                </td>
+                <td>{{ i.nid }}</td>
+                <td id="menu_title{{ i.nid }}"><a href="/menu/check/second/{{ i.nid }}/">{{ i.title }}</a></td>
+                <td>
+                    {% if i.status %}
+                        <i class="ace-icon fa fa-eye"></i>
+                    {% else %}
+                        <i class="ace-icon fa fa-eye-slash"></i>
+                    {% endif %}
+
+                </td>
+                <td>
+                    {% include 'tags_html/edit_tag.html' %}
+                    {% include 'tags_html/del_first_tag.html' %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div>
+        {% include 'tags_html/add_tag.html' %}
+        <a class="btn btn-warning">返回</a>
+    </div>
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
+    <script src="/static/js/csrfajax.js"></script>
+{% endblock %}

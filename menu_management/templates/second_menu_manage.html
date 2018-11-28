@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+    <table class="table table-hover table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>
+                <input type="checkbox">
+            </th>
+            <th>编号</th>
+            <th>菜单名称</th>
+            <th>菜单路径</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for i in  menu_list %}
+            <tr>
+                <td>
+                    <input type="checkbox">
+                </td>
+                <td>{{ i.nid }}</td>
+                <td>{{ i.title }}</td>
+                <td>{{ i.url }}</td>
+                <td>
+                    {% include 'tags_html/edit_second_tag.html' %}
+                    {% include 'tags_html/del_second_tag.html' %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div>
+        {% include 'tags_html/add_second_tag.html' %}
+        <a href="/menu/check/first/" class="btn btn-warning">返回</a>
+    </div>
+
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
+    <script src="/static/js/csrfajax.js"></script>
+{% endblock %}

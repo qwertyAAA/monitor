@@ -16,8 +16,8 @@ Including another URLconf
 
 from django.conf.urls import url
 from account.views import *
+
 urlpatterns = [
     url(r'check_email/$', check_email),
     url(r'check_username/$', check_username),
 ]
-
