@@ -2,15 +2,15 @@
 {% block content %}
     <div class="container">
         <div class="row">
-            <h1>用户角色管理</h1>
+            <h1>用户角色管理</h1><br><br>
             <form action="/permission/user_role/" method="post" class="form-horizontal" enctype="multipart/form-data">
                 {% csrf_token %}
-                用户<select id="user" name="user">
+                用户<select id="user" name="user" class="form-control" style="width: 50%">
                     {% for user in user_list %}
                         <option value="{{ user.pk }}">{{ user.username }}</option>
                     {% endfor %}
-                </select>
-                角色<select id="role" name="role" multiple>
+                </select><br><br>
+                角色<select id="role" name="role" multiple class="form-control" style="width: 50%">
                     {% for role in role_list %}
                         <option value="{{ role.pk }}">{{ role.title }}</option>
                     {% endfor %}

@@ -17,10 +17,10 @@ def init_permission(user_obj, request):
 
     #获取该user对象的所有角色的所有权限
     permisson = user_obj.role_set.all().values("permissions__url", "permissions__action",'permissions__group_id').distinct()
-    print(user_obj.role_set.all())
-    print("该用户的权限信息如下：")
-    print(permisson)
-    print("**"*10)
+    # print(user_obj.role_set.all())
+    # print("该用户的权限信息如下：")
+    # print(permisson)
+    # print("**"*10)
 
     permisson_dict = {}
 
@@ -38,8 +38,8 @@ def init_permission(user_obj, request):
             permisson_dict[gid]['actions'].append(item.get('permissions__action'))
 
     #根据权限组id  得到该角色的权限分组 {1:{urls:[],actions:[]}}
-    print(permisson_dict)
-    print("**" * 10)
+    # print(permisson_dict)
+    # print("**" * 10)
 
     #放入session中
     request.session['permisson_dict'] = permisson_dict
@@ -47,16 +47,25 @@ def init_permission(user_obj, request):
     # 左侧菜单
     #获取该用户的所有权限信息
     permission_menu = user_obj.role_set.all().values('permissions__url', 'permissions__action',
-                                                  'permissions__group__title').distinct()
-    print("**" * 10)
-    print(permission_menu)
-    print("**" * 10)
+                                                  'permissions__group__title','permissions__id').distinct()
+    # print("**" * 10)
+    # print(permission_menu)
+    # print("**" * 10)
     menu_permission_list = []
+    first_menu_list=[]
+    second_menu_list=[]
 
     for item in permission_menu:
         if item['permissions__action'] == 'list':
             menu_permission_list.append((item['permissions__url'], item['permissions__group__title']))
+            first_menu_list.append(item['permissions__id'])
+        if item['permissions__action'] == 'list_second':
+            second_menu_list.append(item['permissions__id'])
 
-    print(menu_permission_list)
 
+    # print(menu_permission_list)
+    # print(first_menu_list)
+    # print(second_menu_list)
     request.session['menu_permission_list'] = menu_permission_list
+    request.session['first_menu_list'] = first_menu_list
+    request.session['second_menu_list'] = second_menu_list

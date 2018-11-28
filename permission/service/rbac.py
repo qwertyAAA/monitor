@@ -1,6 +1,6 @@
 from django.utils.deprecation import  MiddlewareMixin
 from django.shortcuts import HttpResponse,redirect,render
-import  re
+import re
 
 class ValidPermission(MiddlewareMixin):
 
@@ -10,17 +10,17 @@ class ValidPermission(MiddlewareMixin):
         current_path = request.path_info  # 当前路径
         print(current_path)
 
-        valid_url_list=['/login/','/register/','/admin/.*']
+        valid_url_list=['/login/','/register/','/admin/.*','/xadmin/','/logout/',
+                        '/register/','/base/','/fhsms/','/pictures/','/media/.*',
+                        '/index/','','','','']
 
         for valid_url in valid_url_list:
             result=re.match(valid_url,current_path)
             if result:
                 return
 
-
         #检验用户登录的
         user_id=request.session.get('user_id')
-
         if not user_id:
             return redirect('/login/')
 
@@ -57,7 +57,6 @@ class ValidPermission(MiddlewareMixin):
                 if result:
                     request.actions=item['actions']
                     return None
-
         return HttpResponse('没有操作权限')
 
 
