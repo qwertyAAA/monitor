@@ -1,23 +1,24 @@
 {% extends "base.html" %}
 {% block content %}
     <script src="/static/js/jquery-2.1.4.min.js"></script>
+    <script src="/static/js/sweetalert.min.js"></script>
     <br/>
     <br/>
     <div class="pull-right">
-    <a href="/xadmin/"><span>xadmin/</span></a><a href="/xadmin/{{ current_url }}">{{ current_url }}</a>
+        <a href="/xadmin/"><span>xadmin/</span></a><a href="/xadmin/{{ current_url }}">{{ current_url }}</a>
     </div>
     <br/>
     <br/>
     <form action="" method="post" class="form-horizontal">
         {% csrf_token %}
-            {% for field in form %}
-                <div class="form-group">
-                    {{ field.label_tag }}
-                    <div class="col-sm-5">
-                        {{ field }}
-                    </div>
+        {% for field in form %}
+            <div class="form-group">
+                {{ field.label_tag }}
+                <div class="col-sm-5">
+                    {{ field }}
                 </div>
-            {% endfor %}
+            </div>
+        {% endfor %}
         <div class="form-group">
             <button type="submit" class="btn btn-info col-md-offset-2" style="width: 200px;">保存</button>
             <button type="reset" class="btn btn-warning" style="width: 200px;">取消</button>
@@ -26,8 +27,31 @@
     <script>
         $(function () {
             $("form div input").addClass("form-control");
+            {#$("form div select").parent().append(#}
+            {#    "<a href=></a>"#}
+            {#)#}
             $("form div label").addClass("col-sm-2 control-label");
-            $("")
+            $("form div input[name*='password']").val("");
+            $("form div input[name*='password']").attr("type", "password");
+            $("form div input[name*='password']").parent().parent().after(
+                "<div class='form-group'>" +
+                "<label for='check_password' class='col-sm-2 control-label'>确认密码:</label>" +
+                "<div class='col-sm-5'>" +
+                "<input type='password' id='check_password' maxlength='128' class='form-control'>" +
+                "</div>" +
+                "</div>"
+            )
+            $("body").delegate("#check_password", "blur", function () {
+                if($(this).val() != $("form div input[name*='password']").val())
+                {
+                    swal({
+                    title: "输入错误！",
+                    text: "两次输入的密码不一致",
+                    icon: "error",
+                    button: "好的"
+                });
+                }
+            });
         });
     </script>
 {% endblock %}

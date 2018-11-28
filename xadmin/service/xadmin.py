@@ -4,6 +4,8 @@ from django.http import JsonResponse
 from django.db.models import Q
 from django import forms
 from django.db.models import OneToOneField, ForeignKey, ManyToManyField
+import datetime
+from django.contrib.auth.hashers import make_password
 
 
 class ModelXAdmin(object):
@@ -24,6 +26,10 @@ class ModelXAdmin(object):
                     self.field_names.pop()
         else:
             self.fields = [field for field in self.model._meta.fields]
+        self.cross_table_fields = []
+        for field in self.fields:
+            if isinstance(field, ManyToManyField) or isinstance(field, OneToOneField) or isinstance(field, ForeignKey):
+                self.cross_table_fields.append(field)
 
     def get_current_url(self):
         return "{0}/{1}/".format(self.model._meta.app_label, self.model._meta.model_name)
@@ -83,7 +89,13 @@ class ModelXAdmin(object):
         if request.method == "POST":
             form = self.get_form(request)
             if form.is_valid():
-                form.save()
+                password = form.cleaned_data.get("password")
+                form.save(commit=False)
+                for field in self.fields:
+                    if "password" in field.name:
+                        setattr(form.instance, field.name, make_password(password))
+                form.instance.save()
+                form.save_m2m()
             return redirect("/xadmin/" + current_url)
         return render(request, "xadmin/update_view.html", locals())
 
@@ -94,7 +106,13 @@ class ModelXAdmin(object):
         if request.method == "POST":
             form = self.get_form(request=request, instance=qs)
             if form.is_valid():
-                form.save()
+                password = form.cleaned_data.get("password")
+                form.save(commit=False)
+                for field in self.fields:
+                    if "password" in field.name:
+                        setattr(form.instance, field.name, make_password(password))
+                form.instance.save()
+                form.save_m2m()
             return redirect("/xadmin/" + current_url)
         return render(request, "xadmin/update_view.html", locals())
 
@@ -117,11 +135,9 @@ class ModelXAdmin(object):
             ret["status"] = True
             q = Q()
             q.connector = "or"
-            cross_table_fields = []
             for field in self.fields:
-                if isinstance(field, ManyToManyField) or isinstance(field, OneToOneField) or isinstance(field,
-                                                                                                        ForeignKey):
-                    cross_table_fields.append(field)
+                if field in self.cross_table_fields:
+                    continue
                 else:
                     q.children.append((field.name + "__icontains", keyword))
             # 此处代码应该可以优化。
@@ -136,7 +152,7 @@ class ModelXAdmin(object):
                 # 思路2存在的问题的解决办法
                 if obj in qs:
                     continue
-                for field in cross_table_fields:
+                for field in self.cross_table_fields:
                     if getattr(obj, field.name).find(keyword) != -1:
                         qs.append(obj)
             data_list = []
@@ -153,7 +169,15 @@ class ModelXAdmin(object):
                         </td>
                 """
                 for item in data:
-                    item = item[:20:] if hasattr(item, "__iter__") else item
+                    # 此处为返回前端的数据进行过滤
+                    item = item[:20:] if isinstance(item, str) else item
+                    item = item.strftime("%Y-%m-%d %H:%M") if isinstance(item, datetime.datetime) else item
+                    # try:
+                    #     item = item.strftime("%Y{0}%m{1}%d{2} %H:%M".format("年", "月", "日"))
+                    # except Exception as e:
+                    #     item = item
+                    #     print(e)
+                    print(item, type(item))
                     ret["html"] += """
                         <td>
                             <span >{}</span>
@@ -166,7 +190,6 @@ class ModelXAdmin(object):
                 </td>
                 </tr>
                 """.format(data[0])
-            print(ret["html"])
             return JsonResponse(ret)
 
     def get_urls(self):
