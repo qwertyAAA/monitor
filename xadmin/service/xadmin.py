@@ -25,10 +25,11 @@ class ModelXAdmin(object):
         else:
             self.fields = [field for field in self.model._meta.fields]
 
-    def get_current_list_url(self):
-        return "/xadmin/{0}/{1}/".format(self.model._meta.app_label, self.model._meta.model_name)
+    def get_current_url(self):
+        return "{0}/{1}/".format(self.model._meta.app_label, self.model._meta.model_name)
 
-    def view(self, request):
+    def list_view(self, request):
+        current_url = self.get_current_url()
         qs = self.model.objects.all()
         data_list = []
         for obj in qs:
@@ -43,6 +44,7 @@ class ModelXAdmin(object):
             request,
             "xadmin/list_view.html",
             {
+                "current_url": current_url,
                 "model_name": self.model._meta.model_name,
                 "data_list": data_list,
                 "field_names": field_names
@@ -76,22 +78,24 @@ class ModelXAdmin(object):
         return form
 
     def add(self, request):
+        current_url = self.get_current_url()
         form = self.get_form()
         if request.method == "POST":
             form = self.get_form(request)
             if form.is_valid():
                 form.save()
-            return redirect(self.get_current_list_url())
+            return redirect("/xadmin/" + current_url)
         return render(request, "xadmin/update_view.html", locals())
 
     def update(self, request, pk):
+        current_url = self.get_current_url()
         qs = self.model.objects.filter(pk=pk).first()
         form = self.get_form(instance=qs)
         if request.method == "POST":
             form = self.get_form(request=request, instance=qs)
             if form.is_valid():
                 form.save()
-            return redirect(self.get_current_list_url())
+            return redirect("/xadmin/" + current_url)
         return render(request, "xadmin/update_view.html", locals())
 
     def delete(self, request, pk=None):
@@ -167,7 +171,7 @@ class ModelXAdmin(object):
 
     def get_urls(self):
         temp = []
-        temp.append(url(r'^$', self.view))
+        temp.append(url(r'^$', self.list_view))
         temp.append(url(r'add/$', self.add))
         temp.append(url(r'^(\d+)/update/$', self.update))
         temp.append(url(r'^(\d+)/delete/$', self.delete))

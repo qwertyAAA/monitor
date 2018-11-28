@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
     <script src="/static/js/jquery-2.1.4.min.js"></script>
+    <br/>
+    <br/>
+    <div class="pull-right">
+    <a href="/xadmin/"><span>xadmin/</span></a><a href="/xadmin/{{ current_url }}">{{ current_url }}</a>
+    </div>
+    <br/>
+    <br/>
     <form action="" method="post" class="form-horizontal">
         {% csrf_token %}
             {% for field in form %}
@@ -20,6 +27,7 @@
         $(function () {
             $("form div input").addClass("form-control");
             $("form div label").addClass("col-sm-2 control-label");
+            $("")
         });
     </script>
 {% endblock %}
