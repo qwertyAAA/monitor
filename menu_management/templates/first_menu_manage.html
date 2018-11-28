@@ -9,6 +9,7 @@
             </th>
             <th>编号</th>
             <th>菜单名称</th>
+            <th>状态</th>
             <th>操作</th>
         </tr>
         </thead>
@@ -19,63 +20,27 @@
                     <input type="checkbox">
                 </td>
                 <td>{{ i.nid }}</td>
-                <td><a href="/menu/check/second/{{ i.nid }}/">{{ i.title }}</a></td>
+                <td id="menu_title{{ i.nid }}"><a href="/menu/check/second/{{ i.nid }}/">{{ i.title }}</a></td>
                 <td>
-                    <a class="btn btn-primary" href="/menu/edit/1/">编辑</a>
-                    <a class="btn btn-danger" href="/menu/delete/1/">删除</a>
+                    {% if i.status %}
+                        <i class="ace-icon fa fa-eye"></i>
+                    {% else %}
+                        <i class="ace-icon fa fa-eye-slash"></i>
+                    {% endif %}
+
+                </td>
+                <td>
+                    {% include 'tags_html/edit_tag.html' %}
+                    {% include 'tags_html/del_first_tag.html' %}
                 </td>
             </tr>
         {% endfor %}
         </tbody>
-
     </table>
-
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-        增加
-    </button>
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">增加菜单</h4>
-                </div>
-                <div class="form-horizontal">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="inputPassword2" class="col-sm-3 control-label">请输入菜单名称</label>
-                            <div class="col-sm-9">
-                                <input type="text" id="menuname" class="form-control" name="menu_name" placeholder="Password">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                        <button type="button" id="subbtn" class="btn btn-primary" data-dismiss="modal">保存</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div>
+        {% include 'tags_html/add_tag.html' %}
+        <a class="btn btn-warning">返回</a>
     </div>
     <script src="/static/js/jquery-3.3.1.min.js"></script>
     <script src="/static/js/csrfajax.js"></script>
-    <script>
-        $('#subbtn').click(function () {
-            var menu_name=$('#menuname').val();
-            $.ajax({
-                type:'post',
-                url:'/menu/add/first/',
-                data:{
-                    'menu_name':menu_name,
-                    "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val(),
-                    {#"csrfmiddlewaretoken": {% csrf_token %}.val()#}
-                },
-                success:function (data) {
-                    $('#mtbody').append(data.li);
-                    $('#main-menu').append(data)
-                }
-            })
-        })
-    </script>
 {% endblock %}
