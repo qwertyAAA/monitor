@@ -9,11 +9,30 @@
 
         <div>
 
-            <button type="button" class="btn btn-primary">系 &nbsp统&nbsp用&nbsp户&nbsp管&nbsp理&nbsp处</button>
+            <button type="button" class="btn btn-primary">系 &nbsp统&nbsp用&nbsp户&nbsp查&nbsp询&nbsp处</button>
+            <!-- 查询start-->
+            <div  class="col-md-offset-7">
+            <form  action=" /user_management/user_search/" method="post" class="form-inline">
+                  {% csrf_token %}
+            <div class="form-group">
+                <input type="text" class="form-control" name="search_key" id="value" placeholder="在此输入查询"/>
 
-            <form action="/user_management/batch_user/" method="post">
-                {% csrf_token %}
-            </form>
+            </div>
+
+            <div class="form-group">
+                <select class="form-control" id="key" name="choice_title">
+                    <option value="用户姓名">用户姓名</option>
+                    <option value="用户住址">用户住址</option>
+                    <option value="用户编号">用户编号</option>
+                    <option value="用户年龄">用户年龄</option>
+                    <option value="用户年限">用户年限</option>
+                </select>
+            </div>
+            <button type="submit" id="select_user" class="btn btn-info" style="width: 100px;">查询</button>
+
+           </form>
+            </div>
+            <!-- 查询end-->
             <!-- form 多选-->
 
             <select name="action" id="" style="width: 200px; padding:5px 8px;   display: inline-block">
@@ -24,39 +43,7 @@
 
             </select>
             <button type="submit" class="btn btn-info">执行批量删除</button>
-            <!-- 模糊查询start-->
-            <a class="btn btn-xs btn-info" onclick="searchs();" title="检索" data-toggle="modal"
-               data-target="#zhmyModal" style="width: 50px; height: 35px">
-                <i id="nav-search-icon"
-                   class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i>
-            </a>
-            <div class="modal fade" id="zhmyModal" tabindex="-1"
-                 role="dialog"
-                 aria-labelledby="myModalLabel">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
 
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal"
-                                    aria-label="Close"><span aria-hidden="true"></span>
-                            </button>
-                           <p class="bg-success" style="text-align: center;color: red;font-weight: bold;   ">为了更加准确查询您所要的信息请根据提示进行查询！！！例如</p>
-                        </div>
-                        <div class="modal-body">
-                               <p class="bg-info" style="text-align: center">根据用户名进行查询</p>
-                               <p class="bg-info" style="text-align: center">根据用户编号进行查询</p>
-                               <p class="bg-info" style="text-align: center">根据用户角色进行查询</p>
-                               <p class="bg-info" style="text-align: center">................</p>
-                            <div class="modal-footer">
-                                <a href="/user_management/search_user/"
-                                   class="btn btn-danger">以了解下一步</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 模糊查询end-->
             <table class="table table-hover table-bordered">
                 <thead>
                 <tr>
@@ -79,7 +66,7 @@
                     <th class="center">操作</th>
                 </tr>
                 <tbody>
-                {% for user, role_list in user_role_dict.items %}
+                {% for user in userlists %}
                     <tr>
                         <td style="width: 70px"><input type="checkbox" class='choice_item' name='select_pk' id="choice"
                                                        value='{{ staff.pk }}'></td>

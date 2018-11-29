@@ -21,10 +21,10 @@ from django.forms import ModelForm
 def motai(request):
     return render(request,"user_management_html/motai.html")
 
-def add_user(request):
-    return render(request,"user_management_html/add_user.html")
-def addtest(request):
-    return render(request,"user_management_html/edit_user.html")
+def online_user(request):
+    return render(request,"user_management_html/online_user.html")
+def search_user(request):
+    return render(request,"user_management_html/search_user.html")
 def aadd_user(request):
     print('czx')
     if request.method == "POST":
@@ -71,7 +71,6 @@ def user_info(request):
     '''查询所有的用户对应的角色'''
     roles_list=Role.objects.filter(user__userinfo__in=user_list)
     roles_list=Role.objects.all()
-    # role
     user_role_dict = {}
     for user in user_list:
         rolelist = Role.objects.filter(user__userinfo=user)
@@ -139,20 +138,26 @@ def details_user(request, editemp_id):
     return render(request, "user_management/details_employee.html", locals())
 
 
-def search_user(request):
+
+def user_search(request):
     if request.method == "POST":
         search_key = request.POST.get("search_key")
         print(search_key)
         choice_title = request.POST.get("choice_title")
-        if choice_title == "员工编号":
-            staff_list = models.UserInfo.objects.filter(id__icontains=search_key)
-        elif choice_title == "员工姓名":
-            staff_list = models.UserInfo.objects.filter(staff_name__icontains=search_key)
-        elif choice_title == "职位名称":
-            staff_list = models.UserInfo.objects.filter(staff_job__icontains=search_key)
-        elif choice_title == "职务级别":
-            staff_list = models.UserInfo.objects.filter(staff_job_level__icontains=search_key)
-    return render(request, 'user_management/search_employee.html', locals())
+        if choice_title == "用户编号":
+            userlists = models.UserInfo.objects.filter(user_number__icontains=search_key)
+        elif choice_title == "用户姓名":
+            userlists = models.UserInfo.objects.filter(user_name__icontains=search_key)
+        elif choice_title == "用户住址":
+            userlists = models.UserInfo.objects.filter(user_address__icontains=search_key)
+        elif choice_title == "用户年龄":
+            userlists = models.UserInfo.objects.filter(user_age__icontains=search_key)
+        roles_lists = Role.objects.all()
+
+        return render(request, 'user_management_html/search_user.html', locals())
+
+
+
 
 
 def batch(request):

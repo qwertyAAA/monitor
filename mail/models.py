@@ -1,7 +1,6 @@
 from django.db import models
 from user_management.models import UserInfo
 
-
 # Create your models here.
 class Pictures(models.Model):
     """

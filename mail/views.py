@@ -51,5 +51,5 @@ def fhsms(request):
                                  status_id_id=status_id, from_user=userinfo_id)
             send_mail(subject=title, message=content, from_email=settings.EMAIL_FROM,
                       recipient_list=from_user)
-            return redirect('/mail_pictures/fhsms/')
+            return redirect('/fhsms/')
     return render(request, 'mail_pictures/fhsms.html', {'mail_list': mail_list, 'status_list': status_list})
