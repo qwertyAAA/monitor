@@ -150,7 +150,9 @@ class ModelXAdmin(object):
             q = Q()
             q.connector = "or"
             for field in self.fields:
+                # 思路2存在的问题的解决方法：
                 if field in self.cross_table_fields:
+                    print(field)
                     continue
                 else:
                     q.children.append((field.name + "__icontains", keyword))
@@ -163,12 +165,10 @@ class ModelXAdmin(object):
             for obj in self.model.objects.filter(q):
                 qs.append(obj)
             for obj in self.model.objects.all():
-                # 思路2存在的问题的解决办法
-                if obj in qs:
-                    continue
                 for field in self.cross_table_fields:
-                    if getattr(obj, field.name).find(keyword) != -1:
+                    if getattr(obj, field.name).__str__().find(keyword) != -1 and obj not in qs:
                         qs.append(obj)
+            print(self.cross_table_fields)
             data_list = []
             for obj in qs:
                 data = []
@@ -184,14 +184,13 @@ class ModelXAdmin(object):
                 """
                 for item in data:
                     # 此处为返回前端的数据进行过滤
-                    item = item[:20:] if isinstance(item, str) else item
+                    item = item[:40:] if isinstance(item, str) else item
                     item = item.strftime("%Y-%m-%d %H:%M") if isinstance(item, datetime.datetime) else item
                     # try:
                     #     item = item.strftime("%Y{0}%m{1}%d{2} %H:%M".format("年", "月", "日"))
                     # except Exception as e:
                     #     item = item
                     #     print(e)
-                    print(item, type(item))
                     ret["html"] += """
                         <td>
                             <span >{}</span>
