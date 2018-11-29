@@ -27,7 +27,7 @@ def user_role(request):
 
 def role_permission(request,id):
 
-    models.Role.objects.filter(Q)
+    # models.Role.objects.filter(Q)
 
     role_group_id = int(id)                                             #角色组id
     try:
