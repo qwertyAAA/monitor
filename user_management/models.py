@@ -12,7 +12,7 @@ class UserInfo(models.Model):
     user_stay_years = models.IntegerField(null=True, verbose_name="年限")
     user_status = models.BooleanField(default=True, verbose_name="状态")
     user_gender = models.CharField(max_length=4, verbose_name="性别")
-    user_name = models.CharField(max_length=32,default='name', verbose_name="姓名")
+    user_name = models.CharField(max_length=32,default='name', verbose_name="姓名", null=True)
     user_age = models.IntegerField(null=True, verbose_name="年龄")
     user_number = models.CharField(max_length=20, unique=True, verbose_name="编号")
     user_remarks = models.CharField(max_length=255, null=True, verbose_name="备注")
