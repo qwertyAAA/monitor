@@ -26,6 +26,9 @@ def user_role(request):
 
 
 def role_permission(request,id):
+
+    models.Role.objects.filter(Q)
+
     role_group_id = int(id)                                             #角色组id
     try:
         role_group_obj=models.RoleGroup.objects.get(id=role_group_id)       #该角色组对象,如果id不匹配，异常
@@ -39,6 +42,7 @@ def role_permission(request,id):
     crud_permission_list = models.Permission.objects.filter(action='crud')  #增删改查的权限集合
     # print(crud_permission_list)
     role_group_permissions=role_group_obj.permissions.all()             #该角色组的所有权限
+    data_permission_list=models.Data_Per.objects.all()
     # print(role_group_permissions)
     # print(permission_group_list)
     return render(request,'role_permission.html',locals())
@@ -50,9 +54,9 @@ def role_accredit(request,id):
     role_permissions=request.POST.getlist('role_permissions')
     # print(role_permissions)
     for i in role_obj.permissions.all():
-        if i.action == 'crud':
+        if i.action == 'crud':      #先删除 非菜单权限
             role_obj.permissions.remove(i)
-    role_obj.permissions.add(*role_permissions)
+    role_obj.permissions.add(*role_permissions)   #重新添加  增删改查的权限（非菜单权限）
     print(role_obj.permissions.all())
     return redirect('/permission/role_permission/' + role_group_id + '/')
 
@@ -74,6 +78,16 @@ def role_del_permission(request,id):
     print(role_permissions,'********')
     for i in role_permissions:
         role_obj.permissions.remove(i)
+    return redirect('/permission/role_permission/' + role_group_id + '/')
+
+
+def data_permission(request, id):
+    role_group_id = request.GET.get('role_group_id')
+    role_id = id  # 角色id
+    role_obj = models.Role.objects.get(id=role_id)
+    data_permission_id=request.POST.get("data_permission")
+    role_obj.data_per_id=data_permission_id
+    role_obj.save()
     return redirect('/permission/role_permission/' + role_group_id + '/')
 
 def add_role_group(request):
@@ -120,9 +134,9 @@ def role_group_permission(request,id):
 
         for role in role_list:
             for i in role.permissions.all():
-                if i.action != 'crud':
+                if i.action != 'crud':    #如果是菜单权限，就先删除
                     role.permissions.remove(i)
-            role.permissions.add(*permission_list2)
+            role.permissions.add(*permission_list2)    #给角色重新添加角色组的菜单权限
             # print(role.permissions.all())
     return redirect('/permission/role_permission/'+id+'/')
 
