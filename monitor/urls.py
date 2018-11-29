@@ -16,13 +16,14 @@ Including another URLconf
 
 from django.views.static import serve
 from django.conf import settings
-from mail import views as mali_vi
+from mail import views as mail_vi
 from xadmin.service.xadmin import x_admin_site as site
 from django.conf.urls import url, include
 from user_management import urls as user_management_url
 from account.views import *
 from account import urls as account_urls
 from menu_management import urls as menu_urls
+
 urlpatterns = [
     url(r'^xadmin/', site.urls),
     url(r'^menu/',include(menu_urls)),
@@ -31,9 +32,10 @@ urlpatterns = [
     url(r'^login/$', login, name="login"),
     url(r'^register/$', register, name="register"),
     url(r'^logout/$', logout, name="logout"),
-    url(r'^base/', mali_vi.base),
-    url(r'^fhsms/', mali_vi.fhsms),
-    url(r'^pictures/', mali_vi.pictures),
+    url(r'^fhsms/', mail_vi.fhsms),
+    url(r'^pictures/', mail_vi.pictures),
+    url(r'del_all/$', mail_vi.del_all),
+    url(r'send_all/$', mail_vi.send_all),
     # media的相关的路由设置
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
     url(r'^upload/', mali_vi.upload),
