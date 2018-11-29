@@ -55,6 +55,7 @@
 
                     <div class="space-6"></div>
 
+                    <!-- 登录模块 -->
                     <div class="position-relative">
                         <div id="login-box" class="login-box visible widget-box no-border">
                             <div class="widget-body">
@@ -85,7 +86,17 @@
                                                                    placeholder="密码"/>
 															<i class="ace-icon fa fa-lock"></i>
 														</span>
-                                                <span style="color: red" id="login_result">{{ message }}</span>
+                                            </label>
+
+                                            <label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input style="width: 45%; display: inline" id="valid_code"
+                                                                   type="text" name="valid_code"
+                                                                   class="form-control"
+                                                                   placeholder="验证码"/>
+                                                            <img style="width: 50%" id="valid-img" class="valid-img" src="/get_valid_img.png?" alt="">
+														</span>
+                                                <span style="color: red" id="login_result">{{ login_message }}</span>
                                             </label>
 
                                             <div class="space"></div>
@@ -124,8 +135,9 @@
                                     </div>
                                 </div>
                             </div><!-- /.widget-body -->
-                        </div><!-- /.login-box -->
+                        </div><!-- /.login-box --><!-- 登录模块结束 -->
 
+                        <!-- 忘记密码模块 -->
                         <div id="forgot-box" class="forgot-box widget-box no-border">
                             <div class="widget-body">
                                 <div class="widget-main">
@@ -139,19 +151,21 @@
                                         请输入您的邮箱并按提示操作：
                                     </p>
 
-                                    <form action="/forget_pwd/" method="post">
-                                        {% csrf_token %}
+                                    <form action="/account/send_email/" method="post">
                                         <fieldset>
                                             <label class="block clearfix">
 														<span class="block input-icon input-icon-right">
-															<input type="email" name="email-find" class="form-control"
+															<input type="email" id="emailAdress" name="email-find"
+                                                                   class="form-control"
                                                                    placeholder="Email"/>
 															<i class="ace-icon fa fa-envelope"></i>
+                                                            <span id="no_email" style="color: red">{{ message.failed }}</span>
 														</span>
                                             </label>
 
                                             <div class="clearfix">
-                                                <button type="submit" class="width-35 pull-right btn btn-sm btn-danger">
+                                                <button type="submit" id="send_emailAdress"
+                                                        class="width-35 pull-right btn btn-sm btn-danger">
                                                     <i class="ace-icon fa fa-lightbulb-o"></i>
                                                     <span class="bigger-110">发送!</span>
                                                 </button>
@@ -167,8 +181,128 @@
                                     </a>
                                 </div>
                             </div><!-- /.widget-body -->
-                        </div><!-- /.forgot-box -->
+                        </div><!-- /.forgot-box --><!-- 忘记密码模块结束 -->
 
+                        <!-- 输入邮箱验证码模块 -->
+                        <div id="emailCode-box" class="forgot-box widget-box no-border">
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    <h4 class="header red lighter bigger">
+                                        <i class="ace-icon fa fa-key"></i>
+                                        <span id="email_status">输入验证码：</span>
+                                    </h4>
+
+                                    <div class="space-6"></div>
+                                    <p>
+                                        请输入您邮箱里收到的验证码并按提示操作：
+                                    </p>
+
+                                    <form action="#">
+                                        {% csrf_token %}
+                                        <fieldset>
+                                            <label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="text" id="email_code" name="email-code"
+                                                                   class="form-control"
+                                                                   placeholder="验证码"/>
+															<i class="ace-icon fa fa-envelope"></i>
+														</span>
+                                                <span id="check_message" style="color: red"></span>
+                                            </label>
+
+                                            <div class="clearfix">
+                                                <button type="button" id="reSend"
+                                                        class="width-35 pull-left btn btn-sm btn-info">
+                                                    <span class="bigger-110">重新发送</span>
+                                                </button>
+                                                <button type="button" id="check_code"
+                                                        class="width-35 pull-right btn btn-sm btn-info">
+                                                    <span class="bigger-110">下一步</span>
+                                                </button>
+                                            </div>
+                                        </fieldset>
+                                    </form>
+                                </div><!-- /.widget-main -->
+
+                                <div class="toolbar center">
+                                    <a href="#" data-target="#login-box" class="back-to-login-link">
+                                        返回登录
+                                        <i class="ace-icon fa fa-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div><!-- /.widget-body -->
+                        </div><!-- /.forgot-box --><!-- 输入邮箱验证码模块结束 -->
+
+                        <!-- 重置密码模块 -->
+                        <div id="resetPassword-box" class="forgot-box widget-box no-border">
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    <h4 class="header red lighter bigger">
+                                        <i class="ace-icon fa fa-key"></i>
+                                        <span id="email_status">设置新密码：</span>
+                                    </h4>
+
+                                    <div class="space-6"></div>
+                                    <p>
+                                        请输入您的新密码并按提交完成设置：
+                                    </p>
+
+                                    <form>
+                                        {% csrf_token %}
+                                        <fieldset>
+                                            <label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="password" id="newPwd" name="newPwd"
+                                                                   class="form-control"
+                                                                   placeholder="新密码"/>
+														</span>
+                                            </label>
+                                            <label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="password" id="newPwd2" name="newPwd2"
+                                                                   class="form-control"
+                                                                   placeholder="重复新密码"/>
+														</span>
+                                                <span style="color: red" id="reset_message"></span>
+                                            </label>
+
+                                            <div class="clearfix">
+                                                <button type="button" id="reset_pwd"
+                                                        class="width-35 pull-right btn btn-sm btn-info">
+                                                    <span class="bigger-110">提交</span>
+                                                </button>
+                                            </div>
+                                        </fieldset>
+                                    </form>
+                                </div><!-- /.widget-main -->
+
+                                <div class="toolbar center">
+                                    <a href="#" data-target="#login-box" class="back-to-login-link">
+                                        返回登录
+                                        <i class="ace-icon fa fa-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div><!-- /.widget-body -->
+                        </div><!-- /.resetPassword-box --><!-- 重置密码模块结束 -->
+
+                        <!-- 密码重置成功模块 -->
+                        <div id="resetSuccess-box" class="forgot-box widget-box no-border">
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    <h4 class="header red lighter bigger">
+                                        <i class="ace-icon fa fa-key"></i>
+                                        <span id="email_status">恭喜您！密码已重置成功！</span>
+                                    </h4>
+
+                                    <div class="space-6"></div>
+                                    <a href="/login/"><h5 style="text-align: center">
+                                        您将在<span id="ss">3</span>s后跳转回登录界面重新登录
+                                    </h5></a>
+                                </div><!-- /.widget-main -->
+                            </div><!-- /.widget-body -->
+                        </div><!-- /.resetSuccess-box --><!-- 密码重置成功模块结束 -->
+
+                        <!-- 用户注册模块 -->
                         <div id="signup-box" class="signup-box widget-box no-border">
                             <div class="widget-body">
                                 <div class="widget-main">
@@ -254,9 +388,10 @@
                                     </a>
                                 </div>
                             </div><!-- /.widget-body -->
-                        </div><!-- /.signup-box -->
+                        </div><!-- /.signup-box --><!-- 用户注册模块结束 -->
                     </div><!-- /.position-relative -->
 
+                    <!-- 背景切换 -->
                     <div class="navbar-fixed-top align-right">
                         <br/>
                         &nbsp;
@@ -297,5 +432,21 @@
 <!-- inline scripts related to this page -->
 
 <script type="text/javascript" src="/static/js/login.js"></script>
+
+<script type="text/javascript">
+    //密码重置-发送验证码
+    $("#check_code").click(function () {
+        var yzm = "{{ request.session.email_code }}";
+        //alert(yzm);
+        var email_code = $("#email_code").val();
+        if (email_code == yzm) {
+            $('#emailCode-box').removeClass('visible');
+            $('#resetPassword-box').addClass('visible');
+        } else {
+            $("#check_message").text("验证失败，请检查输入是否正确或重新发送验证邮件！");
+        }
+    });
+
+</script>
 </body>
 </html>

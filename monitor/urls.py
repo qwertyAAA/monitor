@@ -22,6 +22,7 @@ from django.conf.urls import url, include
 from user_management import urls as user_management_url
 from account.views import *
 from account import urls as account_urls
+
 urlpatterns = [
     url(r'^xadmin/', site.urls),
     url(r'^user_management/', include(user_management_url)),
@@ -38,5 +39,5 @@ urlpatterns = [
 
     url(r'^$', index),
     url(r'^index/$', index),
+    url(r"^get_valid_img.png/", get_valid_img),
 ]
-
