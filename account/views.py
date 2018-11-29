@@ -15,6 +15,8 @@ def login(request):
         user = auth.authenticate(username=username, password=password)
         if user:
             auth.login(request, user)
+            request.session['user_id'] = user.id
+            init_permission(user, request)
             if remember_pwd:
                 response = render(request, "index.html")
                 response.set_cookie("username", username)
