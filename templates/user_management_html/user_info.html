@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
     <div align="center">
 
     </div>
@@ -13,8 +14,8 @@
 
             <form action="/user_management/batch_user/" method="post">
                 {% csrf_token %}
-            </form>
-            <!-- form 多选-->
+{#            </form>#}
+{#            <!-- form 多选-->#}
 
             <select name="action" id="" style="width: 200px; padding:5px 8px;   display: inline-block">
 
@@ -60,7 +61,7 @@
             <table class="table table-hover table-bordered">
                 <thead>
                 <tr>
-                    <th class="center">全选<input type="checkbox" id="choice"></th>
+                    <th class="center">全选<input type="checkbox" id="check_all"></th>
                     <th class="center">序号</th>
                     <th class="center">编号</th>
                     <th class="center">用户名</th>
@@ -81,7 +82,7 @@
                 <tbody>
                 {% for user, role_list in user_role_dict.items %}
                     <tr>
-                        <td style="width: 70px"><input type="checkbox" class='choice_item' name='select_pk' id="choice"
+                        <td style="width: 70px"><input type="checkbox" class='check_item' name='select_pk' id="choice"
                                                        value='{{ staff.pk }}'></td>
                         <td style="width: 50px">{{ forloop.counter }}</td>
                         <td style="width: 50px">{{ user.id }}</td>
@@ -621,21 +622,26 @@
 
     </div>
     </div>
-    <script>
+    <!-- 实现全选的功能 当下面的全部选中的时候 全选按钮也应该被选中 当全选时候，有一个取消的时候全选也跟着取消-->
+    <script src="/static/js/check_box.js">
 
-        $('#choice').click(function () {
+        {#$('#choice').click(function () {#}
+        {##}
+        {#    if (($(this)).prop("checked")) {#}
+        {##}
+        {#        $(".choice_item").prop("checked", true)#}
+        {##}
+        {#    }#}
+        {#    else {#}
+        {#        $(".choice_item").prop("checked", false)#}
+        {#    }#}
+        {##}
+        {##}
+        {# }) #}
 
-            if (($(this)).prop("checked")) {
-
-                $(".choice_item").prop("checked", true)
-
-            }
-            else {
-                $(".choice_item").prop("checked", false)
-            }
 
 
-        })
+
 
 
     </script>
