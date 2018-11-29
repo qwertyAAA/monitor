@@ -1,36 +1,49 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.http import JsonResponse
 from django.contrib.auth.hashers import make_password
-# from .forms import UserForm
+from permission.models import Role
 from django.contrib.auth.models import User
 from django.contrib import auth
-
+from permission.service.Permission import init_permission
 
 def login(request):
-    context = {}
     if request.method == "POST":
         username = request.POST.get("username", None)
         password = request.POST.get("password", None)
+        remember_pwd = request.POST.get("remember_pwd", None)
+        print(remember_pwd, "****************")
         user = auth.authenticate(username=username, password=password)
         if user:
             auth.login(request, user)
-            return redirect("/index/")
+            request.session['user_id'] = user.id
+            init_permission(user, request)
+            if remember_pwd:
+                response = render(request, "index.html")
+                response.set_cookie("username", username)
+                response.set_cookie("password", password)
+                return response
+            else:
+                return redirect("/index/")
         else:
-            context = {
-                "islogin": False,
-                "pwd": False
-            }
-            return render(request, "login.html", context)
+            message = "账号或密码错误，请重新输入！"
+            return render(request, "login.html", locals())
     else:
-        context = {
-            "islogin": False,
-            "pwd": True
-        }
-    return render(request, "login.html", context)
+        try:
+            username = request.COOKIES.get("username")
+            print(username)
+            password = request.COOKIES.get("password")
+            user = auth.authenticate(username=username, password=password)
+            print(user)
+            if user:
+                auth.login(request, user)
+                return redirect("/index/")
+            else:
+                return render(request, "login.html")
+        except:
+            return render(request, "login.html")
 
 
 def register(request):
-    context = {}
     js_code = """
         window.onload = function(){
         $('#login-box').removeClass('visible');
@@ -41,11 +54,14 @@ def register(request):
         username = request.POST.get("username", None)
         password = request.POST.get("password", None)
         email = request.POST.get("email", None)
-        # 判断用户是否存在
-        # user = auth.authenticate(username=username, password=password)
         user = User.objects.filter(email=email)
+        user2 = User.objects.filter(username=username)
         if user:
-            return render(request, "login.html", {"js_code": js_code})
+            reg_result = "该邮箱已注册，请直接登录！"
+            return render(request, "login.html", locals())
+        elif user2:
+            reg_result = "该用户名已注册，请换个用户名！"
+            return render(request, "login.html", locals())
 
         # 添加到数据库
         user = User.objects.create_user(username=username, password=password, email=email)
@@ -56,7 +72,7 @@ def register(request):
         return redirect("/index/")
     else:
         context = {"islogin": False}
-    return render(request, "login.html", {"js_code": js_code})
+    return render(request, "login.html", locals())
 
 
 def logout(request):
@@ -100,5 +116,3 @@ def check_username(request):
             else:
                 data["message"] = 0
     return JsonResponse(data)
-
-

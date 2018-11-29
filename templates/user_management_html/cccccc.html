@@ -1,0 +1,438 @@
+{% extends "base.html" %}
+{% block content %}
+    <div align="center">
+
+    </div>
+
+    <div class="col-md-offset-1">
+
+
+        <div>
+
+
+            <p class="btn btn-default" style="width: 120px;height: 30px">系 &nbsp统&nbsp用&nbsp户</p>
+            <form action="/user_management/batch_user/" method="post">
+                {% csrf_token %}
+                <select name="action" id="" style="width: 200px; padding:5px 8px;   display: inline-block">
+
+                    <option value="------">--------</option>
+                    <option value="批量删除">批量删除</option>
+
+
+                </select>
+
+                <button type="submit" class="btn btn-info" style="width: 100px;height: 40px">点击执行</button>
+
+
+                <input type="date" value="开始日期">
+                <input class="span10 date-picker" name="lastLoginEnd" value="" type="text" data-date-format="yyyy-mm-dd"
+                       readonly="readonly" style="width:88px;" placeholder="结束日期" title="最近登录结束">
+                <input type="text">
+                <a class="btn btn-light btn-xs" onclick="searchs();" title="检索"><i id="nav-search-icon"
+                                                                                   class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a>
+                <td style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs" onclick="toExcel();"
+                                                                    title="导出到EXCEL"><i id="nav-search-icon"
+                                                                                        class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a>
+                </td>
+                <td style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs" onclick="fromExcel();"
+                                                                    title="从EXCEL导入"><i id="nav-search-icon"
+                                                                                        class="ace-icon fa fa-cloud-upload bigger-110 nav-search-icon blue"></i></a>
+                </td>
+
+                <table class="table table-hover table-bordered">
+
+
+                    <thead>
+                    <tr>
+                        <th class="center">全选<input type="checkbox" id="choice"></th>
+
+                        <th class="center">序号</th>
+                        <th class="center">编号</th>
+                        <th class="center">用户名</th>
+                        <th class="center">姓名</th>
+                        <th class="center">角色</th>
+                        <th class="center">
+                            <i class="ace-icon fa fa-envelope-o"></i>
+                            邮箱
+                        </th>
+                        <th class="center">
+                            <i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>
+                            最近登陆
+                        </th>
+                        <th class="center">上次登录IP</th>
+                        <th class="center">操作</th>
+                    </tr>
+                    <tbody>
+                    {% for user in user_list %}
+                        <tr>
+                            <td>
+                                <input type="checkbox" class='choice_item' name='select_pk' id="choice"
+                                       value='{{ user.pk }}'>
+                            </td>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.user.username }}</td>
+                            <td>{{ user.user.first_name }}{{ user.user.last_name }}</td>
+                            <td>{{ user.user_age }}</td>
+
+                            <!-- 操作界面 -->
+                            <td>
+                                <a title="发送电子邮件" style="text-decoration:none;cursor:pointer;"
+                                   onclick="sendEmail('{{ user.user.email }}');"> {{ user.user.email }}&nbsp;<i
+                                        class="ace-icon fa fa-envelope-o"></i></a>
+
+
+                            </td>
+                            <td> {{ user.user.last_login }} </td>
+
+
+                            <td>{{ user.user_recent_ip }}</td>
+
+
+                            <td>
+
+
+                                <a class="btn btn-xs btn-info" title="发送站内信" onclick="sendFhsms('lisi');">
+                                    <i class="ace-icon fa fa-envelope-o bigger-120" title="发送站内信"></i>
+                                </a>
+                                <a class="btn btn-xs btn-warning" title="发送短信" onclick="sendSms('15153203821');">
+                                    <i class="ace-icon fa fa-envelope-o bigger-120" title="发送短信"></i>
+                                </a>
+                                <!-- 编辑模态框-->
+
+
+
+
+                                <a class="btn btn-xs btn-success" title="编辑" data-toggle="modal"
+                                   data-target="#editmyModal{{ forloop.counter }}">
+                                    <i class="ace-icon fa fa-pencil-square-o bigger-120" title="编辑"></i>
+                                </a>
+
+
+
+
+                                 <div class="modal fade" id="editmyModal{{ forloop.counter }}" tabindex="-1"
+                                     role="dialog"
+                                     aria-labelledby="myModalLabel">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                       aria-label="Close"><span aria-hidden="true">&times;</span>
+
+
+                                                </button>
+
+                                            </div>
+                                            <div class="modal-body">
+
+
+                                                <!-- 编辑模块-->
+
+
+
+                                                <div class="col-md-offset-1">
+                                    <hr/>
+                                    <form action="" method="post" class="form-horizontal">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label for="username" class="col-sm-2 control-label">用户名：</label>
+                                            <div class="col-sm-5">
+                                                <input type="text" class="form-control" id="username" name="username"
+                                                       placeholder="在这里输入用户名">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="username" class="col-sm-2 control-label">姓名：</label>
+                                            <div class="col-sm-5">
+                                                <input type="text" class="form-control" id="username" name="username"
+                                                       placeholder="请在这里输入姓名">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="username" class="col-sm-2 control-label">编号：</label>
+                                            <div class="col-sm-5">
+                                                <input type="text" class="form-control" id="staff_job" name="staff_job"
+                                                       placeholder="请在这里输入编号">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="username" class="col-sm-2 control-label">密码：</label>
+                                            <div class="col-sm-5">
+                                                <input type="text" class="form-control" id="staff_job_level"
+                                                       name="staff_job_level"
+                                                       placeholder="请在这里输入密码">
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label for="username" class="col-sm-2 control-label">手机号：</label>
+                                            <div class="col-sm-5">
+                                                <input type="text" class="form-control" id="staff_salary"
+                                                       name="staff_salary" placeholder="请在这里输入手机号">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="username" class="col-sm-2 control-label">邮箱：</label>
+                                            <div class="col-sm-5">
+                                                <input type="text" class="form-control" id="staff_salary"
+                                                       name="staff_salary" placeholder="请在这里输入邮箱">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="username" class="col-sm-2 control-label">备注：</label>
+                                            <div class="col-sm-5">
+                                                <input type="text" class="form-control" id="staff_salary"
+                                                       name="staff_salary" placeholder="请在这里输入备注信息">
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="form-group">
+                                            <label for="username" class="col-sm-2 control-label">角色：</label>
+                                            <div class="col-sm-5">
+                                                <select name="department_id_list" id="department_id_list" multiple>
+                                                    {% for department in department_list %}
+
+                                                        <option value="{{ department.pk }}">{{ department.department_name }}</option>
+
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <br/>
+
+                                    </form>
+                                </div>
+
+
+
+
+                                                <!-- 编辑模块-->
+
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                    取消
+                                                </button>
+                                                <a href="/user_management/add_user/"
+                                                   class="btn btn-danger">确定保存</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+                                <!-- 编辑模态框-->
+
+                                <!-- 删除模态框-->
+                                <a class="btn btn-xs btn-success" title="删除" data-toggle="modal"
+                                   data-target="#myModal{{ forloop.counter }}">
+                                    <i class="ace-icon fa fa-trash-o bigger-120" title="删除"></i>
+                                </a>
+
+
+                                <div class="modal fade" id="myModal{{ forloop.counter }}" tabindex="-1" role="dialog"
+                                     aria-labelledby="myModalLabel">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close"><span aria-hidden="true">&times;</span>
+                                                </button>
+                                                <h4 class="modal-title">您是否决定删除 <h3>{{ user.user.username }}</h3>
+                                                    用户的相关信息
+                                                </h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>信息一旦删除将无法修复&hellip;!!!</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                    我再想想
+                                                </button>
+                                                <a href="/user_management/delete_user/{{ user.pk }}/"
+                                                   class="btn btn-danger">确定删除</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <script>$('#myModal').modal('toggle')</script>
+                                <!-- 删除模态框-->
+                                <!-- 操作界面 -->
+
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                    </thead>
+
+                </table>
+
+            </form>
+            <div>
+
+                <!-- 新增员工 -->
+                <a class="btn btn-xs btn-success" title="删除" data-toggle="modal"
+                   data-target="#addmyModal">
+                    <i class="btn btn-mini btn-success" style="width: 100px;">新增员工</i>
+                </a>
+
+
+                <div class="modal fade" id="addmyModal" tabindex="-1" role="dialog"
+                     aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"
+                                        aria-label="Close"><span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                            <div class="modal-body">
+
+                                <!-- 新增员工-->
+                                <div align="center">
+                                    <p class="btn btn-default" style="width: 150px;height: 40px">增
+                                        &nbsp加&nbsp用&nbsp户 &nbsp信&nbsp 息</p>
+                                </div>
+
+                                <div class="col-md-offset-1">
+                                    <hr/>
+                                    <form action="" method="post" class="form-horizontal">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label for="username" class="col-sm-2 control-label">用户名：</label>
+                                            <div class="col-sm-5">
+                                                <input type="text" class="form-control" id="username" name="username"
+                                                       placeholder="在这里输入用户名">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="username" class="col-sm-2 control-label">姓名：</label>
+                                            <div class="col-sm-5">
+                                                <input type="text" class="form-control" id="username" name="username"
+                                                       placeholder="请在这里输入姓名">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="username" class="col-sm-2 control-label">编号：</label>
+                                            <div class="col-sm-5">
+                                                <input type="text" class="form-control" id="staff_job" name="staff_job"
+                                                       placeholder="请在这里输入编号">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="username" class="col-sm-2 control-label">密码：</label>
+                                            <div class="col-sm-5">
+                                                <input type="text" class="form-control" id="staff_job_level"
+                                                       name="staff_job_level"
+                                                       placeholder="请在这里输入密码">
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label for="username" class="col-sm-2 control-label">手机号：</label>
+                                            <div class="col-sm-5">
+                                                <input type="text" class="form-control" id="staff_salary"
+                                                       name="staff_salary" placeholder="请在这里输入手机号">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="username" class="col-sm-2 control-label">邮箱：</label>
+                                            <div class="col-sm-5">
+                                                <input type="text" class="form-control" id="staff_salary"
+                                                       name="staff_salary" placeholder="请在这里输入邮箱">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="username" class="col-sm-2 control-label">备注：</label>
+                                            <div class="col-sm-5">
+                                                <input type="text" class="form-control" id="staff_salary"
+                                                       name="staff_salary" placeholder="请在这里输入备注信息">
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="form-group">
+                                            <label for="username" class="col-sm-2 control-label">角色：</label>
+                                            <div class="col-sm-5">
+                                                <select name="department_id_list" id="department_id_list" multiple>
+                                                    {% for department in department_list %}
+
+                                                        <option value="{{ department.pk }}">{{ department.department_name }}</option>
+
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <br/>
+
+                                    </form>
+                                </div>
+
+
+                                <!--新增员工 -->
+
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">
+                                    取消
+                                </button>
+                                <a href="/user_management/add_user/"
+                                   class="btn btn-danger">确定保存</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 新增员工 -->
+
+
+            </div>
+        </div>
+    </div>
+    <script>
+
+        $('#choice').click(function () {
+
+            if (($(this)).prop("checked")) {
+
+                $(".choice_item").prop("checked", true)
+
+            }
+            else {
+                $(".choice_item").prop("checked", false)
+            }
+
+
+        })
+
+
+    </script>
+
+{% endblock %}
