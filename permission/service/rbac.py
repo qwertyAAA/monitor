@@ -1,6 +1,6 @@
 from django.utils.deprecation import  MiddlewareMixin
 from django.shortcuts import HttpResponse,redirect,render
-import  re
+import re
 
 class ValidPermission(MiddlewareMixin):
 
@@ -10,19 +10,19 @@ class ValidPermission(MiddlewareMixin):
         current_path = request.path_info  # 当前路径
         print(current_path)
 
-        # valid_url_list=['/login/','/reg/','/admin/.*']
-        #
-        # for valid_url in valid_url_list:
-        #     result=re.match(valid_url,current_path)
-        #     if result:
-        #         return
+        valid_url_list=['/login/','/register/','/admin/.*','/xadmin/','/logout/',
+                        '/register/','/base/','/fhsms/','/pictures/','/media/.*',
+                        '/index/','','','','']
 
+        for valid_url in valid_url_list:
+            result=re.match(valid_url,current_path)
+            if result:
+                return
 
         #检验用户登录的
-        # user_id=request.session.get('user_id')
-        #
-        # if not user_id:
-        #     return redirect('/login/')
+        user_id=request.session.get('user_id')
+        if not user_id:
+            return redirect('/login/')
 
 
         '''
@@ -45,6 +45,18 @@ class ValidPermission(MiddlewareMixin):
         # #     flag=True
         # return HttpResponse('没有访问权限')
 
+        #判断数据权限
+        data_permission_id_list = request.session.get('data_permission_id_list')
+        print(data_permission_id_list)
+        if 3 in data_permission_id_list:    #可以查看所有的数据
+            pass
+        elif 2 in data_permission_id_list:  #可以看本部门的数据
+            pass
+        elif 1 in data_permission_id_list:  #仅可见自己的数据
+            pass
+
+
+
         #方案2
 
         permission_dict=request.session.get('permisson_dict')
@@ -57,7 +69,6 @@ class ValidPermission(MiddlewareMixin):
                 if result:
                     request.actions=item['actions']
                     return None
-
         return HttpResponse('没有操作权限')
 
 

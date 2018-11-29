@@ -11,6 +11,7 @@ class Department(models.Model):
     address = models.CharField(max_length=20, null=True)
     func = models.CharField(max_length=10, null=True)
     tips = models.TextField(max_length=200, null=True)
-    user = models.OneToOneField(to=m2.User)
+    user = models.ForeignKey(to=m2.User)
     top_department = models.ForeignKey(to='self', null=True)
+    create_by = models.IntegerField(null=False)
 
