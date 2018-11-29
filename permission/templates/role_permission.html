@@ -23,9 +23,10 @@
         <table class="table table-striped center">
             <thead>
             <th style="text-align: center;" class="col-md-1">序号</th>
-            <th style="text-align: center;" class="col-md-2">角色</th>
-            <th style="text-align: center;" class="col-md-4">角色权限</th>
-            <th style="text-align: center;" class="col-md-4">操作</th>
+            <th style="text-align: center;" class="col-md-1">角色</th>
+            <th style="text-align: center;" class="col-md-4">功能权限</th>
+            <th style="text-align: center;" class="col-md-3">数据权限</th>
+            <th style="text-align: center;" class="col-md-3">操作</th>
             </thead>
             <tbody style="text-align: center;">
             {% for role in role_list %}
@@ -121,8 +122,9 @@
                                 </div>
                             </div>
                         </div>
-
-                         <a class="button btn btn-sm btn-primary" data-toggle="modal"
+                    </td>
+                    <td>
+                            <a class="button btn btn-sm btn-primary" data-toggle="modal"
                            data-target="#data_permission{{ forloop.counter }}">查看数据权限</a>
                         <div class="modal fade" id="data_permission{{ forloop.counter }}" tabindex="-1" role="dialog"
                              aria-labelledby="myModalLabel">
@@ -178,8 +180,6 @@
                                 </div>
                             </div>
                         </div>
-
-
                     </td>
                     <td>
                         <a class="btn-sm btn btn-warning" data-toggle="modal"
