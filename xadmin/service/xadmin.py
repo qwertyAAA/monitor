@@ -31,11 +31,9 @@ class ModelXAdmin(object):
             if isinstance(field, ManyToManyField) or isinstance(field, OneToOneField) or isinstance(field, ForeignKey):
                 self.cross_table_fields.append(field)
 
-    def get_current_url(self):
-        return "{0}/{1}/".format(self.model._meta.app_label, self.model._meta.model_name)
-
     def list_view(self, request):
-        current_url = self.get_current_url()
+        current_app_label = self.model._meta.app_label
+        current_model_name = self.model._meta.model_name
         qs = self.model.objects.all()
         data_list = []
         for obj in qs:
@@ -50,7 +48,7 @@ class ModelXAdmin(object):
             request,
             "xadmin/list_view.html",
             {
-                "current_url": current_url,
+                "current_url": current_app_label + "/" + current_model_name + "/",
                 "model_name": self.model._meta.model_name,
                 "data_list": data_list,
                 "field_names": field_names
@@ -84,7 +82,15 @@ class ModelXAdmin(object):
         return form
 
     def add(self, request):
-        current_url = self.get_current_url()
+        cross_tables_info = []
+        for field in self.cross_table_fields:
+            cross_tables_info.append({
+                "app_label": getattr(self.model, field.name).field.remote_field.model._meta.app_label,
+                "model_name": getattr(self.model, field.name).field.remote_field.model._meta.model_name,
+                "verbose_name": field.verbose_name
+            })
+        current_app_label = self.model._meta.app_label
+        current_model_name = self.model._meta.model_name
         form = self.get_form()
         if request.method == "POST":
             form = self.get_form(request)
@@ -96,11 +102,19 @@ class ModelXAdmin(object):
                         setattr(form.instance, field.name, make_password(password))
                 form.instance.save()
                 form.save_m2m()
-            return redirect("/xadmin/" + current_url)
+            return redirect("/xadmin/" + current_app_label + "/" + current_model_name + "/")
         return render(request, "xadmin/update_view.html", locals())
 
     def update(self, request, pk):
-        current_url = self.get_current_url()
+        cross_tables_info = []
+        for field in self.cross_table_fields:
+            cross_tables_info.append({
+                "app_label": getattr(self.model, field.name).field.remote_field.model._meta.app_label,
+                "model_name": getattr(self.model, field.name).field.remote_field.model._meta.model_name,
+                "verbose_name": field.verbose_name
+            })
+        current_app_label = self.model._meta.app_label
+        current_model_name = self.model._meta.model_name
         qs = self.model.objects.filter(pk=pk).first()
         form = self.get_form(instance=qs)
         if request.method == "POST":
@@ -113,7 +127,7 @@ class ModelXAdmin(object):
                         setattr(form.instance, field.name, make_password(password))
                 form.instance.save()
                 form.save_m2m()
-            return redirect("/xadmin/" + current_url)
+            return redirect("/xadmin/" + current_app_label + "/" + current_model_name + "/")
         return render(request, "xadmin/update_view.html", locals())
 
     def delete(self, request, pk=None):
