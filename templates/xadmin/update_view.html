@@ -30,6 +30,9 @@
             {#$("form div select").parent().append(#}
             {#    "<a href=></a>"#}
             {#)#}
+            $("form div input[type='select']").after(
+                "<>"
+            )
             $("form div label").addClass("col-sm-2 control-label");
             $("form div input[name*='password']").val("");
             $("form div input[name*='password']").attr("type", "password");
