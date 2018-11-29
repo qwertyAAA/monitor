@@ -24,6 +24,13 @@ def init_permission(user_obj, request):
 
     permisson_dict = {}
 
+    data_permission = user_obj.role_set.all().values('data_per__id').distinct()
+    print('数据权限id', data_permission)
+    data_permission_id_list=[]
+    for i in data_permission:
+        data_permission_id_list.append(i['data_per__id'])
+    request.session['data_permission_id_list']=data_permission_id_list
+
     for item in permisson:
         gid = item.get('permissions__group_id')
 

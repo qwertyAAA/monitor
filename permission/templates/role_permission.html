@@ -23,9 +23,10 @@
         <table class="table table-striped center">
             <thead>
             <th style="text-align: center;" class="col-md-1">序号</th>
-            <th style="text-align: center;" class="col-md-3">角色</th>
-            <th style="text-align: center;" class="col-md-3">角色权限</th>
-            <th style="text-align: center;" class="col-md-4">操作</th>
+            <th style="text-align: center;" class="col-md-1">角色</th>
+            <th style="text-align: center;" class="col-md-4">功能权限</th>
+            <th style="text-align: center;" class="col-md-3">数据权限</th>
+            <th style="text-align: center;" class="col-md-3">操作</th>
             </thead>
             <tbody style="text-align: center;">
             {% for role in role_list %}
@@ -65,6 +66,32 @@
                                 </div>
                             </div>
                         </div>
+
+                     <a class="button btn btn-sm btn-primary" data-toggle="modal"
+                           data-target="#cat_permission{{ forloop.counter }}">查看功能权限</a>
+                        <div class="modal fade" id="cat_permission{{ forloop.counter }}" tabindex="-1" role="dialog"
+                             aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close"><span
+                                                aria-hidden="true">&times;</span></button>
+                                    </div>
+
+                                        <div class="modal-body">
+                                                {% for r in  role.permissions.all %}
+                                                    <p>{{ r.title }}</p>
+                                                {% endfor %}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                                            </button>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <a class="button btn btn-sm btn-primary" data-toggle="modal"
                            data-target="#delete_permission{{ forloop.counter }}">去除权限</a>
                         <div class="modal fade" id="delete_permission{{ forloop.counter }}" tabindex="-1" role="dialog"
@@ -95,8 +122,64 @@
                                 </div>
                             </div>
                         </div>
+                    </td>
+                    <td>
+                            <a class="button btn btn-sm btn-primary" data-toggle="modal"
+                           data-target="#data_permission{{ forloop.counter }}">查看数据权限</a>
+                        <div class="modal fade" id="data_permission{{ forloop.counter }}" tabindex="-1" role="dialog"
+                             aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close"><span
+                                                aria-hidden="true">&times;</span>
+                                        </button>
+                                        <h2>该角色的数据权限</h2>
+                                    </div>
+                                        <div class="modal-body">
+                                           <h4>{{ role.data_per.title }}</h4>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                                            </button>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
 
-
+                          <a class="button btn btn-sm btn-primary" data-toggle="modal"
+                           data-target="#data_accredit{{ forloop.counter }}">数据授权</a>
+                        <div class="modal fade" id="data_accredit{{ forloop.counter }}" tabindex="-1" role="dialog"
+                             aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close"><span
+                                                aria-hidden="true">&times;</span>
+                                        </button>
+                                        <h2>数据权限列表</h2>
+                                    </div>
+                                      <form action="/permission/data_permission/{{ role.id }}/?role_group_id={{ role_group_id }}"
+                                          method="post">
+                                        {% csrf_token %}
+                                        <div class="modal-body">
+                                            请选择数据权限<select name="data_permission">
+                                            {% for data_permission in data_permission_list %}
+                                                <option value="{{ data_permission.id }}">{{ data_permission.title }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                                            </button>
+                                            <button type="submit" class="btn btn-primary">保存</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </td>
                     <td>
                         <a class="btn-sm btn btn-warning" data-toggle="modal"
@@ -260,27 +343,29 @@
 
 
     </div>
-    <script>
-        $(".cat_permissions").click(function () {
-            var role_id=$(this).attr('role_id');
-            var select=$("select[role_id='"+role_id+"']");
+{# <script type="text/javascript">#}
+{#       $(function () {#}
+{#            $(".cat_permissions").click(function () {#}
+{#            var role_id=$(this).attr('role_id');#}
+{#            var select=$("select[role_id='"+role_id+"']");#}
             {#alert(select.attr('role_id'))#}
-            // 2. 用AJAX发送到服务端
-            $.ajax({
-                url: "/permission/role_permission_list/" ,
-                type: "post",
-                data: {
-                    "role_id": role_id,
-                    "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()
-                },
-                success: function (data) {
-                     data=JSON.parse(data);
-                    $.each(data, function (index, n) {
-                        select.append("<option value=\""+n.id+"\">"+n.title+"</option>")
-                    });
-                }
-            })
-        });
-
-    </script>
+{#            // 2. 用AJAX发送到服务端#}
+{#            $.ajax({#}
+{#                url: "/permission/role_permission_list/" ,#}
+{#                type: "post",#}
+{#                data: {#}
+{#                    "role_id": role_id,#}
+{#                    "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()#}
+{#                },#}
+{#                success: function (data) {#}
+{#                     data=JSON.parse(data);#}
+{#                    $.each(data, function (index, n) {#}
+{#                        select.append("<option value=\""+n.id+"\">"+n.title+"</option>")#}
+{#                    });#}
+{#                }#}
+{#            })#}
+{#        });#}
+{#       })#}
+{##}
+{#    </script>#}
 {% endblock %}

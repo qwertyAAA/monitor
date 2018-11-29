@@ -3,12 +3,19 @@ from django.contrib.auth.models import User
 from user_management.models import UserInfo
 # Create your models here.
 
+
+
 class Role(models.Model):
     title=models.CharField(max_length=32,verbose_name='角色名称')
     permissions=models.ManyToManyField(to='Permission')
     group=models.ForeignKey(to='RoleGroup')
+    data_per=models.ForeignKey(to="Data_Per",default=1)
     user=models.ManyToManyField(to=User)
     def __str__(self): return self.title
+
+class Data_Per(models.Model):
+    title=models.CharField(max_length=32)
+
 
 class RoleGroup(models.Model):
     title=models.CharField(max_length=32,verbose_name='角色组名称')
@@ -26,6 +33,8 @@ class Permission(models.Model):
 
 class PermissionGroup(models.Model):
     title=models.CharField(max_length=32,verbose_name="权限组名称")
+    action=models.CharField(max_length=32,default="")
     is_del=models.BooleanField(default=False)
 
     def __str__(self): return self.title
+
