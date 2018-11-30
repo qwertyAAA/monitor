@@ -26,11 +26,6 @@ def user_mail(request):
     return render(request, "user_management_html/user_mail.html")
 
 
-def online_user(request):
-    online_users = online_user_management.users
-    return render(request, "user_management_html/online_user.html", locals())
-
-
 def search_user(request):
     return render(request, "user_management_html/search_user.html")
 
