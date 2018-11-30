@@ -271,7 +271,7 @@ class XAdminSite(object):
             for model in self._registry.keys():
                 model_name = model._meta.model_name
                 app_label = model._meta.app_label
-                if model_name.find(keyword) != -1:
+                if model_name.find(keyword) != -1 or app_label.find(keyword) != -1:
                     ret["html"] += """
                         <tr>
                             <td>

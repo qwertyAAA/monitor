@@ -54,6 +54,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'permission.service.rbac.ValidPermission',
     'middlewares.xadminMiddleware.CheckXadminPermission',
+    'permission.service.rbac.ValidPermission',
 ]
 
 ROOT_URLCONF = 'monitor.urls'
