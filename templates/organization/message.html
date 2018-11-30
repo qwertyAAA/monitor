@@ -10,15 +10,17 @@
     <style type="text/css">
         ul, li {
             margin: 0;
-            padding-left: 10px;
+            padding-left: 15px;
             padding-top: 5px;
             list-style: none;
+        {#color: grey;#}
         }
     </style>
     <script src="/static/organization/jquery-3.3.1.min.js"></script>
     <div class="row">
         <div class="col-sm-2">
-            <ul id="clNone" class="list-unstyled">
+            <h4>机构树形图</h4>
+            <ul id="clNone" class="list-unstyled app">
 
             </ul>
         </div>
@@ -266,20 +268,60 @@
                 var flag = 0;
                 {% for foo in obj1 %}
                     if ("{{ foo.top_department_id }}" === sup) {
-                        $("#" + "cl" + sup).append('<li>' +
+                        $("#" + "cl" + sup).append('<li><span></span>' +
                             '<a class="cl" href="/organization/message/?id={{ foo.id }}">{{ foo.name }}</a>'
-                            + '<ul id="cl{{ foo.id }}" style=""></ul>'
+                            + '<ul id="cl{{ foo.id }}" class="dis" style="display: none;"></ul>'
                             + '</li>');
                         list("{{ foo.id }}");
                     }
                     flag++;
                     if (flag === {{ length }}) {
-                        console.log("end");
+                        {#console.log("end");#}
                         return 0;
                     }
                 {% endfor %}
             }
+
             list("None");
+
+            function append_btn() {
+                {% for foo in obj1 %}
+                    var cont = $("#cl" +{{ foo.id }});
+                    if (cont.html()) {
+                        cont.prevAll("span").attr("class", "glyphicon glyphicon-plus span_click");
+                        cont.prevAll("span").attr("style", "color: gray; margin: 3px;");
+                        cont.prevAll("span").attr("clicked", "No");
+                    }
+                    {% if foo.id == top.id %}
+                        cont.show("300");
+                        cont.prevAll("span").attr("clicked", "Yes");
+                        cont.prevAll("span").attr("class", "glyphicon glyphicon-minus span_click");
+                        cont.prevAll("span").attr("style", "color: gray; margin: 3px;");
+                        cont.parents("ul").each(function () {
+                            $(this).show("300");
+                            $(this).prevAll("span").attr("clicked", "Yes");
+                            $(this).prevAll("span").attr("class", "glyphicon glyphicon-minus span_click");
+                            $(this).prevAll("span").attr("style", "color: gray; margin: 3px;");
+                        });
+                    {% endif %}
+                {% endfor %}
+            }
+
+            append_btn();
+            {#var flag = "glyphicon glyphicon-plus span_click";#}
+            $(document).on('click', '.span_click', function () {
+                var clicked = $(this).attr("clicked");
+                console.log(clicked);
+                if (clicked === "No") {
+                    $(this).attr("class", "glyphicon glyphicon-minus span_click");
+                    $(this).attr("clicked", "Yes");
+                    $(this).nextAll("ul").show("300");
+                } else {
+                    $(this).attr("class", "glyphicon glyphicon-plus span_click");
+                    $(this).attr("clicked", "No");
+                    $(this).nextAll("ul").hide("300");
+                }
+            });
         });
     </script>
 {% endblock %}
