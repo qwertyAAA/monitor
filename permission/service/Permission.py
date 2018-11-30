@@ -19,13 +19,13 @@ def init_permission(user_obj, request):
     permisson = user_obj.role_set.all().values("permissions__url", "permissions__action",'permissions__group_id').distinct()
     # print(user_obj.role_set.all())
     # print("该用户的权限信息如下：")
-    print(permisson)
-    print("**"*10)
+    # print(permisson)
+    # print("**"*10)
 
     permisson_dict = {}
 
     data_permission = user_obj.role_set.all().values('data_per__id').distinct()
-    print('数据权限id', data_permission)
+    # print('数据权限id', data_permission)
     data_permission_id_list=[]
     for i in data_permission:
         data_permission_id_list.append(i['data_per__id'])
@@ -55,9 +55,7 @@ def init_permission(user_obj, request):
     #获取该用户的所有权限信息
     permission_menu = user_obj.role_set.all().values('permissions__url', 'permissions__action',
                                                   'permissions__group__title','permissions__id').distinct()
-    # print("**" * 10)
-    # print(permission_menu)
-    # print("**" * 10)
+
     menu_permission_list = []
     first_menu_list=[]
     second_menu_list=[]
