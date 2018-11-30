@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, HttpResponse
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.contrib import auth
+from permission.service.Permission import init_permission
 
 
 def login(request):
@@ -15,13 +16,20 @@ def login(request):
         if valid_code.upper() == request.session.get("valid_code", "").upper():
             if user:
                 auth.login(request, user)
+                request.session['user_id'] = user.id
+                init_permission(user, request)
+                response = render(request, "index.html")
                 if remember_pwd:
-                    response = render(request, "index.html")
                     response.set_cookie("username", username)
                     response.set_cookie("password", password)
                     return response
                 else:
-                    return redirect("/index/")
+                    try:
+                        response.delete_cookie("username")
+                        response.delete_cookie("password")
+                        return response
+                    except:
+                        return redirect("/index/")
             else:
                 login_message = "账号或密码错误，请重新输入！"
                 return render(request, "login.html", locals())
@@ -30,16 +38,10 @@ def login(request):
             return render(request, "login.html", locals())
     else:
         try:
-            username = request.COOKIES.get("username")
-            print(username)
-            password = request.COOKIES.get("password")
-            user = auth.authenticate(username=username, password=password)
-            print(user)
-            if user:
-                auth.login(request, user)
-                return redirect("/index/")
-            else:
-                return render(request, "login.html")
+            cookie_username = request.COOKIES.get("username")
+            print(cookie_username)
+            cookie_password = request.COOKIES.get("password")
+            return render(request, "login.html", locals())
         except:
             return render(request, "login.html")
 
@@ -224,7 +226,7 @@ def get_valid_img(request):
     for i in range(5):
         u = chr(random.randint(65, 90))  # 生成大写字母
         l = chr(random.randint(97, 122))  # 生成小写字母
-        n = str(random.randint(0, 9))  # 生成数字，注意要转换成字符串类型
+        n = str(random.randint(2, 9))  # 生成数字，注意要转换成字符串类型
 
         tmp = random.choice([u, l, n])
         tmp_list.append(tmp)

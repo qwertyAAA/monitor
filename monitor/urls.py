@@ -32,7 +32,7 @@ urlpatterns = [
     url(r'^login/$', login, name="login"),
     url(r'^register/$', register, name="register"),
     url(r'^logout/$', logout, name="logout"),
-    url(r'^base/', mali_vi.base),
+    # url(r'^base/', mali_vi.base),
     url(r'^fhsms/', mali_vi.fhsms),
     url(r'^pictures/', mali_vi.pictures),
     # media的相关的路由设置

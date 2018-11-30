@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'mail',
     'organization',
     'xadmin.apps.XadminConfig',
     'user_management.apps.UserManagementConfig',
@@ -52,7 +53,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'middlewares.xadminMiddleware.CheckXadminPermission',
-    # 'middlewares.xadminMiddleware.XadminIndex',
     # 'permission.service.rbac.ValidPermission',
 ]
 
@@ -81,24 +81,12 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  # 数据库的类型
         'HOST': '10.25.116.62',  # 数据库的地址
-        # 'HOST': 'localhost',  # 数据库的地址
         'PORT': 3306,
         'NAME': 'monitor',
         'USER': 'root',
         'PASSWORD': '123456',
     }
 }
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',  # 数据库的类型
-#         # 'HOST': '10.25.116.62',  # 数据库的地址
-#         'HOST': 'localhost',  # 数据库的地址
-#         'PORT': 3306,
-#         'NAME': 'monitor',
-#         'USER': 'root',
-#         'PASSWORD': '123456',
-#     }
-# }
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -139,7 +127,6 @@ CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": "redis://10.25.116.62:6379/0",
-        # "LOCATION": "redis://127.0.0.1:6379/0",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
@@ -154,7 +141,23 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
-# media配置，用户上传的文件都默认存放到当前文件夹下
 
+# media配置，用户上传的文件都默认存放到当前文件夹下
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+# 配置邮箱发邮件的相关功能
+"""
+不可删除
+"""
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# smtp服务的邮箱服务器
+EMAIL_HOST = 'smtp.163.com'
+# smtp服务固定的端口是25
+EMAIL_PORT = 25
+# 发送邮件的邮箱
+EMAIL_HOST_USER = '18388627773@163.com'
+# 在邮箱中设置的客户端授权密码
+EMAIL_HOST_PASSWORD = '163mail'
+# 收件人看到的发件人 <此处要和发送邮件的邮箱相同>
+EMAIL_FROM = '18388627773@163.com'

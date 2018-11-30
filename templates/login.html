@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hans">
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta charset="utf-8"/>
@@ -73,7 +73,7 @@
                                             <label class="block clearfix">
 														<span class="block input-icon input-icon-right">
 															<input id="login_username" type="text" name="username"
-                                                                   class="form-control"
+                                                                   class="form-control" value="{{ cookie_username |default:"" }}"
                                                                    placeholder="用户名"/>
 															<i class="ace-icon fa fa-user"></i>
 														</span>
@@ -82,7 +82,7 @@
                                             <label class="block clearfix">
 														<span class="block input-icon input-icon-right">
 															<input id="login_pwd" type="password" name="password"
-                                                                   class="form-control"
+                                                                   class="form-control" value="{{ cookie_password |default:"" }}"
                                                                    placeholder="密码"/>
 															<i class="ace-icon fa fa-lock"></i>
 														</span>

@@ -1,0 +1,285 @@
+{% extends 'base.html' %}
+
+{% block css %}
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/static/organization/jquery-3.3.1.min.js"></script>
+    <script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
+{% endblock %}
+
+{% block content %}
+    <style type="text/css">
+        ul, li {
+            margin: 0;
+            padding-left: 10px;
+            padding-top: 5px;
+            list-style: none;
+        }
+    </style>
+    <script src="/static/organization/jquery-3.3.1.min.js"></script>
+    <div class="row">
+        <div class="col-sm-2">
+            <ul id="clNone" class="list-unstyled">
+
+            </ul>
+        </div>
+        <div class="col-sm-10">
+            <div class="row">
+                <form class="navbar-form navbar-left" method="post" action="/organization/search/">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input type="text" name="select_text" class="form-control" placeholder="请输入查询条件">
+                        <select name="select_kind" class="form-control">
+                            <option>本级</option>
+                            <option>全部</option>
+                        </select>
+                        <input type="text" name="top" value="{{ top.id }}" class="form-control" style="display: none">
+                    </div>
+                    <button type="submit" class="btn btn-primary">查询</button>
+                </form>
+            </div>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>名称</th>
+                    <th>英文</th>
+                    <th>编码</th>
+                    <th>负责人</th>
+                    <th>操作</th>
+                </tr>
+                {% if msg %}
+                    <caption>以下部门为查询结果</caption>
+                {% elif top %}
+                    <caption id="cap" top="{{ top.name }}">上级部门：{{ top.name }}</caption>
+                {% elif not top %}
+                    <caption id="cap" top="">以下部门为顶级部门</caption>
+                {% endif %}
+                </thead>
+                <tbody>
+                {% for foo in obj %}
+                    {% if foo.top_department_id == top.id or msg %}
+                        <tr>
+                            <td><a href="/organization/message/?id={{ foo.id }}">{{ foo.name }}</a></td>
+                            <td>{{ foo.en_name }}</td>
+                            <td>{{ foo.code }}</td>
+                            <td>{{ foo.user }}</td>
+                            <td>
+                                <button id="btn1" type="button" class="btn btn-sm btn-success"
+                                        {#                                    href="/organization/edit_dep/?id={{ foo.id }}"#}
+                                        edit_id="{{ foo.id }}"
+                                        data-toggle="modal" data-target="#myModal">编辑
+                                </button>
+                                <a id="btn2" type="button" class="btn btn-sm btn-warning"
+                                   del_name="{{ foo.name }}"
+                                   del_id="{{ foo.id }}"
+                                        {#                                   href="/organization/delete_dep/?id={{ foo.id }}"#}
+                                   data-toggle="modal"
+                                   data-target="#myModal2">删除</a>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% empty %}
+                    <tr>
+                        <td class="text-center" colspan="5">暂无内容</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <button id="btn_add" type="button" class="btn btn-sm btn-info"
+                    data-toggle="modal" data-target="#myModal">新增
+            </button>
+        </div>
+    </div>
+    <!-- Modal2 -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="myModal2">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">确认删除</h4>
+                </div>
+                <form method="post" action="/organization/delete_dep/">
+                    {% csrf_token %}
+                    <div id="my2_content" class="modal-body text-center">
+                        <p>是否确认删除<span id="del_name" style="color: red;"></span></p>
+                        <input id="del_id" name="del_id" style="display: none">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="submit" class="btn btn-primary">确认</button>
+                    </div>
+                </form>
+
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    {#    <button type="button" class="btn btn-default btn-xs"></button>#}
+    <!-- Modal1 -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">编辑信息</h4>
+                </div>
+
+                <form action="/organization/edit_dep/" method="post" class="form-horizontal">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="form-group" style="display: none">
+                            <label for="did" class="col-sm-2">id</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="did" class="in1 form-control" id="did"
+                                       placeholder="ID">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="top_dep" class="col-sm-2">上级机构</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="top_dep" class="in1 form-control" id="top_dep"
+                                       placeholder="请输入部门上级机构">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="dname" class="col-sm-2">名称</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="dname" class="in1 form-control" id="dname"
+                                       placeholder="请输入名称">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="en_name" class="col-sm-2">英文名</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="en_name" class="in1 form-control" id="en_name"
+                                       placeholder="请输入英文名">
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="code" class="col-sm-2">编码</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="code" class="in1 form-control" id="code"
+                                       placeholder="请输入编码">
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="phone" class="col-sm-2">手机</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="phone" class="in1 form-control" id="phone"
+                                       placeholder="请输入手机号码">
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="address" class="col-sm-2">地址</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="address" class="in1 form-control" id="address"
+                                       placeholder="请输入地址">
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="func" class="col-sm-2">职能</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="func" class="in1 form-control" id="func"
+                                       placeholder="请输入部门职能">
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="user" class="col-sm-2">负责人</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="user" class="in1 form-control" id="user"
+                                       placeholder="请输入部门负责人">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="tips" class="col-sm-2">备注</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="tips" class="in1 form-control" id="tips"
+                                       placeholder="备注">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="submit" class="btn btn-primary">提交</button>
+                    </div>
+                </form> <!--edit form-->
+
+
+            </div>
+        </div>
+    </div><!-- /.modal -->
+    <script type="text/javascript">
+        $(function () {
+            $('#myModal').on('hidden.bs.modal', function () {
+                $(".in1").val("");
+                $("#top_dep").removeAttr('disabled');
+                $("#top_dep").attr('placeholder', '请输入上级部门')
+            });
+            $(document).on('click', "#btn_add", function () {
+                var flag = $("#cap").attr("top");
+                if (flag) {
+                    $("#top_dep").val(flag);
+                } else {
+                    $("#top_dep").attr('disabled', 'disabled');
+                    $("#top_dep").attr('placeholder', '此部门为顶级部门')
+                }
+            });
+            $(document).on('click', "#btn2", function () {
+                var del_id = $(this).attr("del_id");
+                var del_name = $(this).attr("del_name");
+                $("#del_name").text(del_name);
+                $("#del_id").val(del_id)
+            });
+            $(document).on('click', "#btn1", function () {
+                var id = $(this).attr("edit_id");
+                console.log(id);
+                $.ajax({
+                    url: "/organization/edit_dep/?id=" + id,
+                    type: "get",
+                    success: function (data) {
+                        if (data.top_dep) {
+                            $("#top_dep").val(data.top_dep);
+                        } else {
+                            $("#top_dep").attr('disabled', 'disabled');
+                            $("#top_dep").attr('placeholder', '此部门为顶级部门')
+                        }
+                        $("#did").val(data.did);
+                        $("#dname").val(data.name);
+                        $("#en_name").val(data.en_name);
+                        $("#code").val(data.code);
+                        $("#phone").val(data.phone);
+                        $("#address").val(data.address);
+                        $("#func").val(data.func);
+                        $("#tips").val(data.tips);
+                        $("#user").val(data.user);
+                    }
+                })
+            });
+
+            function list(sup) {
+                var flag = 0;
+                {% for foo in obj1 %}
+                    if ("{{ foo.top_department_id }}" === sup) {
+                        $("#" + "cl" + sup).append('<li>' +
+                            '<a class="cl" href="/organization/message/?id={{ foo.id }}">{{ foo.name }}</a>'
+                            + '<ul id="cl{{ foo.id }}" style=""></ul>'
+                            + '</li>');
+                        list("{{ foo.id }}");
+                    }
+                    flag++;
+                    if (flag === {{ length }}) {
+                        console.log("end");
+                        return 0;
+                    }
+                {% endfor %}
+            }
+            list("None");
+        });
+    </script>
+{% endblock %}

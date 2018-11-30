@@ -8,7 +8,7 @@
 
 
 $(function () {
-    $("#check_all").click(function () {
+    $("body").delegate("#check_all", "click",function () {
         if ($(this).prop("checked")) {
             $(".check_item").prop("checked", true)
         }
@@ -16,7 +16,7 @@ $(function () {
             $(".check_item").prop("checked", false)
         }
     });
-    $(".check_item").click(function () {
+    $("body").delegate(".check_item", "click", function () {
         var check_flag = true;
         $(".check_item").each(function () {
             if (!$(this).prop("checked")) {
