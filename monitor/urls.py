@@ -40,7 +40,6 @@ urlpatterns = [
     url(r'^pictures/', mali_vi.pictures),
     # media的相关的路由设置
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
-    url(r'^upload/', mali_vi.upload),
     url(r'^$', index),
     url(r'^index/$', index),
     url(r"^get_valid_img.png/", get_valid_img),
