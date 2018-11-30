@@ -5,6 +5,8 @@ from permission.models import Role
 from django.contrib.auth.models import User
 from django.contrib import auth
 from permission.service.Permission import init_permission
+from online_management.online_users import online_users
+
 
 def login(request):
     if request.method == "POST":

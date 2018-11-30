@@ -106,6 +106,9 @@ class ModelXAdmin(object):
                         setattr(form.instance, field.name, make_password(password))
                 form.instance.save()
                 form.save_m2m()
+            prev_url = request.GET.get("prev_url")
+            if prev_url:
+                return redirect(prev_url)
             return redirect("/xadmin/" + current_app_label + "/" + current_model_name + "/")
         return render(request, "xadmin/update_view.html", locals())
 
@@ -131,6 +134,9 @@ class ModelXAdmin(object):
                         setattr(form.instance, field.name, make_password(password))
                 form.instance.save()
                 form.save_m2m()
+            prev_url = request.GET.get("prev_url")
+            if prev_url:
+                return redirect(prev_url)
             return redirect("/xadmin/" + current_app_label + "/" + current_model_name + "/")
         return render(request, "xadmin/update_view.html", locals())
 

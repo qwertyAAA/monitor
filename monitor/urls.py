@@ -25,9 +25,11 @@ from organization import urls as organization_urls
 from account import urls as account_urls
 from permission import urls as permission_url
 from menu_management import urls as menu_urls
+from online_management.online_users import offline, online
+
 urlpatterns = [
     url(r'^xadmin/', site.urls),
-    url(r'^menu/',include(menu_urls)),
+    url(r'^menu/', include(menu_urls)),
     url(r'^user_management/', include(user_management_url)),
     url(r'^account/', include(account_urls)),
     url(r'^permission/', include(permission_url)),
@@ -43,5 +45,7 @@ urlpatterns = [
     url(r'^upload/', mali_vi.upload),
     url(r'^$', index),
     url(r'^index/$', index),
-]
+    url(r'^offline/$', offline),
+    url(r'^online/$', online),
 
+]

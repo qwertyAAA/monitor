@@ -27,7 +27,7 @@
                     for="{{ cross_table_info.app_label }}/{{ cross_table_info.model_name }}"
                     class="col-sm-2 control-label"></label>
             <div class="col-sm-5">
-            <a href="/xadmin/{{ cross_table_info.app_label }}/{{ cross_table_info.model_name }}/add"
+            <a href="/xadmin/{{ cross_table_info.app_label }}/{{ cross_table_info.model_name }}/add/?prev_url={{ request.path_info }}"
                id="{{ cross_table_info.app_label }}/{{ cross_table_info.model_name }}"
                class="btn btn-success"><i class="fa fa-plus"></i>
                 <span>向{{ cross_table_info.verbose_name }}添加数据</span></a>
