@@ -3,18 +3,21 @@ from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.contrib import auth
 from permission.service.Permission import init_permission
-from online_management.online_users import online_users
+from middlewares.online_users_management import online_users_management
+from django.contrib.auth.hashers import make_password
 
 
-
+# 登录
 def login(request):
     if request.method == "POST":
         username = request.POST.get("username", None)
+        print(username)
         password = request.POST.get("password", None)
+        print(password)
         valid_code = request.POST.get("valid_code", None)
         remember_pwd = request.POST.get("remember_pwd", None)
-        print(remember_pwd, "****************")
         user = auth.authenticate(username=username, password=password)
+        print(user, "************")
         if valid_code.upper() == request.session.get("valid_code", "").upper():
             if user:
                 auth.login(request, user)
@@ -48,6 +51,7 @@ def login(request):
             return render(request, "login.html")
 
 
+# 注册
 def register(request):
     js_code = """
         window.onload = function(){
@@ -80,19 +84,21 @@ def register(request):
     return render(request, "login.html", locals())
 
 
+# 注销
 def logout(request):
     print(request.META["HTTP_REFERER"])
     try:
         auth.logout(request)
     except Exception as e:
         print(e)
-    return redirect(request.META['HTTP_REFERER'])
+    return redirect("/login/")
 
 
+# 重置密码
 def reset_pwd(request):
     if request.method == "POST":
         data = {}
-        newPwd = request.POST.get("newPwd", None)
+        newPwd = make_password(request.POST.get("newPwd", None))
         auth_id = request.session["auth_id"]
         if newPwd:
             User.objects.filter(id=auth_id).update(password=newPwd)
@@ -103,10 +109,12 @@ def reset_pwd(request):
             return JsonResponse(data)
 
 
+# 首页
 def index(request):
     return render(request, "index.html")
 
 
+# Ajax验证邮箱是否注册
 def check_email(request):
     data = {}
     if request.is_ajax():
@@ -120,6 +128,7 @@ def check_email(request):
     return JsonResponse(data)
 
 
+# Ajax验证用户名是否已注册
 def check_username(request):
     data = {}
     if request.is_ajax():
@@ -133,7 +142,7 @@ def check_username(request):
     return JsonResponse(data)
 
 
-# 发送邮件
+# 发送邮件验证码
 def sendEmail(request):
     message = {}
     print(request.method, "************")
@@ -180,6 +189,7 @@ def sendEmail(request):
                     s.login(sender, pwd)
                     s.sendmail(sender, receiver, msg.as_string())
                     print("邮件发送成功！")
+                    request.session["findBy_email"] = emailaddress
                     request.session["email_code"] = pawdtemp
                     request.session["auth_id"] = idtemp
                     message["success"] = "验证码已经发送到您的邮箱，请尽快登录邮箱以完成密码更新！"
@@ -201,6 +211,7 @@ def sendEmail(request):
     return render(request, "login.html", locals())
 
 
+# 登录验证码生成
 def get_valid_img(request):
     # with open("valid_code.png", "rb") as f:
     #     data = f.read()

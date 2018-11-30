@@ -1,7 +1,124 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% extends 'fhsms.html' %}
-    {% block fhs %}
-    {% endblock %}
+    <!-- 导入 -->
+    <link rel="stylesheet" href="/static/mail/mail_modal.css"/>
+    <span class="input-icon">
+            <input type="text" placeholder="这里输入关键词" class="nav-search-input"
+                   id="nav-search-input" autocomplete="off" name="keywords">
+            <i class="ace-icon fa fa-search nav-search-icon"></i>
+    </span>
+    {% csrf_token %}
+    <div class="mail_list pictures" style="text-align: center">
+        <div class="table-responsive">
+            <table class="table table-bordered tale_inquiry">
+                <thead>
+                <th><input type="checkbox" id="checkbox_on"></th>
+                <th>序号</th>
+                <th>图片</th>
+                <th>标题</th>
+                <th>ID</th>
+                <th>创建时间</th>
+                <th>图片所属人</th>
+                <th>备注</th>
+                <th>操作</th>
+                </thead>
+                <tbody>
+                {% for pictures in pictures_list %}
+                    <tr>
+                        <td><input type="checkbox" value="{{ pictures.id }}" id="onclick_checkbox"
+                                   name="onclick_checkbox"></td>
+                        <td>{{ forloop.counter }}</td>
+                        <td><img class="media-object" src="/media/{{ pictures.path }}" alt="..."
+                                 style="width: 52px;height: 52px;"></td>
+                        <td>{{ pictures.title }}</td>
+                        <td>{{ pictures.name }}</td>
+                        <td>{{ pictures.create_time }}</td>
+                        <td>{{ pictures.master_id.user.username }}</td>
+                        <td>{{ pictures.BZ }}</td>
+                        <td>
+                            <a style="cursor:pointer; color: #69aa46;" class="green" title="编辑">
+                                <i class="ace-icon fa fa-pencil bigger-130"></i>
+                            </a>&nbsp;
+                            <a style="cursor:pointer;" class="red" title="删除">
+                                <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- 新增 -->
+    <div>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">新增</button>
+    </div>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content pictures_content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">新增图片</h4>
+                </div>
+                <div class="pictures_body">
+                    <div class="border_body">
+                        <link href="/static/mail/pictures/css/common.css" type="text/css" rel="stylesheet">
+                        <link href="/static/mail/pictures/css/imgss.css" type="text/css" rel="stylesheet">
+                        <div class="img-box full">
+                            <section class=" img-section">
+                                <div class="z_photo upimg-div clear">
+                                    <!--<section class="up-section fl">
+                                         <span class="up-span"></span>
+                                         <img src="img/buyerCenter/a7.png" class="close-upimg">
+                                         <img src="img/buyerCenter/3c.png" class="type-upimg" alt="添加标签">
+                                         <img src="img/test2.jpg" class="up-img">
+                                         <p class="img-namep"></p>
+                                         <input id="taglocation" name="taglocation" value="" type="hidden">
+                                         <input id="tags" name="tags" value="" type="hidden">
+                                     </section>-->
+                                    <section class="z_file fl">
+                                        <img src="/static/mail/pictures/img/a11.png" class="add-img" name="add-img">
+                                        <input type="file" name="file" id="file" class="file" value=""
+                                               accept="image/jpg,image/jpeg,image/png,image/bmp" multiple/>
+                                    </section>
+                                </div>
+                            </section>
+                        </div>
+                        <aside class="mask works-mask">
+                            <div class="mask-content">
+                                <p class="del-p ">您确定要删除作品图片吗？</p>
+                                <p class="check-p"><span class="del-com wsdel-ok">确定</span><span
+                                        class="wsdel-no">取消</span></p>
+                            </div>
+                        </aside>
+                        {#                            <button type="button" class="btn btn-primary pick_click">#}
+                        {#                                点击选择图片#}
+                        {#                            </button>#}
+                        {#                            <input type="file" name="avatar" id="pic_selector" accept="image/*" style="display: none;"#}
+                        {#                                   multiple/>#}
+                        {#                            <p>或将照片拖到这里，单次最多可选300张</p>#}
+                    </div>
+                </div>
+
+                <!--*************************************************-->
+
+                <!--*************************************************-->
+                <div class="modal-footer">
+                    <span class="left">选中1张图片，共12.6K。</span>
+                    <button type="button" class="btn btn-default continue-click" id="add"
+                            data-dismiss="modal">继续添加
+                    </button>
+                    <button type="button" class="btn btn-primary" id="img_upload">开始上传</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <!-- 多选删除按钮 -->
+    <button type="button" class="btn btn-primary new_add_btn" data-toggle="modal"
+            data-target=".bs-example-modal-sm" id="many_del1">全部删除
+    </button>
+    <!--  -->
 {% endblock %}

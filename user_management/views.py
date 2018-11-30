@@ -19,6 +19,7 @@ from django import forms
 from django.forms import widgets
 from permission.models import Role
 from django.forms import ModelForm
+from middlewares.online_users_management import online_users_management
 
 
 def user_mail(request):
@@ -189,6 +190,12 @@ def batch(request):
 
     return render(request, "user_management/user_info.html")
 
+
+def online_users(request):
+    online_users = online_users_management.users
+    return render(request, "user_management_html/online_users.html", locals())
+
+  
 @csrf_exempt
 def check_usernumber(request):
     data = {}
