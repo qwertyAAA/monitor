@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.shortcuts import render, redirect, HttpResponse
 from django.http import JsonResponse
 from django.contrib.auth.models import User
+from django.views.decorators.csrf import csrf_exempt
 
 from .Myutilss.pageutil import Page
 
@@ -34,9 +35,11 @@ def search_user(request):
 
 def aadd_user(request):
     print('czx')
+
     if request.method == "POST":
         user_id = request.POST.get('user_id')
         user_name = request.POST.get('user_name')
+        user_number = request.POST.get('user_number')
         user_id_card = request.POST.get('user_id_card')
         user_stay_years = request.POST.get('user_stay_years')
         user_gender = request.POST.get('user_gender')
@@ -46,6 +49,7 @@ def aadd_user(request):
         titlelist = request.POST.getlist('titlelist')
         user = models.User.objects.get(id=user_id)
 
+
         UserInfo = models.UserInfo.objects.create(
             user_name=user_name,
             user_id_card=user_id_card,
@@ -54,6 +58,7 @@ def aadd_user(request):
             user_phone=user_phone,
             user_age=user_age,
             user_remarks=user_remarks,
+            user_number=user_number,
             user=user,
         )
         ''' 怎么向Role表里面添加信息'''
@@ -126,7 +131,7 @@ def edit_user(request, user_id):
     return render(request, "user_management_html/user_info.html", locals())
 
 
-def delete_user(request, num):
+def delete_user(request, num=None):
     if num:
         '''  对于删除先删除第三张表再删除作者表 id  注意页面的格式问题'''
         del_obj = models.UserInfo.objects.filter(id=num)
@@ -134,7 +139,12 @@ def delete_user(request, num):
         del_obj.delete()
 
         return redirect('/user_management/user_info/')
-    return redirect('/user_management/user_info/')
+    if request.is_ajax():
+        delete_id_list = request.POST.getlist("delete_id_list")
+        for delete_id in delete_id_list:
+            models.UserInfo.objects.filter(id=delete_id).delete()
+        return JsonResponse({"status": True})
+    return JsonResponse({"status": False})
 
 
 def details_user(request, editemp_id):
@@ -177,3 +187,18 @@ def batch(request):
         return redirect('/user_management/employee_info/')  # 所有的对象
 
     return render(request, "user_management/user_info.html")
+
+@csrf_exempt
+def check_usernumber(request):
+    data = {}
+    print(request.is_ajax())
+    if request.is_ajax():
+        if request.method == "POST":
+            adduser_number = request.POST.get("adduser_number", None)
+            user = models.UserInfo.objects.filter(user_number=adduser_number)
+            if user:
+                data["message"] = 1
+            else:
+                data["message"] = 0
+    print(data)
+    return JsonResponse(data)

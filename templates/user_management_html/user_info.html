@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
     <script src="/static/js/jquery-3.3.1.min.js"></script>
+    <script src="/static/js/jquery-2.1.4.min.js"></script>
+    <script src="/static/js/check_box.js"></script>
+    <script src="/static/js/sweetalert.min.js"></script>
     <div align="center">
 
     </div>
@@ -14,7 +17,7 @@
 
             <form action="/user_management/batch_user/" method="post">
                 {% csrf_token %}
-{#            </form>#}
+            </form>
 {#            <!-- form 多选-->#}
 
             <select name="action" id="" style="width: 200px; padding:5px 8px;   display: inline-block">
@@ -24,7 +27,7 @@
 
 
             </select>
-            <button type="submit" class="btn btn-info">执行批量删除</button>
+            <button type="submit" class="btn btn-danger " id="batch_delete">执行批量删除</button>
             <!-- 模糊查询start-->
             <a class="btn btn-xs btn-info" onclick="searchs();" title="检索" data-toggle="modal"
                data-target="#zhmyModal" style="width: 50px; height: 35px">
@@ -83,7 +86,7 @@
                 {% for user, role_list in user_role_dict.items %}
                     <tr>
                         <td style="width: 70px"><input type="checkbox" class='check_item' name='select_pk' id="choice"
-                                                       value='{{ staff.pk }}'></td>
+                                                       delete_id='{{ user.pk }}'></td>
                         <td style="width: 50px">{{ forloop.counter }}</td>
                         <td style="width: 50px">{{ user.id }}</td>
                         <td style="width: 80px">{{ user.user.username }}</td>
@@ -494,8 +497,6 @@
                                                     <option value="{{ user.pk }}"> {{ user.username }}</option>
 
                                                 {% endfor %}
-
-
                                             </select>
 
                                         </div>
@@ -507,8 +508,19 @@
                                                    placeholder="在这里输入姓名">
                                         </div>
                                     </div>
+
+
                                     <div class="form-group">
-                                        <label for="username" class="col-sm-2 control-label">身份证号：</label>
+                                        <label for="username" class="col-sm-2 control-label"><span style="color: red"> * </span>编号：</label>
+                                        <div class="col-sm-5">
+                                            <input type="text" class="form-control" id="adduser_number" name="adduser_number"
+                                                   placeholder="在这里输入编号">
+                                            <span id="message"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="username" class="col-sm-2 control-label"><span style="color: red"> * </span>身份证号：</label>
                                         <div class="col-sm-5">
                                             <input type="text" class="form-control" id="user_id_card"
                                                    name="user_id_card" placeholder="请在这里输入身份证号">
@@ -524,21 +536,41 @@
                                         </div>
                                     </div>
 
+{#                                    <div class="form-group">#}
+{#                                        <label for="username" class="col-sm-2 control-label">性别：</label>#}
+{#                                        <div class="col-sm-5">#}
+{#                                            <input type="text" class="form-control" id="user_gender"#}
+{#                                                   name="user_gender"#}
+{#                                                   placeholder="请在这里输入性别">#}
+{#                                        </div>#}
+{#                                    </div>#}
+
                                     <div class="form-group">
                                         <label for="username" class="col-sm-2 control-label">性别：</label>
                                         <div class="col-sm-5">
-                                            <input type="text" class="form-control" id="user_gender"
-                                                   name="user_gender"
-                                                   placeholder="请在这里输入性别">
+                                            <!-- 选择是根据name=“” 传递给后台的字段 里面的 取值是是value的值-->
+                                            <select name="user_gender" id="user_gender" style="width: 200px">
+
+
+                                                    <option value="m">男</option>
+                                                    <option value="w">女</option>
+
+
+                                            </select>
+
                                         </div>
                                     </div>
 
 
+
+
+
                                     <div class="form-group">
-                                        <label for="username" class="col-sm-2 control-label">手机号：</label>
+                                        <label for="username" class="col-sm-2 control-label"><span style="color: red"> * </span>手机：</label>
                                         <div class="col-sm-5">
                                             <input type="text" class="form-control" id="user_phone"
-                                                   name="user_phone" placeholder="请在这里输入手机号">
+                                                   name="user_phone" placeholder="请在这里输入手机号" style="color: red">
+
                                         </div>
                                     </div>
 
@@ -577,7 +609,7 @@
 
                                     <br/>
 
-                                    {#                                    </form>#}
+
 
 
                                     <!--新增员工 -->
@@ -624,23 +656,101 @@
     </div>
     <!-- 实现全选的功能 当下面的全部选中的时候 全选按钮也应该被选中 当全选时候，有一个取消的时候全选也跟着取消-->
     <script src="/static/js/check_box.js">
+    </script>
+   <script>
+        {#$("body").delegate(".for_delete", "click", function () {#}
+        {#    swal({#}
+        {#        title: "您确定删除吗?",#}
+        {#        text: "一旦删除，数据将无法找回",#}
+        {#        icon: "warning",#}
+        {#        buttons: ["我再想想", "狠心删除"],#}
+        {#        dangerMode: true,#}
+        {#    })#}
+        {#        .then((willDelete) => {#}
+        {#            if (willDelete) {#}
+        {#                var url = $(this).attr("delete_id") + "/delete";#}
+        {#                $.ajax({#}
+        {#                    url: url,#}
+        {#                    type: "get",#}
+        {#                    success: function (data) {#}
+        {#                        if (data.status)#}
+        {#                            window.location.reload()#}
+        {#                    }#}
+        {#                });#}
+        {#            } else {#}
+        {#                swal("数据还是安全的！");#}
+        {#            }#}
+        {#        });#}
+        {# });#}
+        $("body").delegate("#batch_delete", "click", function () {
+            var delete_id_list = [];
+            $(".check_item").each(function () {
+                if ($(this).prop("checked")) {
+                    var delete_id = $(this).attr("delete_id");
+                    delete_id_list.push(delete_id);
+                }
+            });
+            if (!delete_id_list.length) {
+                swal({
+                    title: "没有选中数据！",
+                    text: "请先选择要删除的数据",
+                    icon: "error",
+                    button: "好的"
+                });
+                return;
+            }
+            swal({
+                title: "确定删除吗?",
+                text: "一旦删除，数据将无法找回",
+                icon: "warning",
+                buttons: ["我再想想", "狠心删除"],
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                            $.ajax({
+                                url: "/user_management/batch_delete/",
+                                type: "post",
+                                traditional: true,
+                                data: {
+                                    "delete_id_list": delete_id_list,
+                                    "csrfmiddlewaretoken": "{{ csrf_token }}"
+                                },
+                                success: function (data) {
+                                    if (data.status)
+                                        window.location.reload()
+                                }
+                            });
+                    } else {
+                        swal("数据还是安全的！");
+                    }
+                });
+        });
 
-        {#$('#choice').click(function () {#}
-        {##}
-        {#    if (($(this)).prop("checked")) {#}
-        {##}
-        {#        $(".choice_item").prop("checked", true)#}
-        {##}
-        {#    }#}
-        {#    else {#}
-        {#        $(".choice_item").prop("checked", false)#}
-        {#    }#}
-        {##}
-        {##}
-        {# }) #}
+    </script>
+    <script>
+    //CSRF设置
+    $.ajaxSetup({
+        data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
+    });
 
+    $("#adduser_number").blur(function () {
+    var usernumber_var = $("#adduser_number").val();
+    if (usernumber_var != "") {
 
-
+        $.post(
+            "/user_management/check_usernumber/",
+            {
+                "adduser_number": usernumber_var
+            },
+            function (data) {
+                if (data["message"] == 1) {
+                    $("#message").text("编号已被占用");
+                }
+            }
+        )
+    }
+});
 
 
 
