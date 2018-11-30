@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 
 from .Myutilss.pageutil import Page
-
+from online_management.online_users import online_user_management
 '''当导入这个方法的时候：用的时候必须是  models.表明'''
 # from user_management import models
 from . import models
@@ -21,12 +21,13 @@ from permission.models import Role
 from django.forms import ModelForm
 
 
-def motai(request):
-    return render(request, "user_management_html/motai.html")
+def user_mail(request):
+    return render(request, "user_management_html/user_mail.html")
 
 
 def online_user(request):
-    return render(request, "user_management_html/online_user.html")
+    online_users = online_user_management.users
+    return render(request, "user_management_html/online_user.html", locals())
 
 
 def search_user(request):
@@ -39,7 +40,7 @@ def aadd_user(request):
     if request.method == "POST":
         user_id = request.POST.get('user_id')
         user_name = request.POST.get('user_name')
-        user_number = request.POST.get('user_number')
+        user_number = request.POST.get('adduser_number')
         user_id_card = request.POST.get('user_id_card')
         user_stay_years = request.POST.get('user_stay_years')
         user_gender = request.POST.get('user_gender')
