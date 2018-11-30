@@ -24,8 +24,7 @@ def user_role(request):
         return redirect('/permission/user_role/')
     return render(request,'user_role.html',locals())
 
-def roles(request):
-    return redirect('/permission/role_permission/1/')
+
 
 def role_permission(request,id):
 
@@ -189,3 +188,6 @@ def delete_role(request,id):
     # print(role_obj.title)
     role_obj.delete()
     return redirect('/permission/role_permission/' + role_group_id + '/')
+
+def roles(request):
+    return redirect('/permission/role_permission/1/')
