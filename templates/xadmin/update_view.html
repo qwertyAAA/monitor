@@ -5,7 +5,9 @@
     <br/>
     <br/>
     <div class="pull-right">
-        <a href="/xadmin/"><span>xadmin/</span></a><a href="/xadmin/{{ current_url }}">{{ current_url }}</a>
+        <a href="/xadmin/"><span>xadmin/</span></a><a
+            href="/xadmin/{{ current_app_label }}/{{ current_model_name }}"><span>{{ current_app_label }}/{{ current_model_name }}/</span></a>
+        <br/>
     </div>
     <br/>
     <br/>
@@ -19,6 +21,19 @@
                 </div>
             </div>
         {% endfor %}
+        {% for cross_table_info in cross_tables_info %}
+        <div class="form-group">
+            <label
+                    for="{{ cross_table_info.app_label }}/{{ cross_table_info.model_name }}"
+                    class="col-sm-2 control-label"></label>
+            <div class="col-sm-5">
+            <a href="/xadmin/{{ cross_table_info.app_label }}/{{ cross_table_info.model_name }}/add/?prev_url={{ request.path_info }}"
+               id="{{ cross_table_info.app_label }}/{{ cross_table_info.model_name }}"
+               class="btn btn-success"><i class="fa fa-plus"></i>
+                <span>向{{ cross_table_info.verbose_name }}添加数据</span></a>
+            </div>
+        </div>
+        {% endfor %}
         <div class="form-group">
             <button type="submit" class="btn btn-info col-md-offset-2" style="width: 200px;">保存</button>
             <button type="reset" class="btn btn-warning" style="width: 200px;">取消</button>
@@ -30,6 +45,10 @@
             {#$("form div select").parent().append(#}
             {#    "<a href=></a>"#}
             {#)#}
+            $("form div select").addClass("form-control");
+            $("form div select").after(
+                "<a href='/xadmin/{{ current_url }}'></a>"
+            )
             $("form div label").addClass("col-sm-2 control-label");
             $("form div input[name*='password']").val("");
             $("form div input[name*='password']").attr("type", "password");
@@ -42,14 +61,13 @@
                 "</div>"
             )
             $("body").delegate("#check_password", "blur", function () {
-                if($(this).val() != $("form div input[name*='password']").val())
-                {
+                if ($(this).val() != $("form div input[name*='password']").val()) {
                     swal({
-                    title: "输入错误！",
-                    text: "两次输入的密码不一致",
-                    icon: "error",
-                    button: "好的"
-                });
+                        title: "输入错误！",
+                        text: "两次输入的密码不一致",
+                        icon: "error",
+                        button: "好的"
+                    });
                 }
             });
         });

@@ -20,4 +20,7 @@ from account.views import *
 urlpatterns = [
     url(r'check_email/$', check_email),
     url(r'check_username/$', check_username),
+    url(r'send_email/$', sendEmail),
+    url(r'reset_pwd/$', reset_pwd),
+    url(r'check_code/$', reset_pwd),
 ]

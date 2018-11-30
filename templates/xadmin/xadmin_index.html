@@ -4,17 +4,13 @@
     </script>
     <div class="container">
         <br/>
-        <br/>
-        <br/>
-        <br/>
         <div align="center">
             <h2><strong>欢迎来到后台管理系统!</strong></h2>
         </div>
         <br/>
         <br/>
-        <br/>
         <div class="col-md-offset-1">
-            <form class="form-inline">
+            <form class="form-inline" method="post">
                 {% csrf_token %}
                 <div class="form-group">
                     <input type="text" class="form-control" id="keyword" style="width: 300px;"

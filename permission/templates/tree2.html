@@ -1,23 +1,25 @@
 <div class="modal fade " style="left: 30%;top: 20%" id="myModal4" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
-        <div class="modal-content" style="width: 35%">
+        <div class="modal-content" style="width: 50%">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">该组权限如下：</h4>
             </div>
             <div class="modal-body">
-            {% comment %}
-            查看组权限，从后台得到该组的所欲权限集合，根据action 的 list 判断是否是顶级菜单
-            如果是，foo.title直接显示。然后再次在其下边 for循环找到次级菜单的title
-            {% endcomment %}
-                {% for foo in role_group_permissions %}
-                    {% if foo.action == 'list' %}
-                        <h2>{{ foo.title }}</h2>
+                {% for f1 in role_group_permissions %}
+                    {% if f1.action == 'list' %}
+                        <h1>{{ f1.title }}</h1>
                         {% for f2 in role_group_permissions %}
-                            {% if f2.group.title == foo.title %}
-                               <h4 class="center"> {{ f2.title }}</h4>
+                            {% if f2.group.title == f1.title %}
+                               <h3>&nbsp;&nbsp;&nbsp;&nbsp; {{ f2.title }}</h3>
+                                {% for f3 in role_group_permissions %}
+                                    {% if f3.group.title == f2.title %}
+                                       <h6> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                           {{ f3.title }}</h6>
+                                    {% endif %}
+                                {% endfor %}
                             {% endif %}
                         {% endfor %}
                     {% endif %}

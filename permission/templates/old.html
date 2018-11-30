@@ -1,0 +1,89 @@
+
+                        <a style="display: none" class="button btn btn-sm btn-primary" data-toggle="modal"
+                           data-target="#accredit{{ forloop.counter }}">授权</a>
+                        <div class="modal fade" id="accredit{{ forloop.counter }}" tabindex="-1" role="dialog"
+                             aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close"><span
+                                                aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="myModalLabel">请选择权限</h4>
+                                    </div>
+                                    <form action="/permission/role_accredit/{{ role.id }}/?role_group_id={{ role_group_id }}"
+                                          method="post">
+                                        {% csrf_token %}
+                                        <div class="modal-body">
+                                            <select name="role_permissions" multiple class="form-control"
+                                                    style="height: 200px;">
+                                                {% for crud_permission in crud_permission_list %}
+                                                    <option value="{{ crud_permission.id }}">{{ crud_permission.title }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                                            </button>
+                                            <button type="submit" class="btn btn-primary">保存</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                     <a style="display: none" class="button btn btn-sm btn-primary" data-toggle="modal"
+                           data-target="#cat_permission{{ forloop.counter }}">查看功能权限</a>
+                        <div class="modal fade" id="cat_permission{{ forloop.counter }}" tabindex="-1" role="dialog"
+                             aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close"><span
+                                                aria-hidden="true">&times;</span></button>
+                                    </div>
+
+                                        <div class="modal-body">
+                                                {% for r in  role.permissions.all %}
+                                                    <p>{{ r.title }}</p>
+                                                {% endfor %}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                                            </button>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a style="display: none" class="button btn btn-sm btn-primary" data-toggle="modal"
+                           data-target="#delete_permission{{ forloop.counter }}">去除权限</a>
+                        <div class="modal fade" id="delete_permission{{ forloop.counter }}" tabindex="-1" role="dialog"
+                             aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close"><span
+                                                aria-hidden="true">&times;</span></button>
+                                        <a class="btn btn-success center cat_permissions" role_id="{{ role.id }}">查看所有权限</a>
+                                    </div>
+                                    <form action="/permission/role_del_permission/{{ role.id }}/?role_group_id={{ role_group_id }}"
+                                          method="post">
+                                        {% csrf_token %}
+
+                                        <div class="modal-body">
+                                            <select name="role_permissions2" multiple class="form-control" role_id="{{ role.id }}"
+                                                    style="height: 200px;">
+                                            </select>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                                            </button>
+                                            <button type="submit" class="btn btn-primary">删除权限</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
