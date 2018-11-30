@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.contrib import auth
 from permission.service.Permission import init_permission
+from middlewares.online_users_management import online_users_management
 from django.contrib.auth.hashers import make_password
 
 

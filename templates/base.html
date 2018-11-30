@@ -18,6 +18,29 @@
     <!-- Google Fonts-->
     <link href='/static/assets/css/abc.css' rel='stylesheet' type='text/css'/>
     <link href="/static/css/base.css" rel="stylesheet" type="text/css"/>
+    <script src="/static/js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript">
+        $(window).unload(function () {
+            console.log("bye")
+            $.ajax({
+                type: 'get',
+                url: '#',
+                data: {
+                    'online_status': 'offline'
+                }
+            });
+        });
+        $(document).ready(function () {
+            console.log("hello")
+            $.ajax({
+                type: 'get',
+                url: '#',
+                data: {
+                    'online_status': 'online'
+                }
+            });
+        });
+    </script>
     {% block css %}{% endblock %}
     {% block js %}{% endblock %}
 </head>
@@ -40,6 +63,12 @@
                 <a href="/xadmin/">
                     <i class="fa fa-cogs"></i>
                     <span>管理员入口</span>
+                </a>
+            </li>
+            <li>
+                <a href="/user_management/online_users/">
+                    <i class="fa fa-users"></i>
+                    <span>在线人数：{{ online_users_count }}</span>
                 </a>
             </li>
             <li class="dropdown">
@@ -209,16 +238,6 @@
 
 <!-- Custom Js -->
 <script src="/static/assets/js/custom-scripts.js"></script>
-<script type="text/javascript">
-    $(window).unload(function () {
-        console.log("bye")
-        $.get("/offline/")
-    });
-    $(function () {
-        console.log("hello")
-        $.get("/online/")
-    });
-</script>
 <script>
 
     $('.mysecond').mouseenter(function () {
