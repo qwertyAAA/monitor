@@ -10,4 +10,5 @@ urlpatterns = [
      url(r"^addtest/", views.addtest),
      url(r"^edit_user/(\d+)/$", views.edit_user),
      url(r"^delete_user/(\d+)/$", views.delete_user),
+     url(r"^online_users/$", views.online_users)
 ]

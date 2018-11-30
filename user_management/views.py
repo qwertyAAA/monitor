@@ -18,6 +18,8 @@ from django import forms
 from django.forms import widgets
 from permission.models import Role
 from django.forms import ModelForm
+from middlewares.online_users_management import online_users_management
+
 def motai(request):
     return render(request,"user_management_html/motai.html")
 
@@ -170,3 +172,8 @@ def batch(request):
         return redirect('/user_management/employee_info/')  # 所有的对象
 
     return render(request, "user_management/user_info.html")
+
+
+def online_users(request):
+    online_users = online_users_management.users
+    return render(request, "user_management_html/online_users.html", locals())
