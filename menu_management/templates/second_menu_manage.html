@@ -1,15 +1,16 @@
 {% extends 'base.html' %}
 {% block content %}
-    <table class="table table-hover table-striped table-bordered">
+    <table class="table table-hover table-striped table-bordered" style="text-align: center">
         <thead>
         <tr>
-            <th>
+            <th style="text-align: center">
                 <input type="checkbox">
             </th>
-            <th>编号</th>
-            <th>菜单名称</th>
-            <th>菜单路径</th>
-            <th>操作</th>
+            <th style="text-align: center">编号</th>
+            <th style="text-align: center">菜单名称</th>
+            <th style="text-align: center">菜单路径</th>
+            <th style="text-align: center">状态</th>
+            <th style="text-align: center">操作</th>
         </tr>
         </thead>
         <tbody>
@@ -21,6 +22,13 @@
                 <td>{{ i.nid }}</td>
                 <td>{{ i.title }}</td>
                 <td>{{ i.url }}</td>
+                <td>
+                    {% if i.status %}
+                        <i class="ace-icon fa fa-eye"></i>
+                    {% else %}
+                        <i class="ace-icon fa fa-eye-slash"></i>
+                    {% endif %}
+                </td>
                 <td>
                     {% include 'tags_html/edit_second_tag.html' %}
                     {% include 'tags_html/del_second_tag.html' %}
