@@ -19,8 +19,8 @@ def init_permission(user_obj, request):
     permisson = user_obj.role_set.all().values("permissions__url", "permissions__action",'permissions__group_id').distinct()
     # print(user_obj.role_set.all())
     # print("该用户的权限信息如下：")
-    # print(permisson)
-    # print("**"*10)
+    print(permisson)
+    print("**"*10)
 
     permisson_dict = {}
 
