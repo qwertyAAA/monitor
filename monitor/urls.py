@@ -35,9 +35,10 @@ urlpatterns = [
     url(r'^login/$', login, name="login"),
     url(r'^register/$', register, name="register"),
     url(r'^logout/$', logout, name="logout"),
-    # url(r'^base/', mali_vi.base),
     url(r'^fhsms/', mali_vi.fhsms),
     url(r'^pictures/', mali_vi.pictures),
+    url(r'^del_all/', mali_vi.del_all),
+    url(r'^upload_img/', mali_vi.upload_img),
     # media的相关的路由设置
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
     url(r'^upload/', mali_vi.upload),
