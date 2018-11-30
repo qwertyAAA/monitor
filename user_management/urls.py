@@ -13,5 +13,4 @@ urlpatterns = [
     url(r"^user_mail/", views.user_mail),
     url(r"^delete_user/(\d+)/$", views.delete_user),
     url(r"^batch_delete/$", views.delete_user),
-    url(r"^online_user/$", views.online_user),
 ]
