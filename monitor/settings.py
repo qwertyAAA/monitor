@@ -53,8 +53,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'middlewares.xadminMiddleware.CheckXadminPermission',
-    # 'middlewares.xadminMiddleware.XadminIndex',
-    # 'permission.service.rbac.ValidPermission',
+    'permission.service.rbac.ValidPermission',
 ]
 
 ROOT_URLCONF = 'monitor.urls'

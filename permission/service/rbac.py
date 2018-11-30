@@ -12,11 +12,11 @@ class ValidPermission(MiddlewareMixin):
 
         valid_url_list=['/login/','/register/','/admin/.*','/xadmin/','/logout/',
                         '/register/','/base/','/fhsms/','/pictures/','/media/.*',
-                        '/index/','','','','']
+                        '/index/',]
 
         for valid_url in valid_url_list:
             result=re.match(valid_url,current_path)
-            if result:
+            if result or current_path == '/':
                 return
 
         #检验用户登录的
@@ -47,7 +47,7 @@ class ValidPermission(MiddlewareMixin):
 
         #判断数据权限
         data_permission_id_list = request.session.get('data_permission_id_list')
-        print(data_permission_id_list)
+        # print(data_permission_id_list)
         if 3 in data_permission_id_list:    #可以查看所有的数据
             pass
         elif 2 in data_permission_id_list:  #可以看本部门的数据
@@ -60,7 +60,7 @@ class ValidPermission(MiddlewareMixin):
         #方案2
 
         permission_dict=request.session.get('permisson_dict')
-
+        print(permission_dict)
         for item in permission_dict.values():  #{urs  actions}
             urls=item['urls']
             for permisson in urls:

@@ -39,10 +39,14 @@ class ModelXAdmin(object):
         for obj in qs:
             data = []
             for field in self.fields:
+                if field.name.find("password") != -1:
+                    continue
                 data.append(getattr(obj, field.name))
             data_list.append(data)
         field_names = []
         for field in self.fields:
+            if field.name.find("password") != -1:
+                continue
             field_names.append(field.verbose_name)
         return render(
             request,
@@ -102,6 +106,9 @@ class ModelXAdmin(object):
                         setattr(form.instance, field.name, make_password(password))
                 form.instance.save()
                 form.save_m2m()
+            prev_url = request.GET.get("prev_url")
+            if prev_url:
+                return redirect(prev_url)
             return redirect("/xadmin/" + current_app_label + "/" + current_model_name + "/")
         return render(request, "xadmin/update_view.html", locals())
 
@@ -127,6 +134,9 @@ class ModelXAdmin(object):
                         setattr(form.instance, field.name, make_password(password))
                 form.instance.save()
                 form.save_m2m()
+            prev_url = request.GET.get("prev_url")
+            if prev_url:
+                return redirect(prev_url)
             return redirect("/xadmin/" + current_app_label + "/" + current_model_name + "/")
         return render(request, "xadmin/update_view.html", locals())
 
@@ -271,7 +281,7 @@ class XAdminSite(object):
             for model in self._registry.keys():
                 model_name = model._meta.model_name
                 app_label = model._meta.app_label
-                if model_name.find(keyword) != -1:
+                if model_name.find(keyword) != -1 or app_label.find(keyword) != -1:
                     ret["html"] += """
                         <tr>
                             <td>

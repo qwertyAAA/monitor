@@ -10,10 +10,13 @@ urlpatterns = [
     url(r'role_group_permission/(\d+)/$', views.role_group_permission),
     url(r'role_del_permission/(\d+)/$', views.role_del_permission),
     url(r'data_permission/(\d+)/$', views.data_permission),
+    url(r'accredit2/(\d+)/$', views.accredit2),
+    # url(r'give_role_permission/$', views.give_role_permission),
 
     url(r'role_permission_list/$', views.role_permission_list),
     url(r'delete_role/(\d+)/$', views.delete_role),
     url(r'edit_role/(\d+)/$', views.edit_role),
     url(r'role_accredit/(\d+)/$', views.role_accredit),
     url(r'add_role/$', views.add_role),
+    url(r'roles/$', views.roles),
 ]
