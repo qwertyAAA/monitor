@@ -52,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'permission.service.rbac.ValidPermission',
     'middlewares.xadminMiddleware.CheckXadminPermission',
     'permission.service.rbac.ValidPermission',
 ]
@@ -151,7 +152,7 @@ MEDIA_URL = '/media/'
 不可删除
 """
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# smtp服务的邮箱服务器 我用的是163
+# smtp服务的邮箱服务器
 EMAIL_HOST = 'smtp.163.com'
 # smtp服务固定的端口是25
 EMAIL_PORT = 25

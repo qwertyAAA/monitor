@@ -2,16 +2,24 @@ from django.shortcuts import render, redirect, HttpResponse
 from organization import models
 from django.http import JsonResponse
 from user_management import models as m2
+from django.db.models import Q
 
 
 # Create your views here.
 def message(request):
     obj = models.Department.objects.all()
+    obj1 = obj
     tid = request.GET.get("id", None)
+    top = models.Department.objects.filter(id=tid).first()
+    # print(top.name)
     if tid:
-        obj = models.Department.objects.filter(top_department=tid)
+        obj = models.Department.objects.filter(top_department=top)
+        # print(obj)
     return render(request, 'organization/message.html', {
-        'obj': obj
+        "obj1": obj1,
+        'obj': obj,
+        "top": top,
+        "length": obj1.__len__()
     })
 
 
@@ -79,4 +87,40 @@ def edit(request):
 
 
 def delete(request):
-    pass
+    nid = request.POST.get("del_id")
+    obj = models.Department.objects.filter(id=nid).first()
+    obj.delete()
+    return redirect("/organization/message/")
+
+
+def search(request):
+    obj = models.Department.objects.all()
+    obj1 = obj
+    text = request.POST.get("select_text")
+    kind = request.POST.get("select_kind")
+    top_id = request.POST.get("top", None)
+    print("上级部门为：", top_id)
+    q1 = Q()
+    q1.connector = 'OR'
+    q1.children.append(('code__contains', text))
+    q1.children.append(('name__contains', text))
+    q1.children.append(('en_name__contains', text))
+    if kind == "全部":
+        obj = models.Department.objects.filter(q1)
+    elif kind == '本级':
+        con = Q()
+        con.add(q1, 'AND')
+        q2 = Q()
+        q2.connector = 'OR'
+        if top_id:
+            q2.children.append(('top_department', top_id))
+        else:
+            q2.children.append(('top_department', None))
+        con.add(q2, 'AND')
+        obj = models.Department.objects.filter(con)
+    return render(request, 'organization/message.html', {
+        "obj": obj,
+        "msg": "1",
+        "obj1": obj1,
+        "length": obj1.__len__()
+    })

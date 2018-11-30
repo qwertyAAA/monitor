@@ -1,3 +1,4 @@
+//login页面的注册、登录、忘记密码模块切换
 jQuery(function ($) {
     $(document).on('click', '.toolbar a[data-target]', function (e) {
         e.preventDefault();
@@ -9,6 +10,7 @@ jQuery(function ($) {
 
 
 //you don't need this, just used for changing background
+// 背景切换
 jQuery(function ($) {
     $('#btn-login-dark').on('click', function (e) {
         $('body').attr('class', 'login-layout');
@@ -32,6 +34,11 @@ jQuery(function ($) {
         e.preventDefault();
     });
 
+});
+
+// 点击验证码图片 刷新验证码
+$("#valid-img").click(function () {
+    $(this)[0].src += "?";
 });
 
 
@@ -109,9 +116,22 @@ $(document).on('focus', '#email, #username, #password, #password2', function () 
     $("#message").text("");
 });
 //清除登录提示
-$(document).on('focus', '#login_username, #login_pwd', function () {
+$(document).on('focus', '#login_username, #login_pwd, #valid_code', function () {
     $("#login_result").text("");
 });
+//清除发送邮件页面的异常提示
+$(document).on('focus', '#emailAdress', function () {
+    $("#no_email").text("");
+});
+//清除输入验证码页面的失败提示
+$(document).on('focus', '#email_code', function () {
+    $("#check_message").text("");
+});
+//清除输入验证码页面的失败提示
+$(document).on('focus', '#newPwd, #newPwd2', function () {
+    $("#reset_message").text("");
+});
+
 
 //判断登录信息为空
 function validateForm() {
@@ -150,3 +170,64 @@ function check_reg() {
         return false;
     }
 }
+
+//重置密码：一致性验证和Ajax提交
+$("#reset_pwd").click(function () {
+    newPwd = $("#newPwd").val();
+    newPwd2 = $("#newPwd2").val();
+    if (newPwd != newPwd2) {
+        $("#reset_message").text("两次密码不一致，请重新输入！")
+    } else {
+        $.post(
+            "/account/reset_pwd/",
+            {
+                "newPwd": newPwd
+            },
+            function (data) {
+                if (data["message"] == 1) {
+                    var i = 3;
+                    var intervalid;
+                    $('#resetPassword-box').removeClass('visible');
+                    $('#resetSuccess-box').addClass('visible');
+
+                    function refer() {
+                        if (i == 0) {
+                            window.location.replace("/login/");
+                            clearInterval(intervalid);
+                        }
+                        document.getElementById("ss").innerHTML = i;
+                        i--;
+                    }
+
+                    intervalid = setInterval(refer, 1000);
+                } else if (data["message"] == 0) {
+                    $("reset_message").text("密码重置失败，请重试！");
+                }
+            }
+        );
+    }
+});
+
+
+//往后端发送邮箱地址
+/*$("#send_emailAdress").click(function () {
+    var email_adress = $("#emailAdress").val();
+    $("#send_emailAdress").css("disabled", "disabled");
+    $.post(
+        "/account/send_email/",
+        {
+            "email_adress": email_adress
+        },
+        function (data) {
+            if (data["success"]) {
+                $('#forgot-box').removeClass('visible');
+                $('#emailCode-box').addClass('visible');
+                $("#email_status").text(data["success"]);
+            } else {
+                $("#no_email").text(data["failed"]);
+                $("#send_emailAdress").css("disabled", false);
+            }
+
+        }
+    )
+});*/

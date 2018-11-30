@@ -1,51 +1,53 @@
-<div class="modal fade " style="left: 30%;top: 20%" id="myModal3" tabindex="-1" role="dialog"
+<div class="modal fade"  style="left: 30%;top: 20%" id="accredit_role{{ forloop.counter }}" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
-        <div class="modal-content" style="width: 45%">
+        <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">请选择权限</h4>
             </div>
-            <form action="/permission/role_group_permission/{{ role_group_id }}/" method="post">
+{#        action="/permission/give_role_permission/{{ role.id }}/?role_group_id={{ role_group_id }}"#}
+            <form  action="/permission/accredit2/{{ role.id }}/?role_group_id={{ role_group_id }}"  method="post">
                 {% csrf_token %}
-                <div class="modal-body">
-
-                    <a class="button btn btn-info" onclick="SelectAll()">全选</a>
-                    <a class="button btn btn-info pull-right" onclick="noSelectAll()">全不选</a>
+                <div class="modal-body" style="text-align: left">
+                    <a class="button btn btn-info select_all">全选</a>
+                    <a class="button btn btn-info no_select_all pull-right">全不选</a>
                     <ul style="list-style: none">
                         {% for first in permission_first %}
                             <li>
-                                {% if first in role_group_permissions %}
-                                    <input type="checkbox" class="first_group" flag="{{ first.title }}"
-                                           name="choose" value="{{ first.id }}" checked="checked">
+                                {% if first in role.permissions.all %}
+                                    <input type="checkbox" class="first_group2" flag="{{ first.title }}"
+                                           name="choose2" value="{{ first.id }}" checked="checked">
                                 {% else %}
-                                    <input type="checkbox" class="first_group" flag="{{ first.title }}"
-                                           name="choose" value="{{ first.id }}">
+                                    <input type="checkbox" class="first_group2" flag="{{ first.title }}"
+                                           name="choose2" value="{{ first.id }}">
                                 {% endif %}
 
-                                <span><a class="role_group">{{ first.title }}</a></span>
+                                <span><a class="role_group2">{{ first.title }}</a></span>
                                 <ul style="list-style: none">
                                     {% for second in permission_second %}
                                         {% if second.group.title == first.title %}
-                                            <li>{% if second in role_group_permissions %}
-                                                <input type="checkbox" class="second_group" flag2="{{ second.title }}"
-                                                       value="{{ second.id }}" name="choose" flag="{{ first.title }}"
+                                            <li>{% if second in role.permissions.all %}
+                                                <input type="checkbox" class="second_group2" flag2="{{ second.title }}"
+                                                       value="{{ second.id }}" name="choose2" flag="{{ first.title }}"
                                                        checked="checked">
                                             {% else %}
-                                                <input type="checkbox" class="second_group" flag2="{{ second.title }}"
-                                                       value="{{ second.id }}" name="choose" flag="{{ first.title }}">
+                                                <input type="checkbox" class="second_group2" flag2="{{ second.title }}"
+                                                       value="{{ second.id }}" name="choose2" flag="{{ first.title }}">
                                             {% endif %}
                                                 <span id="permission">{{ second.title }}</span>
                                                 <ul style="list-style: none">
                                                     {% for third in crud_permission_list %}
                                                         {% if third.group.title == second.title %}
-                                                            <li>{% if third in role_group_permissions %}
-                                                            <input type="checkbox" value="{{ third.id }}" name="choose"
+                                                            <li>
+                                                            {% if third in role.permissions.all %}
+                                                            <input type="checkbox" value="{{ third.id }}" name="choose2"
                                                                    flag="{{ first.title }}" flag2="{{ second.title }}"
                                                                    checked="checked">
                                                         {% else %}
-                                                            <input type="checkbox" value="{{ third.id }}" name="choose"
+                                                            <input type="checkbox" value="{{ third.id }}" name="choose2"
                                                                    flag="{{ first.title }}" flag2="{{ second.title }}">
                                                         {% endif %}
 
@@ -67,30 +69,26 @@
                 </div>
 
             </form>
+
         </div>
     </div>
 </div>
+
 <script src="/static/jquery-3.3.1.min.js"></script>
-<script>
-    function SelectAll() {
-        var checkboxs = document.getElementsByName("choose");
-        for (var i = 0; i < checkboxs.length; i++) {
-            var e = checkboxs[i];
-            e.checked = true;
-        }
-    }
-</script>
-<script>
-    function noSelectAll() {
-        var checkboxs = document.getElementsByName("choose");
-        for (var i = 0; i < checkboxs.length; i++) {
-            var e = checkboxs[i];
-            e.checked = false;
-        }
-    }
+<script type="text/javascript">
+    $(function () {
+        $('.select_all').click(function () {
+            $(this).next().next().find(':checkbox').prop('checked',true);
+            {#$('input[type=checkbox]').prop('checked',true)#}
+        });
+         $('.no_select_all').click(function () {
+            {#$('input[type=checkbox]').prop('checked',false)#}
+              $(this).next().find(':checkbox').prop('checked',false);
+        });
+    })
 </script>
 <script type="text/javascript">
-    $(document).on('click', '.first_group', function () {
+    $(document).on('click', '.first_group2', function () {
         var attrs = $(this).attr('flag');  //获得组id ，用来做标志
         var $check1 = $(this);
         if ($check1[0].checked) {
@@ -107,7 +105,7 @@
 
 </script>
 <script type="text/javascript">
-    $(document).on('click', '.second_group', function () {
+    $(document).on('click', '.second_group2', function () {
         var attrs = $(this).attr('flag2');  //获得组title ，用来做标志
         var $check2 = $(this);
         if ($check2[0].checked) {
@@ -125,7 +123,7 @@
 </script>
 <script type="text/javascript">
     var a = 1
-    $(".role_group").click(function () {
+    $(".role_group2").click(function () {
         if (a == 1) {
             $(this).parent().next().css("display", "none");
             a = 0;
