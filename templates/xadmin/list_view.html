@@ -54,7 +54,7 @@
                         </td>
                         {% for item in data %}
                             <td>
-                                <span>{{ item | slice:":40" }}</span>
+                                <span>{{ item }}</span>
                             </td>
                         {% endfor %}
                         <td>
@@ -70,6 +70,7 @@
         </div>
     </div>
     <script>
+        $("")
         $("body").delegate(".for_delete", "click", function () {
             swal({
                 title: "确定删除吗?",
