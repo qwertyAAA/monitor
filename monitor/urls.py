@@ -24,6 +24,7 @@ from account.views import *
 from account import urls as account_urls
 from menu_management import urls as menu_urls
 from permission import urls as permission_urls
+from organization import urls as organization_urls
 
 urlpatterns = [
     url(r'^xadmin/', site.urls),
@@ -31,10 +32,10 @@ urlpatterns = [
     url(r'^user_management/', include(user_management_url)),
     url(r'^permission/', include(permission_urls)),
     url(r'^account/', include(account_urls)),
+    url(r'^organization/', include(organization_urls)),
     url(r'^login/$', login, name="login"),
     url(r'^register/$', register, name="register"),
     url(r'^logout/$', logout, name="logout"),
-    # url(r'^base/', mali_vi.base),
     url(r'^fhsms/', mali_vi.fhsms),
     url(r'^pictures/', mali_vi.pictures),
     # media的相关的路由设置

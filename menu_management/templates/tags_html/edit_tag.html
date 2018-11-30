@@ -23,10 +23,18 @@
                             <label class="col-sm-3 control-label" for="radio">请选择菜单状态</label>
                             <div id="radio" class="col-sm-9">
                                 <label class="radio-inline">
-                                    <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> 显示
+                                    {% if i.status%}
+                                        <input type="radio" name="menu_status" id="inlineRadio1" value="1" checked="checked"> 显示
+                                    {% else %}
+                                        <input type="radio" name="menu_status" id="inlineRadio1" value="1"> 显示
+                                    {% endif %}
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> 隐藏
+                                    {% if not i.status%}
+                                        <input type="radio" name="menu_status" id="inlineRadio2" value="0" checked="checked"> 隐藏
+                                    {% else %}
+                                        <input type="radio" name="menu_status" id="inlineRadio2" value="0"> 隐藏
+                                    {% endif %}
                                 </label>
                             </div>
                         </div>
