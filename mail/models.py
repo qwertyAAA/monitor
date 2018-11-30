@@ -8,9 +8,9 @@ class Pictures(models.Model):
     图片表
     """
     title = models.CharField(max_length=32, verbose_name="标签", default="图片")
-    name = models.FileField(upload_to="avatars/", default="default.jpg")
+    name = models.CharField(max_length=32, default="图片")
     path = models.FileField(upload_to="avatars/", default="avatars/default.jpg", verbose_name="图片地址")
-    BZ = models.CharField(max_length=50, verbose_name="备注")
+    BZ = models.CharField(max_length=50, verbose_name="备注", default="图片管理处上传")
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
     master_id = models.ForeignKey(to=UserInfo, verbose_name="图片主人")
 
