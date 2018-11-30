@@ -31,11 +31,9 @@ class ModelXAdmin(object):
             if isinstance(field, ManyToManyField) or isinstance(field, OneToOneField) or isinstance(field, ForeignKey):
                 self.cross_table_fields.append(field)
 
-    def get_current_url(self):
-        return "{0}/{1}/".format(self.model._meta.app_label, self.model._meta.model_name)
-
     def list_view(self, request):
-        current_url = self.get_current_url()
+        current_app_label = self.model._meta.app_label
+        current_model_name = self.model._meta.model_name
         qs = self.model.objects.all()
         data_list = []
         for obj in qs:
@@ -50,7 +48,7 @@ class ModelXAdmin(object):
             request,
             "xadmin/list_view.html",
             {
-                "current_url": current_url,
+                "current_url": current_app_label + "/" + current_model_name + "/",
                 "model_name": self.model._meta.model_name,
                 "data_list": data_list,
                 "field_names": field_names
@@ -84,7 +82,15 @@ class ModelXAdmin(object):
         return form
 
     def add(self, request):
-        current_url = self.get_current_url()
+        cross_tables_info = []
+        for field in self.cross_table_fields:
+            cross_tables_info.append({
+                "app_label": getattr(self.model, field.name).field.remote_field.model._meta.app_label,
+                "model_name": getattr(self.model, field.name).field.remote_field.model._meta.model_name,
+                "verbose_name": field.verbose_name
+            })
+        current_app_label = self.model._meta.app_label
+        current_model_name = self.model._meta.model_name
         form = self.get_form()
         if request.method == "POST":
             form = self.get_form(request)
@@ -96,11 +102,19 @@ class ModelXAdmin(object):
                         setattr(form.instance, field.name, make_password(password))
                 form.instance.save()
                 form.save_m2m()
-            return redirect("/xadmin/" + current_url)
+            return redirect("/xadmin/" + current_app_label + "/" + current_model_name + "/")
         return render(request, "xadmin/update_view.html", locals())
 
     def update(self, request, pk):
-        current_url = self.get_current_url()
+        cross_tables_info = []
+        for field in self.cross_table_fields:
+            cross_tables_info.append({
+                "app_label": getattr(self.model, field.name).field.remote_field.model._meta.app_label,
+                "model_name": getattr(self.model, field.name).field.remote_field.model._meta.model_name,
+                "verbose_name": field.verbose_name
+            })
+        current_app_label = self.model._meta.app_label
+        current_model_name = self.model._meta.model_name
         qs = self.model.objects.filter(pk=pk).first()
         form = self.get_form(instance=qs)
         if request.method == "POST":
@@ -113,7 +127,7 @@ class ModelXAdmin(object):
                         setattr(form.instance, field.name, make_password(password))
                 form.instance.save()
                 form.save_m2m()
-            return redirect("/xadmin/" + current_url)
+            return redirect("/xadmin/" + current_app_label + "/" + current_model_name + "/")
         return render(request, "xadmin/update_view.html", locals())
 
     def delete(self, request, pk=None):
@@ -136,7 +150,9 @@ class ModelXAdmin(object):
             q = Q()
             q.connector = "or"
             for field in self.fields:
+                # 思路2存在的问题的解决方法：
                 if field in self.cross_table_fields:
+                    print(field)
                     continue
                 else:
                     q.children.append((field.name + "__icontains", keyword))
@@ -149,12 +165,10 @@ class ModelXAdmin(object):
             for obj in self.model.objects.filter(q):
                 qs.append(obj)
             for obj in self.model.objects.all():
-                # 思路2存在的问题的解决办法
-                if obj in qs:
-                    continue
                 for field in self.cross_table_fields:
-                    if getattr(obj, field.name).find(keyword) != -1:
+                    if getattr(obj, field.name).__str__().find(keyword) != -1 and obj not in qs:
                         qs.append(obj)
+            print(self.cross_table_fields)
             data_list = []
             for obj in qs:
                 data = []
@@ -170,14 +184,13 @@ class ModelXAdmin(object):
                 """
                 for item in data:
                     # 此处为返回前端的数据进行过滤
-                    item = item[:20:] if isinstance(item, str) else item
+                    item = item[:40:] if isinstance(item, str) else item
                     item = item.strftime("%Y-%m-%d %H:%M") if isinstance(item, datetime.datetime) else item
                     # try:
                     #     item = item.strftime("%Y{0}%m{1}%d{2} %H:%M".format("年", "月", "日"))
                     # except Exception as e:
                     #     item = item
                     #     print(e)
-                    print(item, type(item))
                     ret["html"] += """
                         <td>
                             <span >{}</span>
