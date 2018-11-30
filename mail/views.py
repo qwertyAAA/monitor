@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.http import JsonResponse
 from .models import *
+import os
 import json
 from mail import models
 from django.contrib.auth.models import User
@@ -10,9 +11,6 @@ from django.core.mail import send_mail
 
 
 # Create your views here.
-def base(request):
-    return render(request, 'base.html')
-
 
 def pictures(request):
     return render(request, 'mail_pictures/pictures.html')
