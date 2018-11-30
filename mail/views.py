@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.http import JsonResponse
 from .models import *
+import os
 import json
 from mail import models
 from django.contrib.auth.models import User
@@ -10,9 +11,6 @@ from django.core.mail import send_mail
 
 
 # Create your views here.
-def base(request):
-    return render(request, 'base.html')
-
 
 def pictures(request):
     return render(request, 'mail_pictures/pictures.html')
@@ -51,5 +49,5 @@ def fhsms(request):
                                  status_id_id=status_id, from_user=userinfo_id)
             send_mail(subject=title, message=content, from_email=settings.EMAIL_FROM,
                       recipient_list=from_user)
-            return redirect('/mail_pictures/fhsms/')
+            return redirect('/fhsms/')
     return render(request, 'mail_pictures/fhsms.html', {'mail_list': mail_list, 'status_list': status_list})

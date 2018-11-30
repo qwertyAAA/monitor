@@ -154,7 +154,7 @@ MEDIA_URL = '/media/'
 不可删除
 """
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# smtp服务的邮箱服务器 我用的是163
+# smtp服务的邮箱服务器
 EMAIL_HOST = 'smtp.163.com'
 # smtp服务固定的端口是25
 EMAIL_PORT = 25
