@@ -39,10 +39,14 @@ class ModelXAdmin(object):
         for obj in qs:
             data = []
             for field in self.fields:
+                if field.name.find("password") != -1:
+                    continue
                 data.append(getattr(obj, field.name))
             data_list.append(data)
         field_names = []
         for field in self.fields:
+            if field.name.find("password") != -1:
+                continue
             field_names.append(field.verbose_name)
         return render(
             request,
