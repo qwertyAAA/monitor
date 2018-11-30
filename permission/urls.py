@@ -18,4 +18,5 @@ urlpatterns = [
     url(r'edit_role/(\d+)/$', views.edit_role),
     url(r'role_accredit/(\d+)/$', views.role_accredit),
     url(r'add_role/$', views.add_role),
+    url(r'roles/$', views.roles),
 ]

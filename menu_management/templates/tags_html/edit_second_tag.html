@@ -27,6 +27,27 @@
                                        placeholder="请输入菜单路径">
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="radio">请选择菜单状态</label>
+                            <div id="radio" class="col-sm-9">
+                                <label class="radio-inline">
+                                    {% if i.status %}
+                                        <input type="radio" name="menu_status" id="inlineRadio1" value="1"
+                                               checked="checked"> 显示
+                                    {% else %}
+                                        <input type="radio" name="menu_status" id="inlineRadio1" value="1"> 显示
+                                    {% endif %}
+                                </label>
+                                <label class="radio-inline">
+                                    {% if not i.status %}
+                                        <input type="radio" name="menu_status" id="inlineRadio2" value="0"
+                                               checked="checked"> 隐藏
+                                    {% else %}
+                                        <input type="radio" name="menu_status" id="inlineRadio2" value="0"> 隐藏
+                                    {% endif %}
+                                </label>
+                            </div>
+                        </div>
                         <input style="display: none" value="{{ i.first_menu.nid }}" name="first_id">
                     </div>
                     <div class="modal-footer">

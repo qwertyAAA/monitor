@@ -1,9 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
     <script src="/static/js/jquery-3.3.1.min.js"></script>
-    <script src="/static/js/jquery-2.1.4.min.js"></script>
-    <script src="/static/js/check_box.js"></script>
-    <script src="/static/js/sweetalert.min.js"></script>
     <div align="center">
 
     </div>
@@ -13,12 +10,31 @@
 
         <div>
 
-            <button type="button" class="btn btn-primary">系 &nbsp统&nbsp用&nbsp户&nbsp管&nbsp理&nbsp处</button>
+            <button type="button" class="btn btn-primary">系 &nbsp统&nbsp用&nbsp户&nbsp查&nbsp询&nbsp处</button>
+            <!-- 查询start-->
+            <div class="col-md-offset-7">
+                <form action=" /user_management/user_search/" method="post" class="form-inline">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="search_key" id="value" placeholder="在此输入查询"/>
 
-            <form action="/user_management/batch_user/" method="post">
-                {% csrf_token %}
-            </form>
-{#            <!-- form 多选-->#}
+                    </div>
+
+                    <div class="form-group">
+                        <select class="form-control" id="key" name="choice_title">
+                            <option value="用户姓名">用户姓名</option>
+                            <option value="用户住址">用户住址</option>
+                            <option value="用户编号">用户编号</option>
+                            <option value="用户年龄">用户年龄</option>
+                            <option value="用户年限">用户年限</option>
+                        </select>
+                    </div>
+                    <button type="submit" id="select_user" class="btn btn-info" style="width: 100px;">查询</button>
+
+                </form>
+            </div>
+            <!-- 查询end-->
+            <!-- form 多选-->
 
             <select name="action" id="" style="width: 200px; padding:5px 8px;   display: inline-block">
 
@@ -27,44 +43,12 @@
 
 
             </select>
-            <button type="submit" class="btn btn-danger " id="batch_delete">执行批量删除</button>
-            <!-- 模糊查询start-->
-            <a class="btn btn-xs btn-info" onclick="searchs();" title="检索" data-toggle="modal"
-               data-target="#zhmyModal" style="width: 50px; height: 35px">
-                <i id="nav-search-icon"
-                   class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i>
-            </a>
-            <div class="modal fade" id="zhmyModal" tabindex="-1"
-                 role="dialog"
-                 aria-labelledby="myModalLabel">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
+            <button type="submit" class="btn btn-info">执行批量删除</button>
 
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal"
-                                    aria-label="Close"><span aria-hidden="true"></span>
-                            </button>
-                           <p class="bg-success" style="text-align: center;color: red;font-weight: bold;   ">为了更加准确查询您所要的信息请根据提示进行查询！！！例如</p>
-                        </div>
-                        <div class="modal-body">
-                               <p class="bg-info" style="text-align: center">根据用户名进行查询</p>
-                               <p class="bg-info" style="text-align: center">根据用户编号进行查询</p>
-                               <p class="bg-info" style="text-align: center">根据用户角色进行查询</p>
-                               <p class="bg-info" style="text-align: center">................</p>
-                            <div class="modal-footer">
-                                <a href="/user_management/search_user/"
-                                   class="btn btn-danger">以了解下一步</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 模糊查询end-->
             <table class="table table-hover table-bordered">
                 <thead>
                 <tr>
-                    <th class="center">全选<input type="checkbox" id="check_all"></th>
+                    <th class="center">全选<input type="checkbox" id="choice"></th>
                     <th class="center">序号</th>
                     <th class="center">编号</th>
                     <th class="center">用户名</th>
@@ -83,19 +67,19 @@
                     <th class="center">操作</th>
                 </tr>
                 <tbody>
-                {% for user, role_list in user_role_dict.items %}
+                {% for user in userlists %}
                     <tr>
-                        <td style="width: 70px"><input type="checkbox" class='check_item' name='select_pk' id="choice"
-                                                       delete_id='{{ user.pk }}'></td>
+                        <td style="width: 70px"><input type="checkbox" class='choice_item' name='select_pk' id="choice"
+                                                       value='{{ staff.pk }}'></td>
                         <td style="width: 50px">{{ forloop.counter }}</td>
                         <td style="width: 50px">{{ user.id }}</td>
                         <td style="width: 80px">{{ user.user.username }}</td>
                         <td style="width: 80px">{{ user.user_name }}</td>
 
                         <td style="width: 80px">
-                            {% for role in role_list %}
-                                <span style="font-size: 2px "> {{ role.title }}:</span>
-                            {% endfor %}
+                                {% for role in   user.user.role_set.all %}
+                                {{ role.title }}
+                                {% endfor %}
                         </td>
                         <td style="width: 50px">{{ user.user_age }}</td>
 
@@ -275,7 +259,7 @@
 
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal"
-                                                    aria-label="Close"><span aria-hidden="true"></span>
+                                                    aria-label="Close"><span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
 
@@ -465,172 +449,7 @@
 
         <div>
 
-            <!-- 新增员工 -->
-            <a class="btn btn-xs btn-success" title="增加员工" data-toggle="modal"
-               data-target="#addmyModal">
-                <i class="btn btn-mini btn-success" style="width: 70px;height: 25px">新增员工</i>
-            </a>
 
-
-            <div class="modal fade" id="addmyModal" tabindex="-1" role="dialog"
-                 aria-labelledby="myModalLabel">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-body">
-                            <!-- 新增员工-->
-                            <div align="center">
-                                <p class="btn btn-default" style="width: 150px;height: 40px">增
-                                    &nbsp加&nbsp用&nbsp户 &nbsp信&nbsp 息</p>
-                            </div>
-
-                            <div class="col-md-offset-1">
-                                <hr/>
-                                <form action="/user_management/add_user/" method="post" class="form-horizontal">
-                                    {% csrf_token %}
-                                    <div class="form-group">
-                                        <label for="username" class="col-sm-2 control-label">请选择用户：</label>
-                                        <div class="col-sm-5">
-                                            <!-- 选择是根据name=“” 传递给后台的字段 里面的 取值是是value的值-->
-                                            <select name="user_id" id="titlelist" style="width: 200px">
-                                                {% for user in  userlists %}
-
-                                                    <option value="{{ user.pk }}"> {{ user.username }}</option>
-
-                                                {% endfor %}
-                                            </select>
-
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="username" class="col-sm-2 control-label">姓名：</label>
-                                        <div class="col-sm-5">
-                                            <input type="text" class="form-control" id="user_name" name="user_name"
-                                                   placeholder="在这里输入姓名">
-                                        </div>
-                                    </div>
-
-
-                                    <div class="form-group">
-                                        <label for="username" class="col-sm-2 control-label"><span style="color: red"> * </span>编号：</label>
-                                        <div class="col-sm-5">
-                                            <input type="text" class="form-control" id="adduser_number" name="adduser_number"
-                                                   placeholder="在这里输入编号">
-                                            <span id="message"></span>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="username" class="col-sm-2 control-label"><span style="color: red"> * </span>身份证号：</label>
-                                        <div class="col-sm-5">
-                                            <input type="text" class="form-control" id="user_id_card"
-                                                   name="user_id_card" placeholder="请在这里输入身份证号">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="username" class="col-sm-2 control-label">年限：</label>
-                                        <div class="col-sm-5">
-                                            <input type="text" class="form-control" id="user_stay_years"
-                                                   name="user_stay_years"
-                                                   placeholder="请在这里输入年限">
-                                        </div>
-                                    </div>
-
-{#                                    <div class="form-group">#}
-{#                                        <label for="username" class="col-sm-2 control-label">性别：</label>#}
-{#                                        <div class="col-sm-5">#}
-{#                                            <input type="text" class="form-control" id="user_gender"#}
-{#                                                   name="user_gender"#}
-{#                                                   placeholder="请在这里输入性别">#}
-{#                                        </div>#}
-{#                                    </div>#}
-
-                                    <div class="form-group">
-                                        <label for="username" class="col-sm-2 control-label">性别：</label>
-                                        <div class="col-sm-5">
-                                            <!-- 选择是根据name=“” 传递给后台的字段 里面的 取值是是value的值-->
-                                            <select name="user_gender" id="user_gender" style="width: 200px">
-
-
-                                                    <option value="m">男</option>
-                                                    <option value="w">女</option>
-
-
-                                            </select>
-
-                                        </div>
-                                    </div>
-
-
-
-
-
-                                    <div class="form-group">
-                                        <label for="username" class="col-sm-2 control-label"><span style="color: red"> * </span>手机：</label>
-                                        <div class="col-sm-5">
-                                            <input type="text" class="form-control" id="user_phone"
-                                                   name="user_phone" placeholder="请在这里输入手机号" style="color: red">
-
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="username" class="col-sm-2 control-label">年龄：</label>
-                                        <div class="col-sm-5">
-                                            <input type="text" class="form-control" id="user_age"
-                                                   name="user_age" placeholder="请在这里输入年龄">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="username" class="col-sm-2 control-label">备注：</label>
-                                        <div class="col-sm-5">
-                                            <input type="text" class="form-control" id="user_remarks"
-                                                   name="user_remarks" placeholder="请在这里输入备注信息">
-                                        </div>
-                                    </div>
-
-
-                                    <div class="form-group">
-                                        <label for="title" class="col-sm-2 control-label">角色：</label>
-                                        <div class="col-sm-5">
-
-
-                                            <select name="titlelist" id="titlelist" multiple>
-                                                {% for role in roles_list %}
-                                                    <option value="{{ role.pk }}">{{ role.title }}</option>
-
-                                                {% endfor %}
-
-                                            </select>
-
-                                        </div>
-                                    </div>
-
-                                    <br/>
-
-
-
-
-                                    <!--新增员工 -->
-
-                                    <!-- 对于模态框的使用一些按钮是无法乱改的 保存就是保存  取消就是取消 data-dismiss="modal"  就是取消   不用就删除掉再改 -->
-                                    <div class="modal-footer">
-
-                                        <a href="/user_management/user_info/"
-                                           class="btn btn-danger">取消</a>
-                                        <button type="submit" class="btn btn-default">
-                                            保存
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 新增员工 -->
             <!-- 小功能下-->
             <a class="btn btn-xs btn-info" title="发送站内信" onclick="sendFhsms('lisi');">
                 <i class="ace-icon fa fa-envelope-o bigger-120" title="发送站内信" style="height: 20px"></i>
@@ -654,104 +473,21 @@
 
     </div>
     </div>
-    <!-- 实现全选的功能 当下面的全部选中的时候 全选按钮也应该被选中 当全选时候，有一个取消的时候全选也跟着取消-->
-    <script src="/static/js/check_box.js">
-    </script>
-   <script>
-        {#$("body").delegate(".for_delete", "click", function () {#}
-        {#    swal({#}
-        {#        title: "您确定删除吗?",#}
-        {#        text: "一旦删除，数据将无法找回",#}
-        {#        icon: "warning",#}
-        {#        buttons: ["我再想想", "狠心删除"],#}
-        {#        dangerMode: true,#}
-        {#    })#}
-        {#        .then((willDelete) => {#}
-        {#            if (willDelete) {#}
-        {#                var url = $(this).attr("delete_id") + "/delete";#}
-        {#                $.ajax({#}
-        {#                    url: url,#}
-        {#                    type: "get",#}
-        {#                    success: function (data) {#}
-        {#                        if (data.status)#}
-        {#                            window.location.reload()#}
-        {#                    }#}
-        {#                });#}
-        {#            } else {#}
-        {#                swal("数据还是安全的！");#}
-        {#            }#}
-        {#        });#}
-        {# });#}
-        $("body").delegate("#batch_delete", "click", function () {
-            var delete_id_list = [];
-            $(".check_item").each(function () {
-                if ($(this).prop("checked")) {
-                    var delete_id = $(this).attr("delete_id");
-                    delete_id_list.push(delete_id);
-                }
-            });
-            if (!delete_id_list.length) {
-                swal({
-                    title: "没有选中数据！",
-                    text: "请先选择要删除的数据",
-                    icon: "error",
-                    button: "好的"
-                });
-                return;
-            }
-            swal({
-                title: "确定删除吗?",
-                text: "一旦删除，数据将无法找回",
-                icon: "warning",
-                buttons: ["我再想想", "狠心删除"],
-                dangerMode: true,
-            })
-                .then((willDelete) => {
-                    if (willDelete) {
-                            $.ajax({
-                                url: "/user_management/batch_delete/",
-                                type: "post",
-                                traditional: true,
-                                data: {
-                                    "delete_id_list": delete_id_list,
-                                    "csrfmiddlewaretoken": "{{ csrf_token }}"
-                                },
-                                success: function (data) {
-                                    if (data.status)
-                                        window.location.reload()
-                                }
-                            });
-                    } else {
-                        swal("数据还是安全的！");
-                    }
-                });
-        });
-
-    </script>
     <script>
-    //CSRF设置
-    $.ajaxSetup({
-        data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
-    });
 
-    $("#adduser_number").blur(function () {
-    var usernumber_var = $("#adduser_number").val();
-    if (usernumber_var != "") {
+        $('#choice').click(function () {
 
-        $.post(
-            "/user_management/check_usernumber/",
-            {
-                "adduser_number": usernumber_var
-            },
-            function (data) {
-                if (data["message"] == 1) {
-                    $("#message").text("编号已被占用");
-                }
+            if (($(this)).prop("checked")) {
+
+                $(".choice_item").prop("checked", true)
+
             }
-        )
-    }
-});
+            else {
+                $(".choice_item").prop("checked", false)
+            }
 
+
+        })
 
 
     </script>

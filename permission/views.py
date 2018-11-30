@@ -25,6 +25,7 @@ def user_role(request):
     return render(request,'user_role.html',locals())
 
 
+
 def role_permission(request,id):
 
     # models.Role.objects.filter(Q)
@@ -187,3 +188,6 @@ def delete_role(request,id):
     # print(role_obj.title)
     role_obj.delete()
     return redirect('/permission/role_permission/' + role_group_id + '/')
+
+def roles(request):
+    return redirect('/permission/role_permission/1/')
