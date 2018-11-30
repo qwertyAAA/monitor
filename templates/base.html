@@ -151,7 +151,7 @@
     <!--/. NAV TOP  -->
     <!-- 菜单  -->
     {% load menu %}
-    {% get_menu %}
+    {% get_menu request%}
     <!-- /. NAV SIDE  -->
     <div id="page-wrapper">
         <div id="page-inner">
@@ -220,6 +220,7 @@
     });
 </script>
 <script>
+
     $('.mysecond').mouseenter(function () {
         $(this).css('color', 'yellow')
     });

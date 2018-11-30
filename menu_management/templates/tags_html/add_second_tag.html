@@ -17,7 +17,7 @@
                         <div class="form-group">
                             <label for="menu_name" class="col-sm-3 control-label">请输入菜单名称</label>
                             <div class="col-sm-9">
-                                <input type="text" id="menu_name" class="form-control" name="menu_name"
+                                <input type="text" id="second_menu_name" class="form-control" name="menu_name"
                                        placeholder="请输入菜单名称">
                             </div>
                         </div>
@@ -28,7 +28,18 @@
                                        placeholder="请输入菜单路径">
                             </div>
                         </div>
-                        <input name="menu_id" value="{{ id}}" style="display: none">
+                        <input name="menu_id" value="{{ id }}" style="display: none">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="radio">请选择菜单状态</label>
+                            <div id="radio" class="col-sm-9">
+                                <label class="radio-inline">
+                                    <input type="radio" name="menu_status" id="inlineRadio1" value="1"> 显示
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="menu_status" id="inlineRadio2" value="0"> 隐藏
+                                </label>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>

@@ -7,13 +7,15 @@
                 <a class="active-menu" href="/index/"><i class="fa fa-dashboard"></i> <b>后台首页</b></a>
             </li>
             {% for first in first_menu %}
-                <li id="li{{ first.nid }}">
+                <li>
                     <a href="#"><i class="fa fa-sitemap"></i><b>{{ first.title }}</b> <span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
-                        {% for second in first.second_menu_set.all %}
-                            <li>
-                                <a class="mysecond" href="{{ second.url }}">{{ second.title }}</a>
-                            </li>
+                        {% for second in second_menu %}
+                            {% if second.first_menu_id == first.nid %}
+                                <li>
+                                    <a class="mysecond" href="{{ second.url }}">{{ second.title }}</a>
+                                </li>
+                            {% endif %}
                         {% endfor %}
                     </ul>
                 </li>
