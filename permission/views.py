@@ -38,7 +38,10 @@ def role_permission(request,id):
         # return redirect('/permission/role_permission/' + role_group_id + '/')
     role_group_list=models.RoleGroup.objects.all()                      #所有角色组集合
     role_list=models.Role.objects.filter(group_id=role_group_id)        #该角色组下的角色集合
-    permission_group_list = models.PermissionGroup.objects.exclude(id=999)  #除了id是999的权限组集合
+    # permission_group_list_first = models.PermissionGroup.objects.filter(action='first')  #顶级菜单集合
+    # permission_group_list_second = models.PermissionGroup.objects.filter(action='second')  #次级菜单集合
+    permission_first = models.Permission.objects.filter(action='list')  #顶级菜单集合
+    permission_second = models.Permission.objects.filter(action='list_second')  #次级菜单集合
     crud_permission_list = models.Permission.objects.filter(action='crud')  #增删改查的权限集合
     # print(crud_permission_list)
     role_group_permissions=role_group_obj.permissions.all()             #该角色组的所有权限
@@ -47,6 +50,19 @@ def role_permission(request,id):
     # print(permission_group_list)
     return render(request,'role_permission.html',locals())
 
+def accredit2(request,id):
+    role_group_id = request.GET.get('role_group_id')
+    role_id = id  # 角色id
+    role_obj = models.Role.objects.get(id=role_id)
+    role_permission_id_list = request.POST.getlist('choose2')
+    role_obj.permissions.clear()
+    role_obj.permissions.add(*role_permission_id_list)
+    role_obj.save()
+    print(role_permission_id_list)
+    return redirect('/permission/role_permission/' + role_group_id + '/')
+
+
+ # 此方法不用了
 def role_accredit(request,id):
     role_group_id = request.GET.get('role_group_id')
     role_id=id   #角色id
@@ -60,6 +76,8 @@ def role_accredit(request,id):
     print(role_obj.permissions.all())
     return redirect('/permission/role_permission/' + role_group_id + '/')
 
+
+ # 此方法不用了
 def role_permission_list(request):
     role_id=request.POST.get('role_id')
     print(role_id)
@@ -68,6 +86,8 @@ def role_permission_list(request):
     ret = json.dumps(list(role_permission_list))
     return JsonResponse(ret, safe=False)
 
+
+ # 此方法不用了
 def role_del_permission(request,id):
     # return HttpResponse('yes')
     role_group_id = request.GET.get('role_group_id')
@@ -118,26 +138,28 @@ def delete_role_group(request,id):
 
 def role_group_permission(request,id):
     if request.method=='POST':
-        permission_list=request.POST.getlist('choose')
-        permission_list2=[]
-        permissions=models.Permission.objects.all().values_list('title','url','id')
+        permission_id_list=request.POST.getlist('choose')
+        # permission_list2=[]
+        # permissions=models.Permission.objects.all().values_list('title','url','id')
         # print(permissions)
-        for item in permissions:
-            for j in permission_list:
-                if j == item[0]:
-                    permission_list2.append(item[2])
+        # for item in permissions:
+        #     for j in permission_list:
+        #         if j == item[0]:
+        #             permission_list2.append(item[2])
         role_group_obj=models.RoleGroup.objects.get(id=id)
         role_group_obj.permissions.clear()
-        role_group_obj.permissions.add(*permission_list2)
+        role_group_obj.permissions.add(*permission_id_list)
+        # role_group_obj.permissions.add(*permission_list2)
         role_list=role_group_obj.role_set.all()
         # print(role_list)
 
         for role in role_list:
-            for i in role.permissions.all():
-                if i.action != 'crud':    #如果是菜单权限，就先删除
-                    role.permissions.remove(i)
-            role.permissions.add(*permission_list2)    #给角色重新添加角色组的菜单权限
-            # print(role.permissions.all())
+            # for i in role.permissions.all():
+            #     if i.action != 'crud':    #如果是菜单权限，就先删除
+            #         role.permissions.remove(i)
+            # role.permissions.add(*permission_list2)    #给角色重新添加角色组的菜单权限
+            role.permissions.clear()
+            role.permissions.add(*permission_id_list)      #给角色添加所有选中的角色组权限
     return redirect('/permission/role_permission/'+id+'/')
 
 def edit_role(request,id):
