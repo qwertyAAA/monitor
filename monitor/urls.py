@@ -23,6 +23,7 @@ from user_management import urls as user_management_url
 from account.views import *
 from account import urls as account_urls
 from menu_management import urls as menu_urls
+
 urlpatterns = [
     url(r'^xadmin/', site.urls),
     url(r'^menu/',include(menu_urls)),
@@ -31,7 +32,7 @@ urlpatterns = [
     url(r'^login/$', login, name="login"),
     url(r'^register/$', register, name="register"),
     url(r'^logout/$', logout, name="logout"),
-    url(r'^base/', mali_vi.base),
+    # url(r'^base/', mali_vi.base),
     url(r'^fhsms/', mali_vi.fhsms),
     url(r'^pictures/', mali_vi.pictures),
     # media的相关的路由设置
@@ -40,5 +41,5 @@ urlpatterns = [
 
     url(r'^$', index),
     url(r'^index/$', index),
+    url(r"^get_valid_img.png/", get_valid_img),
 ]
-
