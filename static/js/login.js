@@ -1,3 +1,4 @@
+csrf_val = $("#csrf_val").text();
 //login页面的注册、登录、忘记密码模块切换
 jQuery(function ($) {
     $(document).on('click', '.toolbar a[data-target]', function (e) {
@@ -73,9 +74,9 @@ $("#reset").click(function () {
     $("#message").text("");
 });
 
-//CSRF设置
+//CSRF设置--js文件里不能用{{ csrf_token }}
 $.ajaxSetup({
-    data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
+    data: {csrfmiddlewaretoken: csrf_val }
 });
 //邮箱Ajax查重
 $("#email").blur(function () {
@@ -85,6 +86,7 @@ $("#email").blur(function () {
             "/account/check_email/",
             {
                 "email": $("#email").val()
+                //"csrfmiddlewaretoken": csrf_val
             },
             function (data) {
                 if (data["message"] == 1) {
@@ -102,6 +104,7 @@ $("#username").blur(function () {
             "/account/check_username/",
             {
                 "username": username_var
+                //"csrfmiddlewaretoken": csrf_val
             },
             function (data) {
                 if (data["message"] == 1) {
@@ -175,13 +178,17 @@ function check_reg() {
 $("#reset_pwd").click(function () {
     newPwd = $("#newPwd").val();
     newPwd2 = $("#newPwd2").val();
-    if (newPwd != newPwd2) {
+    if(newPwd == "" || newPwd == null){
+        $("#reset_message").text("密码不能为空！")
+    }
+    else if (newPwd != newPwd2) {
         $("#reset_message").text("两次密码不一致，请重新输入！")
     } else {
         $.post(
             "/account/reset_pwd/",
             {
                 "newPwd": newPwd
+                //"csrfmiddlewaretoken": csrf_val
             },
             function (data) {
                 if (data["message"] == 1) {

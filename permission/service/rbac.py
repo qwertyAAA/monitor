@@ -12,7 +12,9 @@ class ValidPermission(MiddlewareMixin):
 
         valid_url_list=['/login/','/register/','/admin/.*','/xadmin/','/logout/',
                         '/register/','/base/','/fhsms/','/pictures/','/media/.*',
-                        '/index/',]
+                        '/index/','/get_valid_img.png/','/account/check_email/',
+                        '/account/check_username/','/account/send_email/','/account/reset_pwd/',
+                        '/account/check_code/']
 
         for valid_url in valid_url_list:
             result=re.match(valid_url,current_path)

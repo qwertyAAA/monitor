@@ -152,6 +152,7 @@
                                     </p>
 
                                     <form action="/account/send_email/" method="post">
+                                        {% csrf_token %}
                                         <fieldset>
                                             <label class="block clearfix">
 														<span class="block input-icon input-icon-right">
@@ -390,6 +391,7 @@
                             </div><!-- /.widget-body -->
                         </div><!-- /.signup-box --><!-- 用户注册模块结束 -->
                     </div><!-- /.position-relative -->
+                    <span id="csrf_val" style="display: none">{{ csrf_token }}</span>
 
                     <!-- 背景切换 -->
                     <div class="navbar-fixed-top align-right">
@@ -439,7 +441,7 @@
         var yzm = "{{ request.session.email_code }}";
         //alert(yzm);
         var email_code = $("#email_code").val();
-        if (email_code == yzm) {
+        if (email_code.toUpperCase() == yzm.toUpperCase()) {
             $('#emailCode-box').removeClass('visible');
             $('#resetPassword-box').addClass('visible');
         } else {
