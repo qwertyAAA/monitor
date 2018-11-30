@@ -99,7 +99,7 @@ def search(request):
     text = request.POST.get("select_text")
     kind = request.POST.get("select_kind")
     top_id = request.POST.get("top", None)
-    print("上级部门为：", top_id)
+    # print("上级部门为：", top_id)
     q1 = Q()
     q1.connector = 'OR'
     q1.children.append(('code__contains', text))
@@ -121,6 +121,7 @@ def search(request):
     return render(request, 'organization/message.html', {
         "obj": obj,
         "msg": "1",
+        "flag": 1,
         "obj1": obj1,
         "length": obj1.__len__()
     })

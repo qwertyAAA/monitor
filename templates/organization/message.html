@@ -22,10 +22,12 @@
                 <form class="navbar-form navbar-left" method="post" action="/organization/search/">
                     {% csrf_token %}
                     <div class="form-group">
-                        <input type="text" name="select_text" class="form-control" placeholder="请输入查询条件">
+                        <input type="text" name="select_text" class="form-control" placeholder="名称\英文\编码(模糊查询)">
                         <select name="select_kind" class="form-control">
-                            <option>本级</option>
                             <option>全部</option>
+                            <option {% if flag %}
+                                style="display: none"
+                            {% endif %}>本级</option>
                         </select>
                         <input type="text" name="top" value="{{ top.id }}" class="form-control" style="display: none">
                     </div>
