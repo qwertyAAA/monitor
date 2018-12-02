@@ -17,7 +17,7 @@ class First_Menu(models.Model):
 class Second_Menu(models.Model):
     nid = models.AutoField(primary_key=True, verbose_name='编号')
     title = models.CharField(max_length=30, null=False, verbose_name='二级菜单')
-    url = models.CharField(max_length=40, default=None, verbose_name='链接')
+    url = models.CharField(max_length=40, default=None,unique=True,verbose_name='链接')
     ico = models.CharField(max_length=40, default='menu-icon fa fa-caret-right', verbose_name='图标')
     status = models.BooleanField(default=True, verbose_name='状态')
     action= models.CharField(max_length=30,verbose_name='权限备注',default='#')
