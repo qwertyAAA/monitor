@@ -14,9 +14,10 @@
                         <div class="form-group">
                             <label for="inputPassword2" class="col-sm-3 control-label">请输入新菜单名称</label>
                             <div class="col-sm-9">
-                                <input type="text" id="edit_menuname" class="form-control" name="menu_name"
+                                <input menuid="{{ i.nid }}" type="text" id="edit_menuname" class="form-control edit_menuname" name="menu_name"
                                        value="{{ i.title }}"
                                        placeholder="请输入菜单名称">
+                                <p style="color: red; display: none;text-align: center" id="edit_prompt{{ i.nid }}">该菜单名已经存在</p>
                             </div>
                         </div>
                         <div class="form-group">
@@ -41,10 +42,39 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                        <button type="submit" class="btn btn-primary">保存</button>
+                        <button id="edit_btn"  type="submit" class="btn btn-primary">保存</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
 </div>
+<script src="/static/js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+
+    {#$('body').delegate('.edit_menuname', 'blur', function () {#}
+    {#    var menu_name=$(this).val();#}
+    {#    var menu_id=$(this).attr('menuid');#}
+    {#    $.ajax({#}
+    {#        url:'/menu/edit/first/0/',#}
+    {#        type:'get',#}
+    {#        data:{#}
+    {#            'menu_name':menu_name,#}
+    {#            'menu_id':menu_id#}
+    {#        },#}
+    {#        success:function (data) {#}
+    {#            console.log(data.id);#}
+    {#            var edit_id='#edit_prompt'+data.id;#}
+    {#            if (data.span == '1') {#}
+    {#                $(edit_id).css('display','block');#}
+    {#                $('#edit_btn').attr('disabled','disabled')#}
+    {#            }#}
+    {#            else#}
+    {#            {#}
+    {#                $(edit_id).css('display','none');#}
+    {#                $('#edit_btn').removeAttr('disabled')#}
+    {#            }#}
+    {#        }#}
+    {#    });#}
+    {# })#}
+</script>
