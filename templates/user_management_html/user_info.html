@@ -18,7 +18,7 @@
             <form action="/user_management/batch_user/" method="post">
                 {% csrf_token %}
             </form>
-{#            <!-- form 多选-->#}
+            {#            <!-- form 多选-->#}
 
             <select name="action" id="" style="width: 200px; padding:5px 8px;   display: inline-block">
 
@@ -44,13 +44,14 @@
                             <button type="button" class="close" data-dismiss="modal"
                                     aria-label="Close"><span aria-hidden="true"></span>
                             </button>
-                           <p class="bg-success" style="text-align: center;color: red;font-weight: bold;   ">为了更加准确查询您所要的信息请根据提示进行查询！！！例如</p>
+                            <p class="bg-success" style="text-align: center;color: red;font-weight: bold;   ">
+                                为了更加准确查询您所要的信息请根据提示进行查询！！！例如</p>
                         </div>
                         <div class="modal-body">
-                               <p class="bg-info" style="text-align: center">根据用户名进行查询</p>
-                               <p class="bg-info" style="text-align: center">根据用户编号进行查询</p>
-                               <p class="bg-info" style="text-align: center">根据用户角色进行查询</p>
-                               <p class="bg-info" style="text-align: center">................</p>
+                            <p class="bg-info" style="text-align: center">根据用户名进行查询</p>
+                            <p class="bg-info" style="text-align: center">根据用户编号进行查询</p>
+                            <p class="bg-info" style="text-align: center">根据用户角色进行查询</p>
+                            <p class="bg-info" style="text-align: center">................</p>
                             <div class="modal-footer">
                                 <a href="/user_management/search_user/"
                                    class="btn btn-danger">以了解下一步</a>
@@ -256,7 +257,7 @@
                             <!-- 详情信息 end0 -->
 
                             <a class="btn btn-xs btn-info" title="发送站内信">
-                                <i class="ace-icon fa fa-envelope-o bigger-120" title="发送站内信"></i>
+                                <i class="ace-icon fa fa-envelope-o bigger-120" title="发送站内信" href="//"></i>
                             </a>
 
 
@@ -511,16 +512,19 @@
 
 
                                     <div class="form-group">
-                                        <label for="username" class="col-sm-2 control-label"><span style="color: red"> * </span>编号：</label>
+                                        <label for="username" class="col-sm-2 control-label"><span
+                                                style="color: red"> * </span>编号：</label>
                                         <div class="col-sm-5">
-                                            <input type="text" class="form-control" id="adduser_number" name="adduser_number"
+                                            <input type="text" class="form-control" id="adduser_number"
+                                                   name="adduser_number"
                                                    placeholder="在这里输入编号">
                                             <span id="message"></span>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="username" class="col-sm-2 control-label"><span style="color: red"> * </span>身份证号：</label>
+                                        <label for="username" class="col-sm-2 control-label"><span
+                                                style="color: red"> * </span>身份证号：</label>
                                         <div class="col-sm-5">
                                             <input type="text" class="form-control" id="user_id_card"
                                                    name="user_id_card" placeholder="请在这里输入身份证号">
@@ -536,14 +540,14 @@
                                         </div>
                                     </div>
 
-{#                                    <div class="form-group">#}
-{#                                        <label for="username" class="col-sm-2 control-label">性别：</label>#}
-{#                                        <div class="col-sm-5">#}
-{#                                            <input type="text" class="form-control" id="user_gender"#}
-{#                                                   name="user_gender"#}
-{#                                                   placeholder="请在这里输入性别">#}
-{#                                        </div>#}
-{#                                    </div>#}
+                                    {#                                    <div class="form-group">#}
+                                    {#                                        <label for="username" class="col-sm-2 control-label">性别：</label>#}
+                                    {#                                        <div class="col-sm-5">#}
+                                    {#                                            <input type="text" class="form-control" id="user_gender"#}
+                                    {#                                                   name="user_gender"#}
+                                    {#                                                   placeholder="请在这里输入性别">#}
+                                    {#                                        </div>#}
+                                    {#                                    </div>#}
 
                                     <div class="form-group">
                                         <label for="username" class="col-sm-2 control-label">性别：</label>
@@ -552,8 +556,8 @@
                                             <select name="user_gender" id="user_gender" style="width: 200px">
 
 
-                                                    <option value="m">男</option>
-                                                    <option value="w">女</option>
+                                                <option value="m">男</option>
+                                                <option value="w">女</option>
 
 
                                             </select>
@@ -562,14 +566,12 @@
                                     </div>
 
 
-
-
-
                                     <div class="form-group">
-                                        <label for="username" class="col-sm-2 control-label"><span style="color: red"> * </span>手机：</label>
+                                        <label for="username" class="col-sm-2 control-label"><span
+                                                style="color: red"> * </span>手机：</label>
                                         <div class="col-sm-5">
                                             <input type="text" class="form-control" id="user_phone"
-                                                   name="user_phone" placeholder="请在这里输入手机号" style="color: red">
+                                                   name="user_phone" placeholder="请在这里输入11位手机号" style="color: red">
 
                                         </div>
                                     </div>
@@ -608,8 +610,6 @@
                                     </div>
 
                                     <br/>
-
-
 
 
                                     <!--新增员工 -->
@@ -657,7 +657,7 @@
     <!-- 实现全选的功能 当下面的全部选中的时候 全选按钮也应该被选中 当全选时候，有一个取消的时候全选也跟着取消-->
     <script src="/static/js/check_box.js">
     </script>
-   <script>
+    <script>
         {#$("body").delegate(".for_delete", "click", function () {#}
         {#    swal({#}
         {#        title: "您确定删除吗?",#}
@@ -708,19 +708,19 @@
             })
                 .then((willDelete) => {
                     if (willDelete) {
-                            $.ajax({
-                                url: "/user_management/batch_delete/",
-                                type: "post",
-                                traditional: true,
-                                data: {
-                                    "delete_id_list": delete_id_list,
-                                    "csrfmiddlewaretoken": "{{ csrf_token }}"
-                                },
-                                success: function (data) {
-                                    if (data.status)
-                                        window.location.reload()
-                                }
-                            });
+                        $.ajax({
+                            url: "/user_management/batch_delete/",
+                            type: "post",
+                            traditional: true,
+                            data: {
+                                "delete_id_list": delete_id_list,
+                                "csrfmiddlewaretoken": "{{ csrf_token }}"
+                            },
+                            success: function (data) {
+                                if (data.status)
+                                    window.location.reload()
+                            }
+                        });
                     } else {
                         swal("数据还是安全的！");
                     }
@@ -729,29 +729,28 @@
 
     </script>
     <script>
-    //CSRF设置
-    $.ajaxSetup({
-        data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
-    });
+        //CSRF设置
+        $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
+        });
 
-    $("#adduser_number").blur(function () {
-    var usernumber_var = $("#adduser_number").val();
-    if (usernumber_var != "") {
+        $("#adduser_number").blur(function () {
+            var usernumber_var = $("#adduser_number").val();
+            if (usernumber_var != "") {
 
-        $.post(
-            "/user_management/check_usernumber/",
-            {
-                "adduser_number": usernumber_var
-            },
-            function (data) {
-                if (data["message"] == 1) {
-                    $("#message").text("编号已被占用");
-                }
+                $.post(
+                    "/user_management/check_usernumber/",
+                    {
+                        "adduser_number": usernumber_var
+                    },
+                    function (data) {
+                        if (data["message"] == 1) {
+                            $("#message").text("编号已被占用");
+                        }
+                    }
+                )
             }
-        )
-    }
-});
-
+        });
 
 
     </script>

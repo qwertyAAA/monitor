@@ -1,18 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <!-- 导入 -->
     <link rel="stylesheet" href="/static/mail/mail_modal.css"/>
     <span class="input-icon">
             <input type="text" placeholder="这里输入关键词" class="nav-search-input"
                    id="nav-search-input" autocomplete="off" name="keywords">
             <i class="ace-icon fa fa-search nav-search-icon"></i>
     </span>
-    <div class="mail_list" style="margin-top: 20px; text-align: center">
+    <div class="mail_list" style="text-align: center">
         <div class="table-responsive">
             <table class="table table-bordered tale_inquiry">
                 <thead>
-                <th><input type="checkbox" id="checkbox_on"></th>
+                <th role="button" id="checkbox_on"><input type="checkbox"></th>
                 <th>序号</th>
                 <th>发信人</th>
                 <th>收信人</th>
@@ -25,7 +24,7 @@
                     <tr>
                         <td><input type="checkbox" value="{{ mail.id }}" id="onclick_checkbox"
                                    name="onclick_checkbox"></td>
-                        <td>{{ forloop.counter }}</td>
+                        <td>{{ mail.id }}</td>
                         <td>{{ mail.to_user }}</td>
                         <td>{{ mail.from_user.user.username }}</td>
                         <td>{{ mail.create_time }}</td>
@@ -41,7 +40,8 @@
         </div>
     </div>
 
-    <!-- 发送邮箱弹出模态框 -->
+
+
     <button type="button" class="btn btn-primary btn-lg mail_btn" data-toggle="modal"
             data-target="#myModal" id="many_del1">
         <i class="ace-icon fa fa-envelope-o bigger-10" title="发送站内信"></i>
@@ -58,7 +58,7 @@
                     </div>
                     <div class="modal-body">
                         <label>文章内容</label>
-                        <textarea name="content" id="content" cols="60" rows="20"></textarea>
+                        <textarea name="content" id="article_content" cols="60" rows="20"></textarea>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -68,13 +68,11 @@
             </div>
         </div>
     </div>
-    <!-- 多选删除按钮 -->
-    <button type="button" class="btn btn-primary" id="many_del">全部删除</button>
-    <script charset="utf-8" src="/static/kindeditor/kindeditor-all.js"></script>
+{#    <script charset="utf-8" src="/static/kindeditor/kindeditor-all.js"></script>#}
     <script>
         //$('你的input的class或id').datetimepicker({});
         KindEditor.ready(function (K) {
-            window.editor = K.create('#content', {
+            window.editor = K.create('#article_content', {
                 width: "800px",
                 height: "500px",
                 resizeType: 0,
@@ -95,5 +93,7 @@
                 ]
             });
         });
+
+
     </script>
 {% endblock %}
