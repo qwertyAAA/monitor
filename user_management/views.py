@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 
 from .Myutilss.pageutil import Page
-from online_management.online_users import online_user_management
+# from online_management.online_users import online_user_management
 '''当导入这个方法的时候：用的时候必须是  models.表明'''
 # from user_management import models
 from . import models
