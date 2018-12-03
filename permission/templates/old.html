@@ -87,3 +87,28 @@
                                 </div>
                             </div>
                         </div>
+{# <script type="text/javascript">#}
+{#       $(function () {#}
+{#            $(".cat_permissions").click(function () {#}
+{#            var role_id=$(this).attr('role_id');#}
+{#            var select=$("select[role_id='"+role_id+"']");#}
+            {#alert(select.attr('role_id'))#}
+{#            // 2. 用AJAX发送到服务端#}
+{#            $.ajax({#}
+{#                url: "/permission/role_permission_list/" ,#}
+{#                type: "post",#}
+{#                data: {#}
+{#                    "role_id": role_id,#}
+{#                    "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()#}
+{#                },#}
+{#                success: function (data) {#}
+{#                     data=JSON.parse(data);#}
+{#                    $.each(data, function (index, n) {#}
+{#                        select.append("<option value=\""+n.id+"\">"+n.title+"</option>")#}
+{#                    });#}
+{#                }#}
+{#            })#}
+{#        });#}
+{#       })#}
+{##}
+{#    </script>#}

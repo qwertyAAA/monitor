@@ -25,8 +25,8 @@
                                            name="choose" value="{{ first.id }}">
                                 {% endif %}
 
-                                <span><a class="role_group">{{ first.title }}</a></span>
-                                <ul style="list-style: none">
+                                <span><a class="role_group" style="text-decoration: none">{{ first.title }}</a></span>
+                                <ul style="list-style: none" attr="yes">
                                     {% for second in permission_second %}
                                          {% if second.is_del == 0 %}
                                         {% if second.group.title == first.title %}
@@ -38,8 +38,8 @@
                                                 <input type="checkbox" class="second_group" flag2="{{ second.title }}"
                                                        value="{{ second.id }}" name="choose" flag="{{ first.title }}">
                                             {% endif %}
-                                                <span id="permission">{{ second.title }}</span>
-                                                <ul style="list-style: none">
+                                                <span id="permission"><a style="text-decoration: none" class="second_title">{{ second.title }}</a></span>
+                                                <ul style="list-style: none" attr="yes">
                                                     {% for third in crud_permission_list %}
                                                             {% if third.group.title == second.title %}
                                                             <li>{% if third in role_group_permissions %}
@@ -75,6 +75,7 @@
     </div>
 </div>
 <script src="/static/jquery-3.3.1.min.js"></script>
+{% comment %}角色组权限的全选{% endcomment %}
 <script>
     function SelectAll() {
         var checkboxs = document.getElementsByName("choose");
@@ -84,6 +85,7 @@
         }
     }
 </script>
+{% comment %}角色组权限的全不选{% endcomment %}
 <script>
     function noSelectAll() {
         var checkboxs = document.getElementsByName("choose");
@@ -93,9 +95,10 @@
         }
     }
 </script>
+{% comment %}角色组权限的一级菜单的CheckBox点击事件{% endcomment %}
 <script type="text/javascript">
     $(document).on('click', '.first_group', function () {
-        var attrs = $(this).attr('flag');  //获得组id ，用来做标志
+        var attrs = $(this).attr('flag');  //获得一级菜单组title（first.title） ，用来做标志
         var $check1 = $(this);
         if ($check1[0].checked) {
             $('input[flag="' + attrs + '"]').prop("checked", true);
@@ -110,6 +113,7 @@
     });
 
 </script>
+{% comment %}角色组权限的二级菜单的CheckBox点击事件{% endcomment %}
 <script type="text/javascript">
     $(document).on('click', '.second_group', function () {
         var attrs = $(this).attr('flag2');  //获得组title ，用来做标志
@@ -127,18 +131,31 @@
     });
 
 </script>
+{% comment %}角色组权限一级菜单的点击事件{% endcomment %}
 <script type="text/javascript">
-    var a = 1
     $(".role_group").click(function () {
-        if (a == 1) {
+        if ($(this).parent().next().attr('attr') == 'yes') {
             $(this).parent().next().css("display", "none");
-            a = 0;
+            $(this).parent().next().attr('attr','no');
         }
-        else if (a == 0) {
+        else {
             $(this).parent().next().css("display", "block");
-            a = 1;
+             $(this).parent().next().attr('attr','yes');
         }
+    });
 
+</script>
+{% comment %}角色组权限二级菜单的点击事件{% endcomment %}
+<script type="text/javascript">
+    $(".second_title").click(function () {
+        if ($(this).parent().next().attr('attr') == 'yes') {
+            $(this).parent().next().css("display", "none");
+            $(this).parent().next().attr('attr','no');
+        }
+        else {
+            $(this).parent().next().css("display", "block");
+             $(this).parent().next().attr('attr','yes');
+        }
     });
 
 </script>
