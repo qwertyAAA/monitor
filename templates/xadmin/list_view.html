@@ -3,12 +3,9 @@
     <script src="/static/js/jquery-2.1.4.min.js"></script>
     <script src="/static/js/check_box.js"></script>
     <script src="/static/js/sweetalert.min.js"></script>
-    <br/>
-    <br/>
     <div class="pull-right">
     <a href="/xadmin/"><span>xadmin/</span></a><a href="/xadmin/{{ current_url }}">{{ current_url }}</a>
     </div>
-    <br/>
     <br/>
     <div align="center">
         <h2><strong>{{ model_name }}表</strong></h2>
@@ -54,7 +51,7 @@
                         </td>
                         {% for item in data %}
                             <td>
-                                <span>{{ item | slice:":40" }}</span>
+                                <span>{{ item }}</span>
                             </td>
                         {% endfor %}
                         <td>
