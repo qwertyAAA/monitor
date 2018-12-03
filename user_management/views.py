@@ -7,25 +7,19 @@ from middlewares.all_requests import all_requests
 from .Myutilss.pageutil import Page
 from permission.models import Role
 from mail.models import Fhsms
-
 ''' 发送站内信需要导入的包'''
 from mail.models import Fhsms, StatusMail
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.core.mail import send_mail
-
 '''当导入这个方法的时候：用的时候必须是  models.表明'''
-
 from . import models
-
 ''' 当导入这个时候跟上面的区别是直接用不用加.'''
 
 
 #
 # def user_mail(request):
 #     return render(request, "user_management_html/user_mail.html")
-
-
 def search_user(request):
     return render(request, "user_management_html/search_user.html")
 
@@ -78,7 +72,10 @@ def main(request):
 
 
 def user_info(request):
-    user_list = models.UserInfo.objects.all()
+    # user_list = models.UserInfo.objects.all()
+    from permission.service.DataPermission import has_data
+    ret=has_data(request)
+    user_list=ret['user_list']
     userlists = models.User.objects.all()
     '''查询所有的用户对应的角色'''
     roles_list = Role.objects.filter(user__userinfo__in=user_list)

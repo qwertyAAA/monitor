@@ -45,30 +45,3 @@
 </div>
 </div>
 <script src="/static/js/jquery-3.3.1.min.js"></script>
-<script type="text/javascript">
-
-    $('body').delegate('#first_menu_name', 'blur', function () {
-        console.log('nihao');
-        var menu_name=$(this).val();
-        console.log({{ first_menu_title }});
-        $.ajax({
-            url:'/menu/add/first/',
-            type:'get',
-            data:{
-                'menu_name':menu_name
-            },
-            success:function (data) {
-                if (data.span == '1') {
-                    $('#prompt').css('display','block');
-                    $('#sub_btn').attr('disabled','disabled')
-                }
-                else
-                {
-                    $('#prompt').css('display','none');
-                    $('#sub_btn').removeAttr('disabled')
-                }
-            }
-        });
-
-    })
-</script>

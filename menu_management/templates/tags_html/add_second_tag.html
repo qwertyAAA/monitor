@@ -20,13 +20,17 @@
                                 <input type="text" id="second_menu_name" class="form-control" name="menu_name"
                                        placeholder="请输入菜单名称">
                             </div>
+                            <p style="color: red; display: none;text-align: center" id="second_prompt">该菜单名已经存在</p>
                         </div>
                         <div class="form-group">
                             <label for="menu_path" class="col-sm-3 control-label">请输入菜单路径</label>
                             <div class="col-sm-9">
                                 <input type="text" id="menu_path" class="form-control" name="menu_path"
                                        placeholder="请输入菜单路径">
+                                <p style="color: red; display: none;text-align: center" id="second_path_prompt">
+                                路径已存在</p>
                             </div>
+
                         </div>
                         <input name="menu_id" value="{{ id }}" style="display: none">
                         <div class="form-group">
@@ -43,7 +47,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                        <button type="submit" class="btn btn-primary">保存</button>
+                        <button id="second_btn" type="submit" class="btn btn-primary">保存</button>
                     </div>
                 </div>
             </form>
@@ -51,3 +55,5 @@
 
     </div>
 </div>
+
+<script src="/static/js/jquery-3.3.1.min.js"></script>
