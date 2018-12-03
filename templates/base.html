@@ -23,6 +23,7 @@
         setInterval(function () {
             $.ajax({
                 type: 'get',
+                async : false,
                 url: '/user_management/online_users_count/',
                 success: function (data) {
                     $("#online_users_count").html("在线人数：" + data.count)

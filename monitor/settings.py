@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'organization',
     'xadmin.apps.XadminConfig',
     'user_management.apps.UserManagementConfig',
-    'testApp.apps.TestappConfig',
     'permission',
     'menu_management',
 ]
