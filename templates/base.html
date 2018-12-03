@@ -20,15 +20,15 @@
     <link href="/static/css/base.css" rel="stylesheet" type="text/css"/>
     <script src="/static/js/jquery-2.1.4.min.js"></script>
     <script type="text/javascript">
-        $(document).ready(function () {
+        setInterval(function () {
             $.ajax({
                 type: 'get',
                 url: '/user_management/online_users_count/',
-                success: function(data){
-                    $("#online_users_count").val("在线人数：" + data.online_requests_count)
+                success: function (data) {
+                    $("#online_users_count").html("在线人数：" + data.count)
                 }
             });
-        });
+        }, 1000);
     </script>
     {% block css %}{% endblock %}
     {% block js %}{% endblock %}
@@ -168,7 +168,7 @@
     <!--/. NAV TOP  -->
     <!-- 菜单  -->
     {% load menu %}
-    {% get_menu request%}
+    {% get_menu request %}
     <!-- /. NAV SIDE  -->
     <div id="page-wrapper">
         <div id="page-inner">
