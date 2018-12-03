@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.contrib import auth
 from permission.service.Permission import init_permission
-from middlewares.online_users_management import online_users_management
+from middlewares.all_requests import all_requests
 from django.contrib.auth.hashers import make_password
 
 
@@ -89,6 +89,8 @@ def logout(request):
     print(request.META["HTTP_REFERER"])
     try:
         auth.logout(request)
+        all_requests.requests_list.remove(request)
+        all_requests.requests_user_pk.remove(request.user.pk)
     except Exception as e:
         print(e)
     return redirect("/login/")

@@ -53,8 +53,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'middlewares.xadminMiddleware.CheckXadminPermission',
-    'middlewares.online_users_management.OnlineManagement',
-    'permission.service.rbac.ValidPermission',
+    # 'permission.service.rbac.ValidPermission',
+    'middlewares.all_requests.PushRequests',
+
 ]
 
 ROOT_URLCONF = 'monitor.urls'
@@ -71,7 +72,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'middlewares.online_users_management.get_online_users_count',
+                'middlewares.all_requests.get_online_requests_count',
 
             ],
         },
