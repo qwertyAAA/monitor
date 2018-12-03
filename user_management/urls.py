@@ -19,7 +19,6 @@ urlpatterns = [
     # 邮箱
     url(r"^user_mail/", views.user_mail),
     url(r"^all_email/", views.all_email),
-
     # url(r"^user_mail/$", views.user_mail),
     #  在线
     url(r"^online_users/$", views.online_users),
@@ -27,6 +26,4 @@ urlpatterns = [
     url(r'^online_users/(\d+)/delete/$', views.online_users_delete),
     url(r'^online_users/batch_delete/$', views.online_users_batch_delete),
     url(r"^online_users_count/$", views.get_online_requests),
-
-
 ]

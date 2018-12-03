@@ -14,17 +14,21 @@
                         <div class="form-group">
                             <label for="inputPassword2" class="col-sm-3 control-label">请输入菜单名称</label>
                             <div class="col-sm-9">
-                                <input type="text" id="edit_menuname" class="form-control" name="menu_name"
+                                <input menuid="{{ i.nid }}" type="text" id="edit_second_menuname" class="form-control edit_second_menuname" name="menu_name"
                                        value="{{ i.title }}"
                                        placeholder="请输入菜单名称">
+                                <p style="color: red; display: none;text-align: center" id="edit_second_prompt{{ i.nid }}">该菜单名已经存在</p>
                             </div>
+
                         </div>
                         <div class="form-group">
                             <label for="menu_path" class="col-sm-3 control-label">请输入菜单路径</label>
                             <div class="col-sm-9">
-                                <input type="text" id="menu_path" class="form-control" name="menu_path"
+                                <input menuid="{{ i.nid }}" type="text" id="menu_path" class="form-control edit_second_menupath" name="menu_path"
                                        value="{{ i.url }}"
                                        placeholder="请输入菜单路径">
+                                <p style="color: red; display: none;text-align: center" id="second_edit_path_prompt{{ i.nid }}">
+                                路径已存在</p>
                             </div>
                         </div>
                         <div class="form-group">
@@ -52,10 +56,11 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                        <button type="submit" class="btn btn-primary">保存</button>
+                        <button type="submit" class="btn btn-primary" id="edit_second_sbtn{{ i.nid }}">保存</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
 </div>
+<script src="/static/js/jquery-3.3.1.min.js"></script>

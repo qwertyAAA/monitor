@@ -15,7 +15,8 @@
                     <a class="button btn btn-info pull-right" onclick="noSelectAll()">全不选</a>
                     <ul style="list-style: none">
                         {% for first in permission_first %}
-                            <li>
+                             {% if first.is_del == 0 %}
+                                 <li>
                                 {% if first in role_group_permissions %}
                                     <input type="checkbox" class="first_group" flag="{{ first.title }}"
                                            name="choose" value="{{ first.id }}" checked="checked">
@@ -27,6 +28,7 @@
                                 <span><a class="role_group">{{ first.title }}</a></span>
                                 <ul style="list-style: none">
                                     {% for second in permission_second %}
+                                         {% if second.is_del == 0 %}
                                         {% if second.group.title == first.title %}
                                             <li>{% if second in role_group_permissions %}
                                                 <input type="checkbox" class="second_group" flag2="{{ second.title }}"
@@ -39,7 +41,7 @@
                                                 <span id="permission">{{ second.title }}</span>
                                                 <ul style="list-style: none">
                                                     {% for third in crud_permission_list %}
-                                                        {% if third.group.title == second.title %}
+                                                            {% if third.group.title == second.title %}
                                                             <li>{% if third in role_group_permissions %}
                                                             <input type="checkbox" value="{{ third.id }}" name="choose"
                                                                    flag="{{ first.title }}" flag2="{{ second.title }}"
@@ -55,9 +57,11 @@
                                                 </ul>
                                             </li>
                                         {% endif %}
+                                        {% endif %}
                                     {% endfor %}
                                 </ul>
                             </li>
+                            {% endif %}
                         {% endfor %}
                     </ul>
                 </div>

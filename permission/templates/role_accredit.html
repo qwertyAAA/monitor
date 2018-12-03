@@ -16,7 +16,8 @@
                     <a class="button btn btn-info no_select_all pull-right">全不选</a>
                     <ul style="list-style: none">
                         {% for first in permission_first %}
-                            <li>
+                             {% if first.is_del == 0 %}
+                                 <li>
                                 {% if first in role.permissions.all %}
                                     <input type="checkbox" class="first_group2" flag="{{ first.title }}"
                                            name="choose2" value="{{ first.id }}" checked="checked">
@@ -28,6 +29,7 @@
                                 <span><a class="role_group2">{{ first.title }}</a></span>
                                 <ul style="list-style: none">
                                     {% for second in permission_second %}
+                                         {% if second.is_del == 0 %}
                                         {% if second.group.title == first.title %}
                                             <li>{% if second in role.permissions.all %}
                                                 <input type="checkbox" class="second_group2" flag2="{{ second.title }}"
@@ -57,9 +59,11 @@
                                                 </ul>
                                             </li>
                                         {% endif %}
+                                        {% endif %}
                                     {% endfor %}
                                 </ul>
                             </li>
+                            {% endif %}
                         {% endfor %}
                     </ul>
                 </div>
