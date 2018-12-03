@@ -6,13 +6,15 @@ import json
 from django.apps import apps
 import redis
 from permission import models as per_models
-
+from Myutils.pageutil import Page
 
 # Create your views here.
 
 def check_first_menu(request):
     menu_list = models.First_Menu.objects.all()
-    return render(request, 'first_menu_manage.html', {'menu_list': menu_list})
+    page=Page(menu_list,request,10)
+    sum = page.Sum()
+    return render(request, 'first_menu_manage.html', {'menu_list': sum[0],'page_html':sum[1]})
 
 
 def check_second_menu(request, id):
