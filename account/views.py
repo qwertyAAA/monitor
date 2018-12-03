@@ -91,9 +91,11 @@ def register(request):
 def logout(request):
     print(request.META["HTTP_REFERER"])
     try:
+        for obj in all_requests.requests_list:
+            if obj.user.pk == request.user.pk:
+                all_requests.requests_list.remove(obj)
+                all_requests.requests_user_pk.remove(obj.user.pk)
         auth.logout(request)
-        all_requests.requests_list.remove(request)
-        all_requests.requests_user_pk.remove(request.user.pk)
     except Exception as e:
         print(e)
     return redirect("/login/")
