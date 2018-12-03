@@ -59,7 +59,7 @@ class ValidPermission(MiddlewareMixin):
                 if result:
                     request.actions=item['actions']
                     return None
-        return HttpResponse('没有操作权限')
+        return render(request,'no_permission.html')
 
 
 
