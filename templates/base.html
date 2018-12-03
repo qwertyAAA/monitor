@@ -19,18 +19,6 @@
     <link href='/static/assets/css/abc.css' rel='stylesheet' type='text/css'/>
     <link href="/static/css/base.css" rel="stylesheet" type="text/css"/>
     <script src="/static/js/jquery-2.1.4.min.js"></script>
-    <script type="text/javascript">
-        setInterval(function () {
-            $.ajax({
-                type: 'get',
-                async : false,
-                url: '/user_management/online_users_count/',
-                success: function (data) {
-                    $("#online_users_count").html("在线人数：" + data.count)
-                }
-            });
-        }, 1000);
-    </script>
     {% block css %}{% endblock %}
     {% block js %}{% endblock %}
 </head>
