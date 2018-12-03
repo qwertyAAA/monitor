@@ -331,7 +331,6 @@ def online_users_search_data(request):
                 elif hasattr(other_request.user, "userinfo"):
                     if other_request.user.userinfo.user_phone != -1:
                         users.append(other_request.user)
-        print(users)
         for obj in users:
             check_box = """
             <td>
@@ -376,7 +375,7 @@ def online_users_batch_delete(request):
             for other_request in all_requests.requests_list:
                 if other_request.user.pk == int(delete_id):
                     all_requests.requests_list.remove(other_request)
-                    all_requests.requests_user_pk.remove(request.user.pk)
+                    all_requests.requests_user_pk.remove(other_request.user.pk)
                     logout(other_request)
     return JsonResponse({"status": True})
 
@@ -385,18 +384,16 @@ def online_users_batch_delete(request):
 
 
 def online_users_delete(request, delete_id):
-    print("WTF怎么不下线啊")
     for item in all_requests.requests_list:
         if item.user.pk == int(delete_id):
             all_requests.requests_list.remove(item)
-            all_requests.requests_user_pk.remove(request.user.pk)
+            all_requests.requests_user_pk.remove(item.user.pk)
             logout(item)
-    print(all_requests.requests_user_pk)
     return redirect("/user_management/online_users/")
 
 
 def get_online_requests(request):
-    return JsonResponse({"online_requests_count": len(all_requests.requests_list)})
+    return JsonResponse({"count": len(all_requests.requests_list)})
 
 
 # def mail(request):

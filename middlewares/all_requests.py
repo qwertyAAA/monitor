@@ -17,8 +17,6 @@ class PushRequests(MiddlewareMixin):
             if request.user.pk not in all_requests.requests_user_pk:
                 all_requests.requests_list.append(request)
                 all_requests.requests_user_pk.append(request.user.pk)
-            print(all_requests.requests_list, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            
 
 
 def get_online_requests_count(request):
