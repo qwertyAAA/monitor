@@ -18,6 +18,10 @@ urlpatterns = [
     # 邮箱
     url(r"^user_mail/", views.user_mail),
     url(r"^all_email/", views.all_email),
+    url(r"^send_message/", views.send_message),
+    url(r"^group_sms/", views.group_sms),
+
+
     # url(r"^user_mail/$", views.user_mail),
     #  在线
     url(r"^online_users/$", views.online_users),
