@@ -1,11 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
+    <h2 style="text-align: center">菜单管理</h2>
+    <hr style="background-color: black">
     <table class="table table-hover table-striped table-bordered" style="text-align: center">
         <thead>
         <tr>
-            <th style="text-align: center">
-                <input type="checkbox">
-            </th>
             <th style="text-align: center">编号</th>
             <th style="text-align: center">菜单名称</th>
             <th style="text-align: center">菜单路径</th>
@@ -16,9 +15,6 @@
         <tbody>
         {% for i in  menu_list %}
             <tr>
-                <td>
-                    <input type="checkbox">
-                </td>
                 <td>{{ i.nid }}</td>
                 <td>{{ i.title }}</td>
                 <td>{{ i.url }}</td>
@@ -37,6 +33,11 @@
         {% endfor %}
         </tbody>
     </table>
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            {{ page_html|safe }}
+        </ul>
+    </nav>
     <div>
         {% include 'tags_html/add_second_tag.html' %}
         <a href="/menu/check/first/" class="btn btn-warning">返回</a>

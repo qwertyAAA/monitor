@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'organization',
     'xadmin.apps.XadminConfig',
     'user_management.apps.UserManagementConfig',
-    'testApp.apps.TestappConfig',
     'permission',
     'menu_management',
 ]
@@ -53,7 +52,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'middlewares.xadminMiddleware.CheckXadminPermission',
-    # 'permission.service.rbac.ValidPermission',
+    'permission.service.rbac.ValidPermission',
+    'middlewares.all_requests.PushRequests',
 ]
 
 ROOT_URLCONF = 'monitor.urls'
@@ -70,6 +70,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'middlewares.all_requests.get_online_requests_count',
+
             ],
         },
     },

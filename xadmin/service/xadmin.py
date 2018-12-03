@@ -6,6 +6,10 @@ from django import forms
 from django.db.models import OneToOneField, ForeignKey, ManyToManyField
 import datetime
 from django.contrib.auth.hashers import make_password
+import locale
+from Myutils.pageutil import Page
+
+locale.setlocale(locale.LC_CTYPE, 'chinese')
 
 
 class ModelXAdmin(object):
@@ -48,13 +52,16 @@ class ModelXAdmin(object):
             if field.name.find("password") != -1:
                 continue
             field_names.append(field.verbose_name)
+        page = Page(data_list, request, per_page=6)
+        sum = page.Sum()
         return render(
             request,
             "xadmin/list_view.html",
             {
                 "current_url": current_app_label + "/" + current_model_name + "/",
                 "model_name": self.model._meta.model_name,
-                "data_list": data_list,
+                "data_list": sum[0],
+                "page_html": sum[1],
                 "field_names": field_names
             }
         )
@@ -183,7 +190,8 @@ class ModelXAdmin(object):
             for obj in qs:
                 data = []
                 for field in self.fields:
-                    data.append(getattr(obj, field.name))
+                    if field.name.find("password") == -1:
+                        data.append(getattr(obj, field.name))
                 data_list.append(data)
             for data in data_list:
                 ret["html"] += """
@@ -195,7 +203,7 @@ class ModelXAdmin(object):
                 for item in data:
                     # 此处为返回前端的数据进行过滤
                     item = item[:40:] if isinstance(item, str) else item
-                    item = item.strftime("%Y-%m-%d %H:%M") if isinstance(item, datetime.datetime) else item
+                    item = item.strftime("%Y年%m月%d日 %H:%M") if isinstance(item, datetime.datetime) else item
                     # try:
                     #     item = item.strftime("%Y{0}%m{1}%d{2} %H:%M".format("年", "月", "日"))
                     # except Exception as e:

@@ -3,11 +3,13 @@ from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.contrib import auth
 from permission.service.Permission import init_permission
+from middlewares.all_requests import all_requests
 from django.contrib.auth.hashers import make_password
 
 
 # 登录
 def login(request):
+    data = {}
     if request.method == "POST":
         username = request.POST.get("username", None)
         print(username)
@@ -22,32 +24,20 @@ def login(request):
                 auth.login(request, user)
                 request.session['user_id'] = user.id
                 init_permission(user, request)
-                response = render(request, "index.html")
+                data["success"] = 1
                 if remember_pwd:
-                    response.set_cookie("username", username)
-                    response.set_cookie("password", password)
-                    return response
+                    request.session.set_expiry(None)
                 else:
-                    try:
-                        response.delete_cookie("username")
-                        response.delete_cookie("password")
-                        return response
-                    except:
-                        return redirect("/index/")
+                    request.session.set_expiry(0)
             else:
                 login_message = "账号或密码错误，请重新输入！"
-                return render(request, "login.html", locals())
+                data["login_message"] = login_message
         else:
             login_message = "验证码错误！"
-            return render(request, "login.html", locals())
+            data["login_message"] = login_message
+        return JsonResponse(data)
     else:
-        try:
-            cookie_username = request.COOKIES.get("username")
-            print(cookie_username)
-            cookie_password = request.COOKIES.get("password")
-            return render(request, "login.html", locals())
-        except:
-            return render(request, "login.html")
+        return render(request, "login.html")
 
 
 # 注册
@@ -87,6 +77,10 @@ def register(request):
 def logout(request):
     print(request.META["HTTP_REFERER"])
     try:
+        for obj in all_requests.requests_list:
+            if obj.user.pk == request.user.pk:
+                all_requests.requests_list.remove(obj)
+                all_requests.requests_user_pk.remove(obj.user.pk)
         auth.logout(request)
     except Exception as e:
         print(e)
@@ -144,70 +138,113 @@ def check_username(request):
 # 发送邮件验证码
 def sendEmail(request):
     message = {}
+    message["result"] = None
     print(request.method, "************")
+    # 第一次发送邮箱验证码的请求方法为POST，重新发送为GET
     if request.method == "POST":
-        js_code = """
-                window.onload = function(){
-                $('#login-box').removeClass('visible');
-                $('#emailCode-box').addClass('visible');
-                $("#email_status").text(data["success"]);
-                }            
-            """
-        emailaddress = request.POST.get("email-find", None)
+        emailaddress = request.POST.get("email_find", None)
         print(emailaddress)
         if User.objects.filter(email=emailaddress):
-            for i in User.objects.filter(email=emailaddress):
-                nametemp = i.username
-                idtemp = i.id
-                # 生成随机验证码
-                from random import choice
-                import string
-                # python3中为string.ascii_letters,而python2下则可以使用string.letters和string.ascii_letters
-                def GenPassword(length=8, chars=string.ascii_letters + string.digits):
-                    return ''.join([choice(chars) for i in range(length)])
+            email_sender(request, emailaddress, message)
+            if message["result"] == False:
+                message["send_result"] = 0
+                message["failed"] = "邮件发送异常，请稍后再试！"
+                # return render(request, "login.html", locals())
+                return JsonResponse(message)
+            message["send_result"] = 1
+            # return render(request, "login.html", locals())
+            return JsonResponse(message)
+        else:
+            message["failed"] = "您的邮箱的账户注册信息没有找到"
+            js_code = """
+                        window.onload = function(){
+                        $('#login-box').removeClass('visible');
+                        $('#forgot-box').addClass('visible');
+                        $("#no_email").text(data["failed"]);
+                        $("#send_emailAdress").css("disabled", false);
+                        }            
+                    """
+            return render(request, "login.html", locals())
+    # 前端把重新发送验证码的请求设置为GET
+    elif request.method == "GET":
+        emailaddress = request.GET.get("email_find", None)
+        email_sender(request, emailaddress, message)
+        if message["result"] == False:
+            js_code = """
+                        window.onload = function(){
+                        $('#login-box').removeClass('visible');
+                        $('#forgot-box').addClass('visible');
+                        $("#no_email").text(data["failed"]);
+                        $("#send_emailAdress").css("disabled", false);
+                        }            
+                    """
+            message["failed"] = "邮件发送异常，请稍后再试！"
+            return render(request, "login.html", locals())
+        js_code = """
+                    window.onload = function(){
+                    $('#login-box').removeClass('visible');
+                    $('#emailCode-box').addClass('visible');
+                    $("#email_status").text(data["success"]);
+                    }            
+                """
+        return render(request, "login.html", locals())
 
-                pawdtemp = GenPassword(8)
 
-                import smtplib
-                from email.mime.text import MIMEText
-                host = "smtp.163.com"
-                port = 25
-                sender = "codelegend@163.com"
-                pwd = "xiaoyang789"
-                receiver = emailaddress
-                # body = "<h1>您本次重置密码的验证码是：  " + pawdtemp + "  ，请尽快操作！</h1>"
-                body = pawdtemp
-                msg = MIMEText(body, "html")
-                msg["subject"] = "来自老朋友的问候"
-                msg["from"] = sender
-                msg["to"] = receiver
-                print(msg["to"])
+# 定义发送邮件的方法
+def email_sender(request, emailaddress, message):
+    for i in User.objects.filter(email=emailaddress):
+        nametemp = i.username
+        idtemp = i.id
+        # 生成随机验证码
+        from random import choice
+        import string
+        # python3中为string.ascii_letters,而python2下则可以使用string.letters和string.ascii_letters
+        def GenPassword(length=8, chars=string.ascii_letters + string.digits):
+            return ''.join([choice(chars) for i in range(length)])
 
-                try:
-                    s = smtplib.SMTP(host, port)
-                    s.login(sender, pwd)
-                    s.sendmail(sender, receiver, msg.as_string())
-                    print("邮件发送成功！")
-                    request.session["findBy_email"] = emailaddress
-                    request.session["email_code"] = pawdtemp
-                    request.session["auth_id"] = idtemp
-                    message["success"] = "验证码已经发送到您的邮箱，请尽快登录邮箱以完成密码更新！"
-                    print(request.session["email_code"])
-                except smtplib.SMTPException as e:
-                    print(e)
-                    message["failed"] = "服务器异常，请重试"
-                # return JsonResponse(message)
-                return render(request, "login.html", locals())
-    message["failed"] = "您的邮箱的账户注册信息没有找到"
-    js_code = """
-                window.onload = function(){
-                $('#login-box').removeClass('visible');
-                $('#forgot-box').addClass('visible');
-                $("#no_email").text(data["failed"]);
-                $("#send_emailAdress").css("disabled", false);
-                }            
-            """
-    return render(request, "login.html", locals())
+        pawdtemp = GenPassword(8)
+
+        import smtplib
+        from email.mime.text import MIMEText
+        host = "smtp.163.com"
+        port = 25
+        sender = "codelegend@163.com"
+        pwd = "xiaoyang789"
+        receiver = emailaddress
+        # body = "<h1>您本次重置密码的验证码是：  " + pawdtemp + "  ，请尽快操作！</h1>"
+        body = pawdtemp
+        msg = MIMEText(body, "html")
+        msg["subject"] = "来自老朋友的问候"
+        msg["from"] = sender
+        msg["to"] = receiver
+        print(msg["to"])
+
+        try:
+            s = smtplib.SMTP(host, port)
+            s.login(sender, pwd)
+            s.sendmail(sender, receiver, msg.as_string())
+            print("邮件发送成功！")
+            request.session["findBy_email"] = emailaddress
+            request.session["email_code"] = pawdtemp
+            request.session["auth_id"] = idtemp
+            message["success"] = "验证码已经发送到您的邮箱，请尽快登录邮箱以完成密码更新！"
+            print(request.session["email_code"])
+        except smtplib.SMTPException as e:
+            print(e)
+            message["result"] = False
+            message["failed"] = "服务器异常，请重试"
+
+
+# 校验邮箱验证码
+def check_code(request):
+    data = {}
+    if request.method == "GET":
+        email_code = request.GET.get("email_code", None)
+        if email_code.upper() == request.session["email_code"].upper():
+            data["result"] = 1
+        else:
+            data["result"] = 0
+        return JsonResponse(data)
 
 
 # 登录验证码生成

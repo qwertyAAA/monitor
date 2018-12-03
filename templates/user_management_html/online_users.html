@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% block content %}
+    <script src="/static/js/sweetalert.min.js"></script>
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
+    <script src="/static/js/check_box.js"></script>
+    <div>
+        <a href="add/" class="btn btn-info" style="width: 100px;">添加数据</a>
+        <button class="btn btn-danger" id="batch_delete" style="width: 100px;">批量下线</button>
+    </div>
+    <br/>
+    <form class="form-inline">
+        {% csrf_token %}
+        <div class="form-group">
+            <input type="text" class="form-control" id="keyword" style="
+            : 400px;"
+                   placeholder="在这里输入需要管理的数据信息(支持模糊查询)"/>
+        </div>
+        <div class="form-group">
+        </div>
+        <button type="button" id="search_data" class="btn btn-info">查询</button>
+    </form>
+
+    <hr/>
+    <table class="table table-hover table-bordered">
+        <thead>
+        <tr>
+            <th>
+                <input type="checkbox" id="check_all"/>
+            </th>
+            <th>用户名</th>
+            <th>邮箱</th>
+            <th>手机号</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody id="data">
+
+        {% for user in online_users %}
+            <tr>
+                <td>
+                    {% if not user == request.user %}
+                        <input type="checkbox" class="check_item" delete_id="{{ user.pk }}"/>
+                    {% endif %}
+                </td>
+                <td>
+                    {{ user.username }}
+                </td>
+                <td>
+                    {{ user.email }}
+                </td>
+                <td>
+                    {{ user.userinfo.user_phone }}
+                </td>
+                <td>
+                    {% if not user == request.user %}
+                        <a href="{{ user.pk }}/delete/" class="btn btn-danger for_delete" delete_id="{{ user.pk }}">下线</a>
+                    {% endif %}
+
+                </td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+    <script>
+        $("body").delegate("#batch_delete", "click", function () {
+            var delete_id_list = [];
+            $(".check_item").each(function () {
+                if ($(this).prop("checked")) {
+                    var delete_id = $(this).attr("delete_id");
+                    delete_id_list.push(delete_id);
+                }
+            });
+            if (!delete_id_list.length) {
+                swal({
+                    title: "没有选中用户！",
+                    text: "请先选择要下线的用户",
+                    icon: "error",
+                    button: "好的"
+                });
+                return;
+            }
+            swal({
+                title: "确定下线吗?",
+                text: "一旦下线，用户将被注销",
+                icon: "warning",
+                buttons: ["还是算了", "让他滚！"],
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            url: "batch_delete/",
+                            type: "post",
+                            traditional: true,
+                            data: {
+                                "delete_id_list": delete_id_list,
+                                "csrfmiddlewaretoken": "{{ csrf_token }}"
+                            },
+                            success: function (data) {
+                                if (data.status)
+                                    window.location.reload()
+                            }
+                        });
+                    } else {
+                        swal("用户还活着呢！");
+                    }
+                });
+        });
+        $("#search_data").click(function () {
+            $("#data").html("")
+            var keyword = $("#keyword").val();
+            if (!keyword.length) {
+                swal({
+                    title: "搜索框没有数据！",
+                    text: "请先在搜索框输入数据",
+                    icon: "error",
+                    button: "好的"
+                });
+                return;
+            }
+            $.ajax({
+                url: "search_data/",
+                type: "post",
+                data: {
+                    "keyword": keyword,
+                    "csrfmiddlewaretoken": "{{ csrf_token }}"
+                },
+                success: function (data) {
+                    if (data.status) {
+                        $("#data").append(data.html)
+                    }
+                    else {
+                        alert("出现了未知错误！请联系开发者：qwerty")
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}

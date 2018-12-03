@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <link rel="stylesheet" href="/static/mail/mail_modal.css"/>
+    <span class="input-icon">
+            <input type="text" placeholder="这里输入关键词" class="nav-search-input"
+                   id="nav-search-input" autocomplete="off" name="keywords">
+            <i class="ace-icon fa fa-search nav-search-icon"></i>
+    </span>
+    <div class="mail_list" style="text-align: center">
+        <div class="table-responsive">
+            <table class="table table-bordered tale_inquiry">
+                <thead>
+                <th role="button" id="checkbox_on"><input type="checkbox"></th>
+                <th>序号</th>
+                <th>发信人</th>
+                <th>收信人</th>
+                <th>发信时间</th>
+                <th>状态</th>
+                <th>操作</th>
+                </thead>
+                <tbody>
+                {% for mail in mail_list %}
+                    <tr>
+                        <td><input type="checkbox" value="{{ mail.id }}" id="onclick_checkbox"
+                                   name="onclick_checkbox"></td>
+                        <td>{{ mail.id }}</td>
+                        <td>{{ mail.to_user }}</td>
+                        <td>{{ mail.from_user.user.username }}</td>
+                        <td>{{ mail.create_time }}</td>
+                        <td>{{ mail.status_id.status }}</td>
+                        <td>
+                            <a href="#">查看</a>
+                            <a href="#">回复</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+    <button type="button" class="btn btn-primary btn-lg mail_btn" data-toggle="modal"
+            data-target="#myModal" id="many_del1">
+        <i class="ace-icon fa fa-envelope-o bigger-10" title="发送站内信"></i>
+    </button>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content mail_modal">
+                <form method="post" action="">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        标题：<input type="text" name="title">
+                        邮箱：<input type="email" name="from_user">
+                        <input type="text" name="status_id" value="{{ status_list.nid }}" style="display: none">
+                    </div>
+                    <div class="modal-body">
+                        <label>文章内容</label>
+                        <textarea name="content" id="article_content" cols="60" rows="20"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="submit" class="btn btn-primary">发送</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{#    <script charset="utf-8" src="/static/kindeditor/kindeditor-all.js"></script>#}
+    <script>
+        //$('你的input的class或id').datetimepicker({});
+        KindEditor.ready(function (K) {
+            window.editor = K.create('#article_content', {
+                width: "800px",
+                height: "500px",
+                resizeType: 0,
+                uploadJson: '/upload/',
+                extraFileUploadParams: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                filePostName: 'upload_img',
+                items: [
+                    'source', '|', 'undo', 'redo', '|', 'preview', 'print', 'template', 'code', 'cut', 'copy', 'paste',
+                    'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+                    'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+                    'superscript', 'clearhtml', 'quickformat', 'selectall', '|', 'fullscreen', '/',
+                    'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+                    'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'multiimage',
+                    'flash', 'media', 'insertfile', 'table', 'hr', 'emoticons', 'baidumap', 'pagebreak',
+                    'anchor', 'link', 'unlink', '|', 'about'
+                ]
+            });
+        });
+
+
+    </script>
+{% endblock %}

@@ -18,7 +18,7 @@
             <form action="/user_management/batch_user/" method="post">
                 {% csrf_token %}
             </form>
-{#            <!-- form 多选-->#}
+            {#            <!-- form 多选-->#}
 
             <select name="action" id="" style="width: 200px; padding:5px 8px;   display: inline-block">
 
@@ -27,7 +27,15 @@
 
 
             </select>
-            <button type="submit" class="btn btn-danger " id="batch_delete">执行批量删除</button>
+            <button type="submit" class="btn btn-danger " id="batch_delete">
+                执行批量删除
+                <a class="btn btn-xs btn-danger" title="删除" data-toggle="modal"
+                   data-target="#plmyModal{{ forloop.counter }}">
+                    <i class="ace-icon fa fa-trash-o bigger-120" title="删除" style="height: 20px"></i>
+                </a>
+
+
+            </button>
             <!-- 模糊查询start-->
             <a class="btn btn-xs btn-info" onclick="searchs();" title="检索" data-toggle="modal"
                data-target="#zhmyModal" style="width: 50px; height: 35px">
@@ -44,13 +52,14 @@
                             <button type="button" class="close" data-dismiss="modal"
                                     aria-label="Close"><span aria-hidden="true"></span>
                             </button>
-                           <p class="bg-success" style="text-align: center;color: red;font-weight: bold;   ">为了更加准确查询您所要的信息请根据提示进行查询！！！例如</p>
+                            <p class="bg-success" style="text-align: center;color: red;font-weight: bold;   ">
+                                为了更加准确查询您所要的信息请根据提示进行查询！！！例如</p>
                         </div>
                         <div class="modal-body">
-                               <p class="bg-info" style="text-align: center">根据用户名进行查询</p>
-                               <p class="bg-info" style="text-align: center">根据用户编号进行查询</p>
-                               <p class="bg-info" style="text-align: center">根据用户角色进行查询</p>
-                               <p class="bg-info" style="text-align: center">................</p>
+                            <p class="bg-info" style="text-align: center">根据用户名进行查询</p>
+                            <p class="bg-info" style="text-align: center">根据用户编号进行查询</p>
+                            <p class="bg-info" style="text-align: center">根据用户角色进行查询</p>
+                            <p class="bg-info" style="text-align: center">................</p>
                             <div class="modal-footer">
                                 <a href="/user_management/search_user/"
                                    class="btn btn-danger">以了解下一步</a>
@@ -86,13 +95,13 @@
                 {% for user, role_list in user_role_dict.items %}
                     <tr>
                         <td style="width: 70px"><input type="checkbox" class='check_item' name='select_pk' id="choice"
-                                                       delete_id='{{ user.pk }}'></td>
+                                                       delete_id='{{ user.pk }}' value="{{ user.pk }}"></td>
                         <td style="width: 50px">{{ forloop.counter }}</td>
                         <td style="width: 50px">{{ user.id }}</td>
                         <td style="width: 80px">{{ user.user.username }}</td>
                         <td style="width: 80px">{{ user.user_name }}</td>
 
-                        <td style="width: 80px">
+                        <td style="width: 100px">
                             {% for role in role_list %}
                                 <span style="font-size: 2px "> {{ role.title }}:</span>
                             {% endfor %}
@@ -100,7 +109,7 @@
                         <td style="width: 50px">{{ user.user_age }}</td>
 
                         <!-- 操作界面 -->
-                        <td>
+                        <td style="width: 200px">
                             <a title="发送电子邮件" style="text-decoration:none;cursor:pointer; "
                                onclick="sendEmail('{{ user.user.email }}');"> {{ user.user.email }}&nbsp;<i
                                     class="ace-icon fa fa-envelope-o"></i></a>
@@ -109,7 +118,7 @@
 
                         <td style="width: 90px">{{ user.user_recent_ip }}</td>
 
-                        <td style="width: 150px">
+                        <td style="width: 190px">
 
 
                             <!-- 详情信息start0 -->
@@ -127,7 +136,7 @@
 
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal"
-                                                    aria-label="Close"><span aria-hidden="true"></span>
+                                                    aria-label="Close"><span aria-hidden="true">x</span>
                                             </button>
                                         </div>
 
@@ -254,10 +263,79 @@
                             </div>
 
                             <!-- 详情信息 end0 -->
+                            <!-- 站内信 start -->
 
-                            <a class="btn btn-xs btn-info" title="发送站内信">
+                            <a class="btn btn-xs btn-info" title="发送站内信" data-toggle="modal"
+                               data-target="#znmyModal{{ forloop.counter }}">
                                 <i class="ace-icon fa fa-envelope-o bigger-120" title="发送站内信"></i>
                             </a>
+
+                            <div class="modal fade" id="znmyModal{{ forloop.counter }}" tabindex="-1" role="dialog"
+                                 aria-labelledby="myModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content mail_modal">
+                                        <form method="post" action="/user_management/user_mail/">
+                                            {% csrf_token %}
+                                            <div class="modal-header">
+
+
+                                                姓名：<input type="text" name="from_user1" value={{ user.user.username }}>
+                                                邮箱：<input type="email" name="from_user" value={{ user.user.email }}>
+
+
+                                            </div>
+                                            <div class="modal-body">
+                                                标题：<input type="text" name="title">
+
+                                                <input type="text" name="status_id" value="0"
+                                                       style="display: none">
+                                                <label>文章内容:</label>
+                                                <textarea name="content" id="article_content" cols="60"
+                                                          rows="20"></textarea>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                                                </button>
+                                                <button type="submit" class="btn btn-primary" id="sendmail">发送</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <script>
+                                //$('你的input的class或id').datetimepicker({});
+                                KindEditor.ready(function (K) {
+                                    window.editor = K.create('#article_content', {
+                                        width: "800px",
+                                        height: "500px",
+                                        resizeType: 0,
+                                        uploadJson: '/upload/',
+                                        extraFileUploadParams: {
+                                            csrfmiddlewaretoken: '{{ csrf_token }}'
+                                        },
+                                        filePostName: 'upload_img',
+                                        items: [
+                                            'source', '|', 'undo', 'redo', '|', 'preview', 'print', 'template', 'code', 'cut', 'copy', 'paste',
+                                            'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+                                            'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+                                            'superscript', 'clearhtml', 'quickformat', 'selectall', '|', 'fullscreen', '/',
+                                            'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+                                            'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'multiimage',
+                                            'flash', 'media', 'insertfile', 'table', 'hr', 'emoticons', 'baidumap', 'pagebreak',
+                                            'anchor', 'link', 'unlink', '|', 'about'
+                                        ]
+                                    });
+                                });
+
+
+                            </script>
+                            <!-- 站内信 end -->
+                            <!-- 短信start-->
+                            <a class="btn btn-xs btn-warning" title="发送短信" >
+                                <i class="ace-icon fa fa-envelope-o bigger-120" title="发送短信" ></i>
+                            </a>
+
+                            <!-- 短信end-->
 
 
                             <!-- 编辑模态框start-->
@@ -275,7 +353,7 @@
 
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal"
-                                                    aria-label="Close"><span aria-hidden="true"></span>
+                                                    aria-label="Close"><span aria-hidden="true">x</span>
                                             </button>
                                         </div>
 
@@ -476,6 +554,12 @@
                  aria-labelledby="myModalLabel">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
+
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"
+                                    aria-label="Close"><span aria-hidden="true">x</span>
+                            </button>
+                        </div>
                         <div class="modal-body">
                             <!-- 新增员工-->
                             <div align="center">
@@ -511,19 +595,23 @@
 
 
                                     <div class="form-group">
-                                        <label for="username" class="col-sm-2 control-label"><span style="color: red"> * </span>编号：</label>
+                                        <label for="username" class="col-sm-2 control-label"><span
+                                                style="color: red"> * </span>编号：</label>
                                         <div class="col-sm-5">
-                                            <input type="text" class="form-control" id="adduser_number" name="adduser_number"
+                                            <input type="text" class="form-control" id="adduser_number"
+                                                   name="adduser_number"
                                                    placeholder="在这里输入编号">
                                             <span id="message"></span>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="username" class="col-sm-2 control-label"><span style="color: red"> * </span>身份证号：</label>
+                                        <label for="username" class="col-sm-2 control-label"><span
+                                                style="color: red"> * </span>身份证号：</label>
                                         <div class="col-sm-5">
                                             <input type="text" class="form-control" id="user_id_card"
                                                    name="user_id_card" placeholder="请在这里输入身份证号">
+                                            <span id="cardmessage"></span>
                                         </div>
                                     </div>
 
@@ -536,14 +624,6 @@
                                         </div>
                                     </div>
 
-{#                                    <div class="form-group">#}
-{#                                        <label for="username" class="col-sm-2 control-label">性别：</label>#}
-{#                                        <div class="col-sm-5">#}
-{#                                            <input type="text" class="form-control" id="user_gender"#}
-{#                                                   name="user_gender"#}
-{#                                                   placeholder="请在这里输入性别">#}
-{#                                        </div>#}
-{#                                    </div>#}
 
                                     <div class="form-group">
                                         <label for="username" class="col-sm-2 control-label">性别：</label>
@@ -552,8 +632,8 @@
                                             <select name="user_gender" id="user_gender" style="width: 200px">
 
 
-                                                    <option value="m">男</option>
-                                                    <option value="w">女</option>
+                                                <option value="m">男</option>
+                                                <option value="w">女</option>
 
 
                                             </select>
@@ -562,14 +642,13 @@
                                     </div>
 
 
-
-
-
                                     <div class="form-group">
-                                        <label for="username" class="col-sm-2 control-label"><span style="color: red"> * </span>手机：</label>
+                                        <label for="username" class="col-sm-2 control-label"><span
+                                                style="color: red"> * </span>手机：</label>
                                         <div class="col-sm-5">
-                                            <input type="text" class="form-control" id="user_phone"
-                                                   name="user_phone" placeholder="请在这里输入手机号" style="color: red">
+                                            <input type="text" class="form-control" id="ckuser_phone"
+                                                   name="ckuser_phone" placeholder="请在这里输入11位手机号" style="color: red">
+                                            <span id="phonemessage" style="color: red"></span>
 
                                         </div>
                                     </div>
@@ -591,25 +670,23 @@
                                     </div>
 
 
-                                    <div class="form-group">
-                                        <label for="title" class="col-sm-2 control-label">角色：</label>
-                                        <div class="col-sm-5">
-
-
-                                            <select name="titlelist" id="titlelist" multiple>
-                                                {% for role in roles_list %}
-                                                    <option value="{{ role.pk }}">{{ role.title }}</option>
-
-                                                {% endfor %}
-
-                                            </select>
-
-                                        </div>
-                                    </div>
+                                    {#                                    <div class="form-group">#}
+                                    {#                                        <label for="title" class="col-sm-2 control-label">角色：</label>#}
+                                    {#                                        <div class="col-sm-5">#}
+                                    {##}
+                                    {##}
+                                    {#                                            <select name="titlelist" id="titlelist" multiple>#}
+                                    {#                                                {% for role in roles_list %}#}
+                                    {#                                                    <option value="{{ role.pk }}">{{ role.title }}</option>#}
+                                    {##}
+                                    {#                                                {% endfor %}#}
+                                    {##}
+                                    {#                                            </select>#}
+                                    {##}
+                                    {#                                        </div>#}
+                                    {#                                    </div>#}
 
                                     <br/>
-
-
 
 
                                     <!--新增员工 -->
@@ -632,18 +709,78 @@
 
             <!-- 新增员工 -->
             <!-- 小功能下-->
-            <a class="btn btn-xs btn-info" title="发送站内信" onclick="sendFhsms('lisi');">
-                <i class="ace-icon fa fa-envelope-o bigger-120" title="发送站内信" style="height: 20px"></i>
+            <a class="btn btn-xs btn-info" title="批量发送站内信" data-toggle="modal"
+               data-target="#qznmyModal{{ forloop.counter }}">
+                <i class="ace-icon fa fa-envelope-o bigger-120" title="批量发送站内信" style="height: 20px" id="allsmail"></i>
             </a>
+
+            <div class="modal fade" id="qznmyModal{{ forloop.counter }}" tabindex="-1" role="dialog"
+                 aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content mail_modal">
+                        {#                        <form method="post" action="/user_management/all_email/">#}
+                        {#                            {% csrf_token %}#}
+                        <div class="modal-header" style="background:whitesmoke">
+                            <button type="button" class="close" data-dismiss="modal"
+                                    aria-label="Close"><span aria-hidden="true" style="color: red">x</span>
+                            </button>
+                            {#                                姓名：<input type="text" name="from_user1" value={{ user.user.username }}>#}
+                            {#                                邮箱：<input type="email" name="from_user" value={{ user.user.email }}>#}
+
+
+                        </div>
+                        <div class="modal-body">
+                            标题：<input type="text" name="title" class="titles">
+
+                            <input type="text" name="status_id" value="0"
+                                   style="display: none">
+                            <label>文章内容:</label>
+                            <textarea name="content" id="article_content" cols="60"
+                                      rows="20" class="contents"></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                            </button>
+                            <a class="btn btn-primary" id="allsendmail">发送</a>
+                        </div>
+                        {#                        </form>#}
+                    </div>
+                </div>
+            </div>
+            <script>
+                //$('你的input的class或id').datetimepicker({});
+                KindEditor.ready(function (K) {
+                    window.editor = K.create('#article_content', {
+                        width: "800px",
+                        height: "500px",
+                        resizeType: 0,
+                        uploadJson: '/upload/',
+                        extraFileUploadParams: {
+                            csrfmiddlewaretoken: '{{ csrf_token }}'
+                        },
+                        filePostName: 'upload_img',
+                        items: [
+                            'source', '|', 'undo', 'redo', '|', 'preview', 'print', 'template', 'code', 'cut', 'copy', 'paste',
+                            'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+                            'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+                            'superscript', 'clearhtml', 'quickformat', 'selectall', '|', 'fullscreen', '/',
+                            'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+                            'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'multiimage',
+                            'flash', 'media', 'insertfile', 'table', 'hr', 'emoticons', 'baidumap', 'pagebreak',
+                            'anchor', 'link', 'unlink', '|', 'about'
+                        ]
+                    });
+                });
+
+
+            </script>
+
+
             <a class="btn btn-xs btn-info" title="批量发送电子邮件">
                 <i class="ace-icon fa fa-envelope bigger-120" title="批量发送电子邮件" style="height: 20px"></i>
             </a>
             <a class="btn btn-xs btn-warning" title="发送短信" onclick="sendSms('15153203821');">
                 <i class="ace-icon fa fa-envelope-o bigger-120" title="发送短信" style="height: 20px"></i>
-            </a>
-            <a class="btn btn-xs btn-danger" title="删除" data-toggle="modal"
-               data-target="#plmyModal{{ forloop.counter }}">
-                <i class="ace-icon fa fa-trash-o bigger-120" title="删除" style="height: 20px"></i>
             </a>
 
 
@@ -657,7 +794,10 @@
     <!-- 实现全选的功能 当下面的全部选中的时候 全选按钮也应该被选中 当全选时候，有一个取消的时候全选也跟着取消-->
     <script src="/static/js/check_box.js">
     </script>
-   <script>
+{#    <script src="/static/user_management/phone.js"></script>#}
+{#    <script src="/static/user_management/id_card.js"></script>#}
+        <script src="/static/mail.js"></script>
+    <script>
         {#$("body").delegate(".for_delete", "click", function () {#}
         {#    swal({#}
         {#        title: "您确定删除吗?",#}
@@ -692,35 +832,35 @@
             });
             if (!delete_id_list.length) {
                 swal({
-                    title: "没有选中数据！",
-                    text: "请先选择要删除的数据",
+                    title: "没有选中用户！",
+                    text: "请先选择要发送的用户",
                     icon: "error",
                     button: "好的"
                 });
                 return;
             }
             swal({
-                title: "确定删除吗?",
-                text: "一旦删除，数据将无法找回",
+                title: "是否决定删除",
+                text: "一旦删除将无法恢复",
                 icon: "warning",
-                buttons: ["我再想想", "狠心删除"],
+                buttons: ["我再想想", "发送"],
                 dangerMode: true,
             })
                 .then((willDelete) => {
                     if (willDelete) {
-                            $.ajax({
-                                url: "/user_management/batch_delete/",
-                                type: "post",
-                                traditional: true,
-                                data: {
-                                    "delete_id_list": delete_id_list,
-                                    "csrfmiddlewaretoken": "{{ csrf_token }}"
-                                },
-                                success: function (data) {
-                                    if (data.status)
-                                        window.location.reload()
-                                }
-                            });
+                        $.ajax({
+                            url: "/user_management/batch_delete/",
+                            type: "post",
+                            traditional: true,
+                            data: {
+                                "delete_id_list": delete_id_list,
+                                "csrfmiddlewaretoken": "{{ csrf_token }}"
+                            },
+                            success: function (data) {
+                                if (data.status)
+                                    window.location.reload()
+                            }
+                        });
                     } else {
                         swal("数据还是安全的！");
                     }
@@ -729,30 +869,104 @@
 
     </script>
     <script>
-    //CSRF设置
-    $.ajaxSetup({
-        data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
-    });
+        //CSRF设置
+        $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
+        });
 
-    $("#adduser_number").blur(function () {
-    var usernumber_var = $("#adduser_number").val();
-    if (usernumber_var != "") {
+        $('body').delegate('#adduser_number', 'blur', function () {
+            var usernumber_var = $("#adduser_number").val();
+            if (usernumber_var != "") {
 
-        $.post(
-            "/user_management/check_usernumber/",
-            {
-                "adduser_number": usernumber_var
-            },
-            function (data) {
-                if (data["message"] == 1) {
-                    $("#message").text("编号已被占用");
-                }
+                $.post(
+                    "/user_management/check_usernumber/",
+                    {
+                        "adduser_number": usernumber_var
+                    },
+                    function (data) {
+                        console.log(data.message);
+                        if (data.message == 1) {
+
+                            $("#message").text("编号已被占用");
+
+                            {#$('#message').css('display','none');#}
+
+                        }
+                        else {
+                            <!-- $('#message').css('display','none'); 不能这样设置 当第二次判断的时候 即使是错的的也无法进行错误提示显示  -->
+                            $("#message").text("");
+
+                        }
+                    }
+                )
             }
-        )
-    }
-});
-
+        });
 
 
     </script>
+    <!-- 群发站内信start-->
+    <script>
+        {#delegate#}
+        $("body").delegate("#allsmail", "click", function () {
+            var delete_id_list = [];
+
+
+            $(".check_item").each(function () {
+                if ($(this).prop("checked")) {
+                    var delete_id = $(this).attr("delete_id");
+                    delete_id_list.push(delete_id);
+                }
+            });
+            if (!delete_id_list.length) {
+                swal({
+                    title: "没有选中用户！",
+                    text: "请先选择要发送的用户",
+                    icon: "error",
+                    button: "好的"
+
+                });
+
+            }
+
+        });
+
+
+    </script>
+    <script>
+        $("#allsendmail").click(function () {
+
+            var title = $('.titles').val()
+            var content = $('.contents').val()
+
+            var delete_id_list = [];
+            $(".check_item").each(function () {
+                if ($(this).prop("checked")) {
+                    var delete_id = $(this).attr("delete_id");
+                    delete_id_list.push(delete_id);
+                }
+            });
+            $.ajax({
+                url: "/user_management/all_email/",
+                type: "post",
+                traditional: true,
+                data: {
+                    "delete_id_list": delete_id_list,
+                    'title': title,
+                    'content': content,
+                    "csrfmiddlewaretoken": "{{ csrf_token }}"
+                },
+                success: function (data) {
+
+                    if (data.status)
+                        alert('发送成功')
+                    window.location.reload()
+                }
+            });
+
+
+        });
+
+
+    </script>
+    <!-- 群发站内信start-->
 {% endblock %}

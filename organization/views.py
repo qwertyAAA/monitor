@@ -56,7 +56,7 @@ def edit(request):
         dfunc = request.POST.get("func", None)
         duser = request.POST.get("user", None)
         dtips = request.POST.get("tips", None)
-        obj = models.Department.objects.filter(name=dname).first()
+        obj = models.Department.objects.filter(name=did).first()
         top_obj = models.Department.objects.filter(name=dtop_dep).first()
         user = m2.User.objects.filter(username=duser).first()
         if obj:
@@ -99,7 +99,7 @@ def search(request):
     text = request.POST.get("select_text")
     kind = request.POST.get("select_kind")
     top_id = request.POST.get("top", None)
-    print("上级部门为：", top_id)
+    # print("上级部门为：", top_id)
     q1 = Q()
     q1.connector = 'OR'
     q1.children.append(('code__contains', text))
@@ -121,6 +121,7 @@ def search(request):
     return render(request, 'organization/message.html', {
         "obj": obj,
         "msg": "1",
+        "flag": 1,
         "obj1": obj1,
         "length": obj1.__len__()
     })

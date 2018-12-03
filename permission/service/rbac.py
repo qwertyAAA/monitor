@@ -47,22 +47,10 @@ class ValidPermission(MiddlewareMixin):
         # #     flag=True
         # return HttpResponse('没有访问权限')
 
-        #判断数据权限
-        data_permission_id_list = request.session.get('data_permission_id_list')
-        # print(data_permission_id_list)
-        if 3 in data_permission_id_list:    #可以查看所有的数据
-            pass
-        elif 2 in data_permission_id_list:  #可以看本部门的数据
-            pass
-        elif 1 in data_permission_id_list:  #仅可见自己的数据
-            pass
-
-
-
         #方案2
 
         permission_dict=request.session.get('permisson_dict')
-        print(permission_dict)
+        # print(permission_dict)
         for item in permission_dict.values():  #{urs  actions}
             urls=item['urls']
             for permisson in urls:
@@ -71,7 +59,7 @@ class ValidPermission(MiddlewareMixin):
                 if result:
                     request.actions=item['actions']
                     return None
-        return HttpResponse('没有操作权限')
+        return render(request,'no_permission.html')
 
 
 

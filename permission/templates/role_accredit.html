@@ -16,39 +16,41 @@
                     <a class="button btn btn-info no_select_all pull-right">全不选</a>
                     <ul style="list-style: none">
                         {% for first in permission_first %}
-                            <li>
+                             {% if first.is_del == 0 %}
+                                 <li>
                                 {% if first in role.permissions.all %}
-                                    <input type="checkbox" class="first_group2" flag="{{ first.title }}"
+                                    <input type="checkbox" class="first_group2" flag="{{ first.title }}2"
                                            name="choose2" value="{{ first.id }}" checked="checked">
                                 {% else %}
-                                    <input type="checkbox" class="first_group2" flag="{{ first.title }}"
+                                    <input type="checkbox" class="first_group2" flag="{{ first.title }}2"
                                            name="choose2" value="{{ first.id }}">
                                 {% endif %}
 
-                                <span><a class="role_group2">{{ first.title }}</a></span>
-                                <ul style="list-style: none">
+                                <span><a class="role_group2" style="text-decoration: none">{{ first.title }}</a></span>
+                                <ul style="list-style: none" attr2="yes">
                                     {% for second in permission_second %}
+                                         {% if second.is_del == 0 %}
                                         {% if second.group.title == first.title %}
                                             <li>{% if second in role.permissions.all %}
-                                                <input type="checkbox" class="second_group2" flag2="{{ second.title }}"
-                                                       value="{{ second.id }}" name="choose2" flag="{{ first.title }}"
+                                                <input type="checkbox" class="second_group2" flag2="{{ second.title }}2"
+                                                       value="{{ second.id }}" name="choose2" flag="{{ first.title }}2"
                                                        checked="checked">
                                             {% else %}
-                                                <input type="checkbox" class="second_group2" flag2="{{ second.title }}"
-                                                       value="{{ second.id }}" name="choose2" flag="{{ first.title }}">
+                                                <input type="checkbox" class="second_group2" flag2="{{ second.title }}2"
+                                                       value="{{ second.id }}" name="choose2" flag="{{ first.title }}2">
                                             {% endif %}
-                                                <span id="permission">{{ second.title }}</span>
-                                                <ul style="list-style: none">
+                                                <span id="permission"><a class="second_title2" style="text-decoration: none">{{ second.title }}</a></span>
+                                                <ul style="list-style: none" attr2="yes">
                                                     {% for third in crud_permission_list %}
                                                         {% if third.group.title == second.title %}
                                                             <li>
                                                             {% if third in role.permissions.all %}
                                                             <input type="checkbox" value="{{ third.id }}" name="choose2"
-                                                                   flag="{{ first.title }}" flag2="{{ second.title }}"
+                                                                   flag="{{ first.title }}2" flag2="{{ second.title }}2"
                                                                    checked="checked">
                                                         {% else %}
                                                             <input type="checkbox" value="{{ third.id }}" name="choose2"
-                                                                   flag="{{ first.title }}" flag2="{{ second.title }}">
+                                                                   flag="{{ first.title }}2" flag2="{{ second.title }}2">
                                                         {% endif %}
 
                                                             <span id="permission">{{ third.title }}</span>
@@ -57,9 +59,11 @@
                                                 </ul>
                                             </li>
                                         {% endif %}
+                                        {% endif %}
                                     {% endfor %}
                                 </ul>
                             </li>
+                            {% endif %}
                         {% endfor %}
                     </ul>
                 </div>
@@ -74,65 +78,3 @@
     </div>
 </div>
 
-<script src="/static/jquery-3.3.1.min.js"></script>
-<script type="text/javascript">
-    $(function () {
-        $('.select_all').click(function () {
-            $(this).next().next().find(':checkbox').prop('checked',true);
-            {#$('input[type=checkbox]').prop('checked',true)#}
-        });
-         $('.no_select_all').click(function () {
-            {#$('input[type=checkbox]').prop('checked',false)#}
-              $(this).next().find(':checkbox').prop('checked',false);
-        });
-    })
-</script>
-<script type="text/javascript">
-    $(document).on('click', '.first_group2', function () {
-        var attrs = $(this).attr('flag');  //获得组id ，用来做标志
-        var $check1 = $(this);
-        if ($check1[0].checked) {
-            $('input[flag="' + attrs + '"]').prop("checked", true);
-            //如果因为jquery版本问题，导致checkbox显示不正常，用下面的attr方法
-            // $('input[flag="' + attrs + '"]').attr("checked",true);
-        }
-        else {
-            $('input[flag="' + attrs + '"]').prop('checked', false);
-            //如果因为jquery版本问题，导致checkbox显示不正常，用下面的attr方法
-            //  $('input[flag="' + attrs + '"]').attr('checked', false);
-        }
-    });
-
-</script>
-<script type="text/javascript">
-    $(document).on('click', '.second_group2', function () {
-        var attrs = $(this).attr('flag2');  //获得组title ，用来做标志
-        var $check2 = $(this);
-        if ($check2[0].checked) {
-            $('input[flag2="' + attrs + '"]').prop("checked", true);
-            //如果因为jquery版本问题，导致checkbox显示不正常，用下面的attr方法
-            // $('input[flag2="' + attrs + '"]').attr("checked",true);
-        }
-        else {
-            $('input[flag2="' + attrs + '"]').prop('checked', false);
-            //如果因为jquery版本问题，导致checkbox显示不正常，用下面的attr方法
-            //  $('input[flag2="' + attrs + '"]').attr('checked', false);
-        }
-    });
-
-</script>
-<script type="text/javascript">
-    var a = 1
-    $(".role_group2").click(function () {
-        if (a == 1) {
-            $(this).parent().next().css("display", "none");
-            a = 0;
-        }
-        else if (a == 0) {
-            $(this).parent().next().css("display", "block");
-            a = 1;
-        }
-
-    });
-
-</script>

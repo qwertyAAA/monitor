@@ -67,7 +67,7 @@
 
                                     <div class="space-6"></div>
 
-                                    <form action="/login/" method="post" onsubmit="return validateForm()">
+                                    <form>
                                         {% csrf_token %}
                                         <fieldset>
                                             <label class="block clearfix">
@@ -96,18 +96,19 @@
                                                                    placeholder="验证码"/>
                                                             <img style="width: 50%" id="valid-img" class="valid-img" src="/get_valid_img.png?" alt="">
 														</span>
-                                                <span style="color: red" id="login_result">{{ login_message }}</span>
+                                                <span id="session_valid_code" style="display: none">{{ request.session.valid_code }}</span>
+                                                <span style="color: red" id="login_result"></span>
                                             </label>
 
                                             <div class="space"></div>
 
                                             <div class="clearfix">
                                                 <label class="inline">
-                                                    <input type="checkbox" name="remember_pwd" class="ace"/>
+                                                    <input type="checkbox" id="remember_pwd" name="remember_pwd" class="ace"/>
                                                     <span class="lbl"> 记住密码 </span>
                                                 </label>
 
-                                                <button type="submit" id="btn-login"
+                                                <button type="button" id="btn-login"
                                                         class="width-35 pull-right btn btn-sm btn-primary">
                                                     <i class="ace-icon fa fa-key"></i>
                                                     <span class="bigger-110"> 登录 </span>
@@ -137,6 +138,23 @@
                             </div><!-- /.widget-body -->
                         </div><!-- /.login-box --><!-- 登录模块结束 -->
 
+                        <!-- 登录成功模块 -->
+                        <div id="loginSuccess-box" class="login-box widget-box no-border">
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    <h4 class="header blue lighter bigger">
+                                        <i class="ace-icon fa fa-key"></i>
+                                        <span id="ls_status">登录成功！</span>
+                                    </h4>
+
+                                    <div class="space-6"></div>
+                                    <a href="/index/"><h5 style="text-align: center">
+                                        您将在<span id="ls3s">3</span>s后跳转到首页
+                                    </h5></a>
+                                </div><!-- /.widget-main -->
+                            </div><!-- /.widget-body -->
+                        </div><!-- /.loginSuccess-box --><!-- 登录成功模块结束 -->
+
                         <!-- 忘记密码模块 -->
                         <div id="forgot-box" class="forgot-box widget-box no-border">
                             <div class="widget-body">
@@ -151,7 +169,7 @@
                                         请输入您的邮箱并按提示操作：
                                     </p>
 
-                                    <form action="/account/send_email/" method="post">
+                                    <form>
                                         {% csrf_token %}
                                         <fieldset>
                                             <label class="block clearfix">
@@ -165,10 +183,10 @@
                                             </label>
 
                                             <div class="clearfix">
-                                                <button type="submit" id="send_emailAdress"
+                                                <button type="button" id="send_emailAdress"
                                                         class="width-35 pull-right btn btn-sm btn-danger">
                                                     <i class="ace-icon fa fa-lightbulb-o"></i>
-                                                    <span class="bigger-110">发送!</span>
+                                                    <span class="bigger-110" id="sentIt">发送!</span>
                                                 </button>
                                             </div>
                                         </fieldset>
@@ -214,7 +232,8 @@
                                             <div class="clearfix">
                                                 <button type="button" id="reSend"
                                                         class="width-35 pull-left btn btn-sm btn-info">
-                                                    <span class="bigger-110">重新发送</span>
+                                                    <span class="bigger-110" id="60s">重新发送</span>
+                                                    <span id="findBy_email" style="display: none">{{ request.session.findBy_email }}</span>
                                                 </button>
                                                 <button type="button" id="check_code"
                                                         class="width-35 pull-right btn btn-sm btn-info">
@@ -436,18 +455,6 @@
 <script type="text/javascript" src="/static/js/login.js"></script>
 
 <script type="text/javascript">
-    //密码重置-发送验证码
-    $("#check_code").click(function () {
-        var yzm = "{{ request.session.email_code }}";
-        //alert(yzm);
-        var email_code = $("#email_code").val();
-        if (email_code.toUpperCase() == yzm.toUpperCase()) {
-            $('#emailCode-box').removeClass('visible');
-            $('#resetPassword-box').addClass('visible');
-        } else {
-            $("#check_message").text("验证失败，请检查输入是否正确或重新发送验证邮件！");
-        }
-    });
 
 </script>
 </body>

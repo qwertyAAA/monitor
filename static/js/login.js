@@ -74,9 +74,10 @@ $("#reset").click(function () {
     $("#message").text("");
 });
 
+
 //CSRF设置--js文件里不能用{{ csrf_token }}
 $.ajaxSetup({
-    data: {csrfmiddlewaretoken: csrf_val }
+    data: {csrfmiddlewaretoken: csrf_val}
 });
 //邮箱Ajax查重
 $("#email").blur(function () {
@@ -91,6 +92,9 @@ $("#email").blur(function () {
             function (data) {
                 if (data["message"] == 1) {
                     $("#message").text("该邮箱已注册！");
+                    $("#register").addClass("disabled");
+                } else {
+                    $("#register").removeClass("disabled");
                 }
             }
         )
@@ -109,6 +113,9 @@ $("#username").blur(function () {
             function (data) {
                 if (data["message"] == 1) {
                     $("#message").text("该用户名已被注册！");
+                    $("#register").addClass("disabled");
+                } else {
+                    $("#register").removeClass("disabled");
                 }
             }
         )
@@ -136,16 +143,50 @@ $(document).on('focus', '#newPwd, #newPwd2', function () {
 });
 
 
-//判断登录信息为空
-function validateForm() {
+//登录Ajax
+$("#btn-login").click(function () {
     var username = $("#login_username").val();
     var password = $("#login_pwd").val();
-    if (username == "" || username == null || password == "" || password == null) {
-        $("#login_result").text("账号和密码不能为空！");
-        return false;
+    var valid_code = $("#valid_code").val();
+    var remember_pwd = $("#remenber_pwd").val();
+    if (username == "" || username == null || password == "" || password == null || valid_code == "" || valid_code == null) {
+        $("#login_result").text("账号、密码、验证码不能为空！");
+    } else {
+        $.post(
+            "/login/",
+            {
+                "username": username,
+                "password": password,
+                "valid_code": valid_code,
+                "remember_pwd": remember_pwd,
+                "csrfmiddlewaretoken": csrf_val
+            },
+            function (data) {
+                if (data["success"] == 1) {
+                    $('#login-box').removeClass('visible');
+                    $('#loginSuccess-box').addClass('visible');
+                    var i = 3;
+                    var intervalid;
+
+                    function refer() {
+                        if (i == 0) {
+                            window.location.replace("/index/");
+                            clearInterval(intervalid);
+                        }
+                        $("#ls3s").text(i);
+                        i--;
+                    }
+
+                    intervalid = setInterval(refer, 1000);
+                } else {
+                    $("#login_result").text(data["login_message"]);
+                }
+            }
+        );
+
     }
-    return true;
-}
+});
+
 
 //判断注册完整性和有效性
 function check_reg() {
@@ -158,9 +199,14 @@ function check_reg() {
     var regCn = /[·！#￥（——）：；“”‘、，|《。》？、【】[\]]/;
     //验证密码格式
     var pwd_reg = /^[0-9a-zA-Z_]{6,20}$/;
+    //验证邮箱格式
+    var email_reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
 
     if (email == null || email == "" || username == null || username == "" || pwd == null || pwd == "") {
         $("#message").text("注册信息不完整！");
+        return false;
+    } else if (!email_reg.test(email)) {
+        $("#message").text("邮箱格式不正确！");
         return false;
     } else if (pwd != pwd2) {
         $("#message").text("输入的密码不一致，请重新输入！");
@@ -174,15 +220,117 @@ function check_reg() {
     }
 }
 
+//输入邮箱地址获取验证码
+$("#send_emailAdress").click(function () {
+    var email_find = $("#emailAdress").val();
+    $.post(
+        "/account/send_email/",
+        {
+            "email_find": email_find
+        },
+        function (message) {
+            if (message["send_result"] == 1) {
+                $('#forgot-box').removeClass('visible');
+                $('#emailCode-box').addClass('visible');
+
+                var i = 60;
+                var intervalid;
+                $("#reSend").addClass("disabled");
+
+                function refer() {
+                    if (i == 0) {
+                        $("#reSend").removeClass("disabled");
+                        clearInterval(intervalid);
+                        $("#60s").text("重新发送");
+                    } else {
+                        $("#60s").text(i + "s");
+                    }
+                    i--;
+                }
+
+                intervalid = setInterval(refer, 1000);
+            } else if (message["send_result"] == 0) {
+                $("#no_email").text(message["failed"]);
+
+                var i = 60;
+                var intervalid;
+                $("#send_emailAdress").addClass("disabled");
+
+                function refer() {
+                    if (i == 0) {
+                        $("#send_emailAdress").removeClass("disabled");
+                        clearInterval(intervalid);
+                        $("#sentIt").text("发送!");
+                    } else {
+                        $("#sentIt").text(i + "s");
+                    }
+                    i--;
+                }
+
+                intervalid = setInterval(refer, 1000);
+            }
+        }
+    )
+});
+
+//重新发送邮箱验证码
+$("#reSend").click(function () {
+    //var findBy_email = $("#findBy_email").text();
+    var findBy_email = $("#emailAdress").val();
+    $.get(
+        "/account/send_email/?email_find=" + findBy_email,
+        function (data) {
+            var i = 60;
+            var intervalid;
+            $("#reSend").addClass("disabled");
+
+            function refer() {
+                if (i == 0) {
+                    $("#reSend").removeClass("disabled");
+                    clearInterval(intervalid);
+                    $("#60s").text("重新发送");
+                } else {
+                    $("#60s").text(i + "s");
+                }
+                i--;
+            }
+
+            intervalid = setInterval(refer, 1000);
+        }
+    )
+});
+
+//邮箱验证码匹配验证
+$("#check_code").click(function () {
+    var email_code = $("#email_code").val();
+    if (email_code != "" || email_code != null) {
+        $.get(
+            "/account/check_code/?email_code=" + email_code,
+            function (data) {
+                if (data["result"] == 1) {
+                    $('#emailCode-box').removeClass('visible');
+                    $('#resetPassword-box').addClass('visible');
+                } else {
+                    $("#check_message").text("验证失败，请检查输入是否正确或重新发送验证邮件！");
+                }
+            }
+        );
+    }
+});
+
 //重置密码：一致性验证和Ajax提交
 $("#reset_pwd").click(function () {
     newPwd = $("#newPwd").val();
     newPwd2 = $("#newPwd2").val();
-    if(newPwd == "" || newPwd == null){
-        $("#reset_message").text("密码不能为空！")
+    //验证密码格式
+    var pwd_reg = /^[0-9a-zA-Z_]{6,20}$/;
+    if (newPwd == "" || newPwd == null) {
+        $("#reset_message").text("密码不能为空！");
     }
     else if (newPwd != newPwd2) {
-        $("#reset_message").text("两次密码不一致，请重新输入！")
+        $("#reset_message").text("两次密码不一致，请重新输入！");
+    } else if (!pwd_reg.test(newPwd)) {
+        $("#reset_message").text("密码只能是6-20位的字母、数字、下划线！");
     } else {
         $.post(
             "/account/reset_pwd/",
@@ -216,25 +364,3 @@ $("#reset_pwd").click(function () {
 });
 
 
-//往后端发送邮箱地址
-/*$("#send_emailAdress").click(function () {
-    var email_adress = $("#emailAdress").val();
-    $("#send_emailAdress").css("disabled", "disabled");
-    $.post(
-        "/account/send_email/",
-        {
-            "email_adress": email_adress
-        },
-        function (data) {
-            if (data["success"]) {
-                $('#forgot-box').removeClass('visible');
-                $('#emailCode-box').addClass('visible');
-                $("#email_status").text(data["success"]);
-            } else {
-                $("#no_email").text(data["failed"]);
-                $("#send_emailAdress").css("disabled", false);
-            }
-
-        }
-    )
-});*/

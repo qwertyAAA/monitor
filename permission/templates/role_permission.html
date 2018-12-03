@@ -19,6 +19,13 @@
             <a class="button btn btn-danger" data-toggle="modal" data-target="#myModal7">删除组</a>
             <a class="button btn btn-danger" data-toggle="modal" data-target="#myModal4">查看组权限</a>
             <a class="button btn btn-danger" data-toggle="modal" data-target="#myModal3">组菜单授权</a>
+
+            {% comment %}角色组权限的模态框及js代码{% endcomment %}
+            {% include 'tree.html' %}
+            {% comment %}//查看角色组权限{% endcomment %}
+            {% include 'tree2.html' %}
+
+
             <a class="btn-sm btn btn-warning pull-right" data-toggle="modal"
                            data-target="#add_role">增加角色</a>
         </div>
@@ -166,6 +173,77 @@
             </tbody>
         </table>
 
+        {% comment %}角色授权的一级菜单的点击事件{% endcomment %}
+        <script type="text/javascript">
+            $(".role_group2").click(function () {
+                if ($(this).parent().next().attr('attr2') == 'yes') {
+                    $(this).parent().next().css("display", "none");
+                    $(this).parent().next().attr('attr2','no');
+                }
+                else {
+                    $(this).parent().next().css("display", "block");
+                     $(this).parent().next().attr('attr2','yes');
+                }
+
+            });
+        </script>
+
+        {% comment %}角色授权的二级菜单的点击事件{% endcomment %}
+        <script type="text/javascript">
+            $(".second_title2").click(function () {
+                 if ($(this).parent().next().attr('attr2') == 'yes') {
+                    $(this).parent().next().css("display", "none");
+                    $(this).parent().next().attr('attr2','no');
+                }
+                else {
+                    $(this).parent().next().css("display", "block");
+                     $(this).parent().next().attr('attr2','yes');
+                }
+            });
+        </script>
+
+        <script src="/static/jquery-3.3.1.min.js"></script>
+
+        {% comment %}角色授权的全选，全不选{% endcomment %}
+        <script type="text/javascript">
+            $(function () {
+                $('.select_all').click(function () {
+                    $(this).next().next().find(':checkbox').prop('checked',true);
+                    {#$('input[type=checkbox]').prop('checked',true)#}
+                });
+                 $('.no_select_all').click(function () {
+                    {#$('input[type=checkbox]').prop('checked',false)#}
+                      $(this).next().find(':checkbox').prop('checked',false);
+                });
+            })
+        </script>
+
+        {% comment %}角色授权的一级菜单，二级菜单前CheckBox的点击事件{% endcomment %}
+        <script type="text/javascript">
+            $(function () {
+                $('.first_group2').click(function () {
+                    var $check1 = $(this);
+                    var is_check=$check1[0].checked;
+                    if(is_check){
+                         $(this).next().next().find(':checkbox').prop('checked',true);
+                    }
+                    else{
+                         $(this).next().next().find(':checkbox').prop('checked',false);
+                    }
+                });
+                $('.second_group2').click(function () {
+                    var $check1 = $(this);
+                    var is_check=$check1[0].checked;
+                    if(is_check){
+                         $(this).next().next().find(':checkbox').prop('checked',true);
+                    }
+                    else{
+                         $(this).next().next().find(':checkbox').prop('checked',false);
+                    }
+                });
+            })
+        </script>
+
 
 
         <!-- Modal -->
@@ -230,8 +308,7 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="add_role" tabindex="-1" role="dialog"
-                             aria-labelledby="myModalLabel">
+        <div class="modal fade" id="add_role" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -261,36 +338,5 @@
                             </div>
                         </div>
 
-
-        {% include 'tree.html' %}
-        {% include 'tree2.html' %}
-
-
     </div>
-
-{# <script type="text/javascript">#}
-{#       $(function () {#}
-{#            $(".cat_permissions").click(function () {#}
-{#            var role_id=$(this).attr('role_id');#}
-{#            var select=$("select[role_id='"+role_id+"']");#}
-            {#alert(select.attr('role_id'))#}
-{#            // 2. 用AJAX发送到服务端#}
-{#            $.ajax({#}
-{#                url: "/permission/role_permission_list/" ,#}
-{#                type: "post",#}
-{#                data: {#}
-{#                    "role_id": role_id,#}
-{#                    "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val()#}
-{#                },#}
-{#                success: function (data) {#}
-{#                     data=JSON.parse(data);#}
-{#                    $.each(data, function (index, n) {#}
-{#                        select.append("<option value=\""+n.id+"\">"+n.title+"</option>")#}
-{#                    });#}
-{#                }#}
-{#            })#}
-{#        });#}
-{#       })#}
-{##}
-{#    </script>#}
 {% endblock %}

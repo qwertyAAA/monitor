@@ -18,6 +18,7 @@
     <!-- Google Fonts-->
     <link href='/static/assets/css/abc.css' rel='stylesheet' type='text/css'/>
     <link href="/static/css/base.css" rel="stylesheet" type="text/css"/>
+    <script src="/static/js/jquery-2.1.4.min.js"></script>
     {% block css %}{% endblock %}
     {% block js %}{% endblock %}
 </head>
@@ -40,6 +41,12 @@
                 <a href="/xadmin/">
                     <i class="fa fa-cogs"></i>
                     <span>管理员入口</span>
+                </a>
+            </li>
+            <li>
+                <a href="/user_management/online_users/">
+                    <i class="fa fa-users"></i>
+                    <span id="online_users_count">在线人数：{{ online_requests_count }}</span>
                 </a>
             </li>
             <li class="dropdown">
@@ -90,7 +97,6 @@
                             </div>
                         </a>
                     </li>
-
                 </ul>
                 <!-- /.dropdown-tasks -->
             </li>
@@ -151,7 +157,7 @@
     <!--/. NAV TOP  -->
     <!-- 菜单  -->
     {% load menu %}
-    {% get_menu request%}
+    {% get_menu request %}
     <!-- /. NAV SIDE  -->
     <div id="page-wrapper">
         <div id="page-inner">
@@ -206,19 +212,10 @@
 <script src="/static/assets/js/easypiechart-data.js"></script>
 
 <script src="/static/assets/js/Lightweight-Chart/jquery.chart.js"></script>
-
+{#菜单管理的js文件#}
+<script src="/static/js/menu_management.js"></script>
 <!-- Custom Js -->
 <script src="/static/assets/js/custom-scripts.js"></script>
-<script type="text/javascript">
-    $(window).unload(function () {
-        console.log("bye")
-        $.get("/offline/")
-    });
-    $(function () {
-        console.log("hello")
-        $.get("/online/")
-    });
-</script>
 <script>
 
     $('.mysecond').mouseenter(function () {
