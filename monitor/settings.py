@@ -52,9 +52,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'middlewares.xadminMiddleware.CheckXadminPermission',
-    # 'permission.service.rbac.ValidPermission',
+    'permission.service.rbac.ValidPermission',
     'middlewares.all_requests.PushRequests',
-
 ]
 
 ROOT_URLCONF = 'monitor.urls'
@@ -153,14 +152,13 @@ CACHES = {
 SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 
 STATIC_URL = '/static/'
-
+# media配置，用户上传的文件都默认存放到当前文件夹下
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'media'),
 ]
-
-# media配置，用户上传的文件都默认存放到当前文件夹下
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
 
 # 配置邮箱发邮件的相关功能
 """

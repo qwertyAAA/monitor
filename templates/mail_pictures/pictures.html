@@ -3,11 +3,76 @@
 {% block content %}
     <!-- 导入 -->
     <link rel="stylesheet" href="/static/mail/mail_modal.css"/>
-    <span class="input-icon">
-            <input type="text" placeholder="这里输入关键词" class="nav-search-input"
-                   id="nav-search-input" autocomplete="off" name="keywords">
-            <i class="ace-icon fa fa-search nav-search-icon"></i>
-    </span>
+    <div class="input-group input-search">
+        <input type="text" class="form-control" id="search_id" name="search_id" placeholder="请输入关键字">
+        <input type="date" class="form-control" id="action-time" name="action-time" value="">
+        <input type="date" class="form-control" id="end-time" name="end-time" value="">
+        <!--<i class="am-icon-search search" id="q_i"></i>-->
+        <button type="button" class="btn btn-primary fuzzy-query1" id="fuzzy-query1">查询</button>
+        <!-- 新增 -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">新增</button>
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content pictures_content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">新增图片</h4>
+                    </div>
+                    <div class="pictures_body">
+                        <div class="border_body">
+                            <link href="/static/mail/pictures/css/common.css" type="text/css" rel="stylesheet">
+                            <link href="/static/mail/pictures/css/imgss.css" type="text/css" rel="stylesheet">
+                            <div class="img-box full">
+                                <section class=" img-section">
+                                    <div class="z_photo upimg-div clear">
+                                        <!--<section class="up-section fl">
+                                             <span class="up-span"></span>
+                                             <img src="img/buyerCenter/a7.png" class="close-upimg">
+                                             <img src="img/buyerCenter/3c.png" class="type-upimg" alt="添加标签">
+                                             <img src="img/test2.jpg" class="up-img">
+                                             <p class="img-namep"></p>
+                                             <input id="taglocation" name="taglocation" value="" type="hidden">
+                                             <input id="tags" name="tags" value="" type="hidden">
+                                         </section>-->
+                                        <section class="z_file fl">
+                                            <img src="/static/mail/pictures/img/a11.png" class="add-img" name="add-img">
+                                            <input type="file" name="file" id="file" class="file" value=""
+                                                   accept="image/jpg,image/jpeg,image/png,image/bmp" multiple/>
+                                        </section>
+                                    </div>
+                                </section>
+                            </div>
+                            <aside class="mask works-mask">
+                                <div class="mask-content">
+                                    <p class="del-p ">您确定要删除作品图片吗？</p>
+                                    <p class="check-p"><span class="del-com wsdel-ok">确定</span><span
+                                            class="wsdel-no">取消</span></p>
+                                </div>
+                            </aside>
+                            {#                            <button type="button" class="btn btn-primary pick_click">#}
+                            {#                                点击选择图片#}
+                            {#                            </button>#}
+                            {#                            <input type="file" name="avatar" id="pic_selector" accept="image/*" style="display: none;"#}
+                            {#                                   multiple/>#}
+                            {#                            <p>或将照片拖到这里，单次最多可选300张</p>#}
+                        </div>
+                    </div>
+
+                    <!--*************************************************-->
+
+                    <!--*************************************************-->
+                    <div class="modal-footer">
+                        <span class="left">选中1张图片，共12.6K。</span>
+                        <button type="button" class="btn btn-default continue-click" id="add"
+                                data-dismiss="modal">继续添加
+                        </button>
+                        <button type="button" class="btn btn-primary" id="img_upload">开始上传</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    </div>
     {% csrf_token %}
     <div class="mail_list pictures" style="text-align: center">
         <div class="table-responsive">
@@ -34,91 +99,87 @@
                         <td>{{ pictures.title }}</td>
                         <td>{{ pictures.name }}</td>
                         <td>{{ pictures.create_time }}</td>
-                        <td>{{ pictures.master_id.user.username }}</td>
+                        <td>{{ pictures.master_id.username }}</td>
                         <td>{{ pictures.BZ }}</td>
                         <td>
-                            <a style="cursor:pointer; color: #69aa46;" class="green" title="编辑">
-                                <i class="ace-icon fa fa-pencil bigger-130"></i>
-                            </a>&nbsp;
-                            <a style="cursor:pointer;" class="red" title="删除">
-                                <i class="ace-icon fa fa-trash-o bigger-130"></i>
-                            </a>
+                            <button type="button" class="btn btn-info" data-toggle="modal"
+                                    data-target="#search-pictures{{ forloop.counter }}" id="pictures_search"
+                                    value="">查询
+                            </button>
+                            <button type="button" class="btn btn-danger" data-toggle="modal"
+                                    data-target="#pictures_search{{ forloop.counter }}" id="pictures_search">删除
+                            </button>
                         </td>
                     </tr>
+                    <div class="modal fade" id="pictures_search{{ forloop.counter }}" tabindex="-1" role="dialog"
+                         aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content search-one-modal" style="width: 300px;left: 160px;">
+                                <div class="modal-header">
+                                    确认删除{{ pictures.name }}吗？
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                                        取消
+                                    </button>
+                                    <a href="pictures/del_pictures/id={{ pictures.id }}/">
+                                        <button type="button" class="btn btn-primary">确认删除</button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="search-pictures{{ forloop.counter }}" tabindex="-1" role="dialog"
+                         aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content search-one-modal">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true"">&times;</span></button>
+                                    {{ pictures.name }}
+                                </div>
+                                <div class="modal-body search-one-body">
+                                    <div class="email_body1">
+                                        <p>标题：{{ pictures.titel }}</p>
+                                        <p>图片名：{{ pictures.name }}</p>
+                                        <p>图片：{{ pictures.path }}</p>
+                                        <p>创建时间：{{ pictures.create_time }}</p>
+                                        <p>所属人：{{ pictures.master_id.username }}</p>
+                                        <p>备注：{{ pictures.BZ }}</p>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                                        关闭
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
-    <!-- 新增 -->
-    <div>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">新增</button>
-    </div>
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content pictures_content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">新增图片</h4>
-                </div>
-                <div class="pictures_body">
-                    <div class="border_body">
-                        <link href="/static/mail/pictures/css/common.css" type="text/css" rel="stylesheet">
-                        <link href="/static/mail/pictures/css/imgss.css" type="text/css" rel="stylesheet">
-                        <div class="img-box full">
-                            <section class=" img-section">
-                                <div class="z_photo upimg-div clear">
-                                    <!--<section class="up-section fl">
-                                         <span class="up-span"></span>
-                                         <img src="img/buyerCenter/a7.png" class="close-upimg">
-                                         <img src="img/buyerCenter/3c.png" class="type-upimg" alt="添加标签">
-                                         <img src="img/test2.jpg" class="up-img">
-                                         <p class="img-namep"></p>
-                                         <input id="taglocation" name="taglocation" value="" type="hidden">
-                                         <input id="tags" name="tags" value="" type="hidden">
-                                     </section>-->
-                                    <section class="z_file fl">
-                                        <img src="/static/mail/pictures/img/a11.png" class="add-img" name="add-img">
-                                        <input type="file" name="file" id="file" class="file" value=""
-                                               accept="image/jpg,image/jpeg,image/png,image/bmp" multiple/>
-                                    </section>
-                                </div>
-                            </section>
-                        </div>
-                        <aside class="mask works-mask">
-                            <div class="mask-content">
-                                <p class="del-p ">您确定要删除作品图片吗？</p>
-                                <p class="check-p"><span class="del-com wsdel-ok">确定</span><span
-                                        class="wsdel-no">取消</span></p>
-                            </div>
-                        </aside>
-                        {#                            <button type="button" class="btn btn-primary pick_click">#}
-                        {#                                点击选择图片#}
-                        {#                            </button>#}
-                        {#                            <input type="file" name="avatar" id="pic_selector" accept="image/*" style="display: none;"#}
-                        {#                                   multiple/>#}
-                        {#                            <p>或将照片拖到这里，单次最多可选300张</p>#}
-                    </div>
-                </div>
-
-                <!--*************************************************-->
-
-                <!--*************************************************-->
-                <div class="modal-footer">
-                    <span class="left">选中1张图片，共12.6K。</span>
-                    <button type="button" class="btn btn-default continue-click" id="add"
-                            data-dismiss="modal">继续添加
-                    </button>
-                    <button type="button" class="btn btn-primary" id="img_upload">开始上传</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
 
     <!-- 多选删除按钮 -->
-    <button type="button" class="btn btn-primary new_add_btn" data-toggle="modal"
-            data-target=".bs-example-modal-sm" id="many_del1">全部删除
+    <button type="button" class="btn btn-primary" data-toggle="modal"
+            data-target="#all_del">全部删除
     </button>
+    <div class="modal fade" id="all_del" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content del-one-modal" style="width: 300px;left: 160px;">
+                <div class="modal-header">
+                    确定全部删除吗？
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                            data-target="#all_del" id="many_del">确认删除
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/static/mail/mail_js/fuzzy_query.js"></script>
     <!--  -->
 {% endblock %}

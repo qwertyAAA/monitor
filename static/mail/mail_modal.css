@@ -1,8 +1,30 @@
 
 .mail_modal {
     width: 1000px;
-    position: absolute;
-    right: 1px;
+    right: 200px;
+}
+.search-one-modal .modal-header {
+    font-size: 24px;
+    color: white;
+    height: 50px;
+    background-color: purple;
+}
+.search-one-body {
+    height: 400px;
+    text-align: left;
+    margin: 10px 10px;
+    border: 1px dashed #1ebfae;
+}
+.email_body1 {
+    border: 1px dashed #1ebfae;
+    margin-bottom: 5px;
+    padding: 5px 10px;
+}
+
+.email_body2 {
+    height: 336px;
+    padding: 5px 10px;
+    border: 1px dashed #1ebfae;
 }
 
 .pictures_content {
@@ -17,6 +39,9 @@
 
 .mail_list th {
     text-align: center;
+}
+.mail_list tbody tr td{
+    line-height: 29px;
 }
 
 .pictures tbody tr td {
@@ -44,4 +69,17 @@
     position: absolute;
     bottom: 50px;
     left: 85px;
+}
+
+.input-search .form-control {
+    width: 160px;
+    margin-right: 5px;
+}
+
+.input-search #select_text {
+    width: 80px;
+}
+
+.input-search .btn {
+    margin-right: 5px;
 }

@@ -31,8 +31,14 @@ $("#many_del").click(function () {
             dateType: "json",
             traditional: true,
             success: function (data) {
-                location.href = "/fhsms/";
-                alert("删除成功")
+                if (url === '/fhsms/'){
+                    location.href = "/fhsms/";
+                    alert("删除成功")
+                }
+                if (url === '/pictures/'){
+                    location.href = "/pictures/";
+                    alert("删除成功")
+                }
             }
         })
     }
