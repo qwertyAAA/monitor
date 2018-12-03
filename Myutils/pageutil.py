@@ -5,7 +5,7 @@ class Page():
         self.per_page=per_page
         self.max_page=max_page
     def Sum(self):
-
+        print(self.per_page)
         #分页三要素：总条数 每页显示数量 当前页
         #通过get请求获取page_num当前页
         if self.request.method=='GET':
@@ -13,7 +13,8 @@ class Page():
         else:
             page_num=self.request.POST.get('pagenum',None)
         #总页数
-        total_count=self.models.count()#总数据量
+        total_count=len(self.models)#总数据量
+        print(total_count)
         total_page,m=divmod(total_count,self.per_page)
         if m!=0:
             total_page+=1
@@ -42,7 +43,6 @@ class Page():
         page_start=page_num-half_page
         #页面上最后一页
         page_end = page_num + half_page
-        print(page_start)
         # if page_start<=0:
         #     page_start=1
         #     page_end=1
@@ -66,6 +66,7 @@ class Page():
             if page_add>page_end:
                 page_add=page_end
         #all可以进行切片
+        print(data_end,data_start)
         stu=self.models[data_start:data_end]#django分页就是切片
 
         #返回的html结构
