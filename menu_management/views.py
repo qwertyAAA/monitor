@@ -76,13 +76,14 @@ def edit_first_menu(request,id):
         menu_status = request.POST.get('menu_status')
         print(menu_status)
         menu = models.First_Menu.objects.filter(nid=menu_id).first()
-        permissiongroup = per_models.PermissionGroup.objects.filter(title=menu.title).first()
-        permission = per_models.Permission.objects.filter(title=menu.title).first()
+        permissiongroup = per_models.PermissionGroup.objects.filter(title=menu.title)[0]
+        permission = per_models.Permission.objects.filter(title=menu.title)[0]
         menu.title = menu_name
         menu.action = menu_name
-        permissiongroup.title=menu_name
+        permissiongroup.title = menu_name
         permission.title = menu_name
-        permission.url=menu_name
+        permission.url = menu_name
+        # permission.group_id=permissiongroup.id
         if menu_status == '1':
             menu.status = True
         else:
@@ -103,12 +104,12 @@ def add_second_menu(request):
         # print('menu_path',menu_path)
         menu_p=models.Second_Menu.objects.filter(url=menu_path).first()
         menu = models.Second_Menu.objects.filter(title=menu_title).first()
-        permission = per_models.Permission.objects.filter(title=menu_title,url=menu_path).first()
+        permission = per_models.Permission.objects.filter(url=menu_path).first()
         # print('menu',menu)
         # print('menu_p',menu_p)
         rep = {}
         rep['span'] = '1'
-        #判断是菜单名还是路径已经存在
+        #判断是菜单名和路径是否已经存在
         if menu:
             return JsonResponse(rep)
         elif menu_p:
@@ -127,6 +128,7 @@ def add_second_menu(request):
         menu_status = request.POST.get('menu_status')
         per_obj=per_models.Permission.objects.filter(url=menu_path).first()
         if per_obj:
+            # if per_models.Permission.objects.filter(url=menu_path,title=menu_title).first():
             per_obj.is_del = False
             per_obj.save()
         else:
