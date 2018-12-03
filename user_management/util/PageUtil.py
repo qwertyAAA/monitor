@@ -1,5 +1,5 @@
 class Page():
-    def __init__(self,page_num,total_count,url_prefix,params,per_page=10,max_page=11):
+    def __init__(self, page_num, total_count, url_prefix, params, per_page=10, max_page=11):
         '''
         :param page_num: 当前的页码数
         :param total_count:总的记录
@@ -9,16 +9,16 @@ class Page():
         :return: html分页结构str
         params:表示为了携带查询条件的参数
         '''
-        self.url_prefix=url_prefix
-        self.max_page=max_page
+        self.url_prefix = url_prefix
+        self.max_page = max_page
 
         import copy
-        self.params=copy.deepcopy(params)
+        self.params = copy.deepcopy(params)
 
         total_page, m = divmod(total_count, per_page)
         if m:
             total_page += 1
-        self.total_page=total_page
+        self.total_page = total_page
         # 如果输入的页码数超过了最大的页码数，默认返回最后一页
         try:
             page_num = int(page_num)
@@ -27,13 +27,13 @@ class Page():
         except Exception as e:
             # 当输入的页码不是数字的时候，默认返回第一页
             page_num = 1
-        self.page_num=page_num
+        self.page_num = page_num
         # 数据是根据当前页查找数据的起点和重点
         data_start = (page_num - 1) * per_page
-        data_end = (page_num) *per_page
+        data_end = (page_num) * per_page
 
-        self.data_start=data_start
-        self.data_end=data_end
+        self.data_start = data_start
+        self.data_end = data_end
 
         # 定义页面上的页码 11 个页码
         max_page = 11
@@ -56,42 +56,44 @@ class Page():
         if page_end > total_page:
             page_end = total_page
             page_start = total_page - max_page + 1
-        self.page_start=page_start
+        self.page_start = page_start
         self.page_end = page_end
 
     def page_html(self):
-            # 自己拼接分页的HTML
-            html_str_list = []
-            html_str_list.append('<li><a href="/{}?pn=1" >首页</a></li>'.format(self.url_prefix))
-            if self.page_num <= 1:
-                html_str_list.append( '<li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>')
+        # 自己拼接分页的HTML
+        html_str_list = []
+        html_str_list.append('<li><a href="/{}?pn=1" >首页</a></li>'.format(self.url_prefix))
+        if self.page_num <= 1:
+            html_str_list.append(
+                '<li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>')
+        else:
+            html_str_list.append(
+                '<li><a href="/{}?pn={}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>'.format(
+                    self.url_prefix, self.page_num - 1))
+
+        print(self.params.urlencode())
+
+        # pn=1&isSchoolJob=1&city=全国
+
+        for i in range(self.page_start, self.page_end + 1):
+            self.params['pn'] = i
+            if i == self.page_num:
+                html_str_list.append(
+                    '<li class="active"><a href="/{0}/?pn={1}">{1}</a></li>'.format(self.url_prefix, i))
             else:
-                html_str_list.append('<li><a href="/{}?pn={}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>'.format(self.url_prefix,self.page_num - 1))
+                html_str_list.append(
+                    '<li><a href="{0}?{1}">{2}</a></li>'.format(self.url_prefix, self.params.urlencode(), i))
 
-            print(self.params.urlencode())
+        if self.page_num >= self.total_page:
+            html_str_list.append(
+                '<li style="display:none"><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>')
+        else:
+            html_str_list.append(
+                '<li><a href="/{}/?pn={}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>'.format(
+                    self.url_prefix, self.page_num + 1))
 
-             # pn=1&isSchoolJob=1&city=全国
+        html_str_list.append('<li><a href="/{}/?pn={}" >尾页</a></li>'.format(self.url_prefix, self.total_page))
 
+        page_html = "".join(html_str_list)
 
-            for i in range(self.page_start, self.page_end + 1):
-                self.params['pn']=i
-                if i == self.page_num:
-                    html_str_list.append('<li class="active"><a href="/{0}/?pn={1}">{1}</a></li>'.format(self.url_prefix,i))
-                else:
-                    html_str_list.append('<li><a href="{0}?{1}">{2}</a></li>'.format(self.url_prefix,self.params.urlencode(),i))
-
-
-
-
-
-            if self.page_num >= self.total_page:
-                html_str_list.append('<li style="display:none"><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>')
-            else:
-                html_str_list.append( '<li><a href="/{}/?pn={}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>'.format(self.url_prefix ,self.page_num + 1))
-
-            html_str_list.append('<li><a href="/{}/?pn={}" >尾页</a></li>'.format(self.url_prefix,self.total_page))
-
-            page_html = "".join(html_str_list)
-
-            return page_html
-
+        return page_html
