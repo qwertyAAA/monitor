@@ -15,3 +15,5 @@ class Department(models.Model):
     top_department = models.ForeignKey(to='self', null=True)
     create_by = models.IntegerField(null=False)
 
+    def __str__(self):
+        return self.name
