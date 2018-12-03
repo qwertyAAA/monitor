@@ -5,8 +5,8 @@
     <link rel="stylesheet" href="/static/mail/mail_modal.css"/>
     <div class="input-group input-search">
         <input type="text" class="form-control" id="search_id" name="search_id" placeholder="请输入关键字">
-        <input type="date" class="form-control" id="action-time" name="action-time" value="">
-        <input type="date" class="form-control" id="end-time" name="end-time" value="">
+        <input type="date" class="form-control" id="action-time" name="action-time" value="" style="display: none">
+        <input type="date" class="form-control" id="end-time" name="end-time" value="" style="display: none">
         <!--<i class="am-icon-search search" id="q_i"></i>-->
         <button type="button" class="btn btn-primary fuzzy-query1" id="fuzzy-query1">查询</button>
         <!-- 新增 -->
@@ -38,7 +38,7 @@
                                         <section class="z_file fl">
                                             <img src="/static/mail/pictures/img/a11.png" class="add-img" name="add-img">
                                             <input type="file" name="file" id="file" class="file" value=""
-                                                   accept="image/jpg,image/jpeg,image/png,image/bmp" multiple/>
+                                                   accept="image/jpg,image/jpeg,image/png,image/bmp,image/gif" multiple/>
                                         </section>
                                     </div>
                                 </section>
@@ -181,5 +181,6 @@
         </div>
     </div>
     <script src="/static/mail/mail_js/fuzzy_query.js"></script>
+    <script src="/static/mail/pictures/js/imgUp.js"></script>
     <!--  -->
 {% endblock %}

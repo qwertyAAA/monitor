@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from user_management.models import UserInfo
 from monitor import settings
 from django.core.mail import send_mail
+from django.core.files.uploadedfile import TemporaryUploadedFile
 
 
 # Create your views here.
@@ -48,9 +49,9 @@ def upload_img(request):
     if request.method == 'POST':
         master_id = request.user.id
         print(master_id)
-        obj = request.FILES.get('formdata')
+        obj = request.FILES.get('files')
         print(obj)
-        obj_name = request.POST.get('file_name')
+        obj_name = request.POST.get('files_name')
         # media路径下的图片 回传到富文本 json数据格式   服务器上图片的路径  img的方式回传到
         # 构建服务器的图片的路径
         models.Pictures.objects.create(master_id_id=master_id, title=obj_name, name=obj_name, path=obj)
