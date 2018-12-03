@@ -25,5 +25,4 @@ urlpatterns = [
     url(r'^online_users/search_data/$', views.online_users_search_data),
     url(r'^online_users/(\d+)/delete/$', views.online_users_delete),
     url(r'^online_users/batch_delete/$', views.online_users_batch_delete),
-    url(r"^online_users_count/$", views.get_online_requests),
 ]

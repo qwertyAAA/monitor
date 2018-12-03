@@ -392,10 +392,6 @@ def online_users_delete(request, delete_id):
     return redirect("/user_management/online_users/")
 
 
-def get_online_requests(request):
-    return JsonResponse({"count": len(all_requests.requests_list)})
-
-
 # def mail(request):
 #     print('zzzzzzzzzzzzzzzzzzzzzzzzzzz')
 #     data={}
