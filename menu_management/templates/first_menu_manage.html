@@ -1,12 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
+    <h2 style="text-align: center">菜单管理</h2>
+    <hr style="background-color: black">
     {% csrf_token %}
     <table class="table table-hover table-striped table-bordered" style="text-align: center">
         <thead>
         <tr>
-            <th style="text-align: center">
-                <input type="checkbox">
-            </th>
             <th style="text-align: center">编号</th>
             <th style="text-align: center">菜单名称</th>
             <th style="text-align: center">状态</th>
@@ -16,9 +15,6 @@
         <tbody id="mtbody">
         {% for i in  menu_list %}
             <tr>
-                <td>
-                    <input type="checkbox">
-                </td>
                 <td>{{ i.nid }}</td>
                 <td id="menu_title{{ i.nid }}"><a href="/menu/check/second/{{ i.nid }}/">{{ i.title }}</a></td>
                 <td>
