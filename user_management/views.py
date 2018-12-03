@@ -73,7 +73,10 @@ def main(request):
 
 
 def user_info(request):
-    user_list = models.UserInfo.objects.all()
+    # user_list = models.UserInfo.objects.all()
+    from permission.service.DataPermission import has_data
+    ret=has_data(request)
+    user_list=ret['user_list']
     userlists = models.User.objects.all()
     '''查询所有的用户对应的角色'''
     roles_list = Role.objects.filter(user__userinfo__in=user_list)
