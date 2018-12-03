@@ -174,6 +174,20 @@ function check_reg() {
     }
 }
 
+//重新发送邮箱验证码
+/*$("#reSend").click(function () {
+   var findBy_email = $("#findBy_email").text();
+   $.post(
+       "/account/send_email/",
+       {
+           "email-find": findBy_email
+       },
+       function () {
+
+       }
+   )
+});*/
+
 //重置密码：一致性验证和Ajax提交
 $("#reset_pwd").click(function () {
     newPwd = $("#newPwd").val();
