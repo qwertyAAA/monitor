@@ -22,6 +22,7 @@ def check_second_menu(request, id):
 
 def add_first_menu(request):
     if request.is_ajax():
+        print('一级菜单')
         menu_title=request.GET.get('menu_name')
         menu = models.First_Menu.objects.filter(title=menu_title).first()
         print('menu',menu)
@@ -40,7 +41,7 @@ def add_first_menu(request):
             per_obj.save()
         else:
             per_models.PermissionGroup.objects.create(title=menu_title, action='first')
-            per_models.Permission.objects.create(title=menu_title, url=menu_title, action='list', group_id=0)
+            per_models.Permission.objects.create(title=menu_title, url=menu_title, action='list',group_id=999)
         if menu_status == '1':
             status = True
         else:
@@ -128,7 +129,6 @@ def add_second_menu(request):
         menu_status = request.POST.get('menu_status')
         per_obj=per_models.Permission.objects.filter(url=menu_path).first()
         if per_obj:
-            # if per_models.Permission.objects.filter(url=menu_path,title=menu_title).first():
             per_obj.is_del = False
             per_obj.save()
         else:

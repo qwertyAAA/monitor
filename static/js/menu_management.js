@@ -1,6 +1,5 @@
 // 添加一级菜单时判断是否已经存在
 $('body').delegate('#first_menu_name', 'blur', function () {
-    console.log('nihao');
     var menu_name=$(this).val();
     $.ajax({
         url:'/menu/add/first/',
@@ -9,6 +8,7 @@ $('body').delegate('#first_menu_name', 'blur', function () {
             'menu_name':menu_name
         },
         success:function (data) {
+            console.log('一级菜单');
             if (data.span == '1') {
                 $('#prompt').css('display','block');
                 $('#sub_btn').attr('disabled','disabled')
@@ -18,9 +18,17 @@ $('body').delegate('#first_menu_name', 'blur', function () {
                 $('#prompt').css('display','none');
                 $('#sub_btn').removeAttr('disabled')
             }
+            if ($('#first_menu_name').val().length == 0)
+            {
+                $('#sub_btn').attr('disabled','disabled')
+            }
         }
     });
 });
+if ($('#first_menu_name').val().length == 0)
+{
+    $('#sub_btn').attr('disabled','disabled')
+}
 
 // 添加二级菜单时判断是否已经存在
 $('body').delegate('#second_menu_name', 'blur', function () {
@@ -46,6 +54,10 @@ $('body').delegate('#second_menu_name', 'blur', function () {
                 }
                 // $('#second_btn').removeAttr('disabled')
             }
+            if ($('#second_menu_name').val().length == 0)
+            {
+                $('#second_btn').attr('disabled','disabled')
+            }
         }
     });
 });
@@ -70,12 +82,18 @@ $('body').delegate('#menu_path', 'blur', function () {
                 {
                     $('#second_btn').removeAttr('disabled')
                 }
-                // $('#second_btn').removeAttr('disabled')
+            }
+            if ($('#menu_path').val().length == 0)
+            {
+                $('#second_btn').attr('disabled','disabled')
             }
         }
     });
   });
-
+if ($('#second_menu_name').val().length == 0 || $('#menu_path').val().length == 0)
+{
+    $('#second_btn').attr('disabled','disabled')
+}
 
 
 // 编辑一级菜单时进行数据校验
