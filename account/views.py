@@ -24,16 +24,19 @@ def login(request):
                 init_permission(user, request)
                 response = render(request, "index.html")
                 if remember_pwd:
-                    response.set_cookie("username", username)
-                    response.set_cookie("password", password)
-                    return response
+                    # response.set_cookie("username", username)
+                    # response.set_cookie("password", password)
+                    request.session.set_expiry(None)
+                    return redirect("/index/")
                 else:
-                    try:
-                        response.delete_cookie("username")
-                        response.delete_cookie("password")
-                        return response
-                    except:
-                        return redirect("/index/")
+                    # try:
+                    #     response.delete_cookie("username")
+                    #     response.delete_cookie("password")
+                    #     # return redirect("/index/")
+                    #     return response
+                    # except:
+                    request.session.set_expiry(0)
+                    return redirect("/index/")
             else:
                 login_message = "账号或密码错误，请重新输入！"
                 return render(request, "login.html", locals())
@@ -41,13 +44,13 @@ def login(request):
             login_message = "验证码错误！"
             return render(request, "login.html", locals())
     else:
-        try:
-            cookie_username = request.COOKIES.get("username")
-            print(cookie_username)
-            cookie_password = request.COOKIES.get("password")
-            return render(request, "login.html", locals())
-        except:
-            return render(request, "login.html")
+        # try:
+        #     cookie_username = request.user.username
+        #     print(cookie_username)
+        #     cookie_password = request.user.password
+        #     return render(request, "login.html", locals())
+        # except:
+        return render(request, "login.html")
 
 
 # 注册
