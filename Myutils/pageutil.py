@@ -6,7 +6,6 @@ class Page():
         self.max_page = max_page
 
     def Sum(self):
-
         # 分页三要素：总条数 每页显示数量 当前页
         # 通过get请求获取page_num当前页
         if self.request.method == 'GET':
@@ -42,7 +41,6 @@ class Page():
         page_start = page_num - half_page
         # 页面上最后一页
         page_end = page_num + half_page
-        print(page_start)
         # if page_start<=0:
         #     page_start=1
         #     page_end=1
@@ -67,6 +65,7 @@ class Page():
                 page_add = page_end
         # all可以进行切片
         stu = self.models[data_start:data_end]  # django分页就是切片
+
 
         # 返回的html结构
         html_list = []

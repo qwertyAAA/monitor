@@ -12,14 +12,12 @@ from Myutils.pageutil import Page
 
 def check_first_menu(request):
     menu_list = models.First_Menu.objects.all()
-    page=Page(menu_list,request,10)
-    sum = page.Sum()
-    return render(request, 'first_menu_manage.html', {'menu_list': sum[0],'page_html':sum[1]})
+    return render(request, 'first_menu_manage.html', {'menu_list': menu_list,})
 
 
 def check_second_menu(request, id):
     menu_list = models.First_Menu.objects.filter(nid=id)[0].second_menu_set.all()
-    return render(request, 'second_menu_manage.html', {'menu_list': menu_list, 'id': id})
+    return render(request, 'second_menu_manage.html', {'menu_list': menu_list, 'id': id,})
 
 
 def add_first_menu(request):
