@@ -44,14 +44,18 @@ $('body').delegate('.edit_menuname', 'blur', function () {
         success:function (data) {
             console.log(data.id);
             var edit_id='#edit_prompt'+data.id;
+            var edit_btnid='#edit_btn'+data.id;
             if (data.span == '1') {
                 $(edit_id).css('display','block');
-                $('#edit_btn').attr('disabled','disabled')
+                $(edit_btnid).attr('disabled','disabled')
             }
             else
             {
                 $(edit_id).css('display','none');
-                $('#edit_btn').removeAttr('disabled')
+                $(edit_btnid).removeAttr('disabled')
+            }
+            if(menu_name.length == 0){
+                $(edit_btnid).attr('disabled','disabled')
             }
         }
     });
