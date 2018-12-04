@@ -29,7 +29,7 @@ from organization import urls as organization_urls
 
 urlpatterns = [
     url(r'^xadmin/', site.urls),
-    url(r'^menu/',include(menu_urls)),
+    url(r'^menu/', include(menu_urls)),
     url(r'^user_management/', include(user_management_url)),
     url(r'^account/', include(account_urls)),
     url(r'^organization/', include(organization_urls)),

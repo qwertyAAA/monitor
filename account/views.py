@@ -5,6 +5,7 @@ from django.contrib import auth
 from permission.service.Permission import init_permission
 from middlewares.all_requests import all_requests
 from django.contrib.auth.hashers import make_password
+from mail.models import Fhsms
 
 
 # 登录

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.http import JsonResponse
 from .models import *
+
 import os
 from django.db.models import Q
 import json
@@ -9,6 +10,7 @@ from django.contrib.auth.models import User
 from user_management.models import UserInfo
 from monitor import settings
 from django.core.mail import send_mail
+from Myutils.pageutil import Page
 from django.core.files.uploadedfile import TemporaryUploadedFile
 
 
@@ -16,8 +18,21 @@ from django.core.files.uploadedfile import TemporaryUploadedFile
 
 def pictures(request):
     pictures_list = Pictures.objects.all()
+    page = Page(pictures_list, request, 10, 10)
+    sum = page.Sum()
+    return render(request, 'mail_pictures/pictures.html', {'pictures_list': sum[0], 'page_html': sum[1]})
 
-    return render(request, 'mail_pictures/pictures.html', {'pictures_list': pictures_list})
+
+# def base(request):
+#     user_id = request.user.id
+#     fhsms_list = Fhsms.objects.all()
+#     sum_email = 0
+#     print(user_id)
+#     for i in range(len(fhsms_list)):
+#         sum_email += 1
+#     print(sum_email)
+#     return render(request, 'base.html',
+#                   {'fhsms_list': fhsms_list, 'sum_email': sum_email})
 
 
 # 邮件图片多选删除
@@ -100,8 +115,10 @@ def form_mail(request):
     user_id = request.user.id
     mail_list = Fhsms.objects.filter(from_user_id=user_id)
     status_list = StatusMail.objects.filter(nid=0).first()
+    page = Page(mail_list, request, 10, 10)
+    sum = page.Sum()
     return render(request, 'mail_pictures/fhsms.html',
-                  {'mail_list': mail_list, 'status_list': status_list})
+                  {'mail_list': sum[0], 'status_list': status_list, 'page_html': sum[1]})
 
 
 # 发件箱
@@ -110,8 +127,10 @@ def to_mail(request):
     user_name_ob = User.objects.filter(pk=user_id).first()
     mail_list = Fhsms.objects.filter(to_user=user_name_ob)
     status_list = StatusMail.objects.filter(nid=0).first()
+    page = Page(mail_list, request, 10, 10)
+    sum = page.Sum()
     return render(request, 'mail_pictures/fhsms.html',
-                  {'mail_list': mail_list, 'status_list': status_list})
+                  {'mail_list': sum[0], 'status_list': status_list, 'page_html': sum[1]})
 
 
 # 邮件模糊查询
@@ -242,6 +261,8 @@ def fuzzy_query1(request):
 def fhsms(request):
     mail_list = Fhsms.objects.all()
     status_list = StatusMail.objects.filter(nid=0).first()
+    page = Page(mail_list, request, 10, 10)
+    sum = page.Sum()
     # response = redirect('/fhsms/')
     # 设置cookie，关闭游览器自动失效
     # response.set_cookie('key', 'value')
@@ -259,6 +280,7 @@ def fhsms(request):
             send_mail(subject=title, message=content, from_email=settings.EMAIL_FROM,
                       recipient_list=from_user)
         return redirect('/fhsms/')
-    return render(request, 'mail_pictures/fhsms.html', {'mail_list': mail_list, 'status_list': status_list})
+    return render(request, 'mail_pictures/fhsms.html',
+                  {'mail_list': sum[0], 'page_html': sum[1], 'status_list': status_list})
 
 # https://mail.163.com/
