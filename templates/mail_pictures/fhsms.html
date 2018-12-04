@@ -16,6 +16,10 @@
         <button type="button" class="btn btn-primary fuzzy-query" id="fuzzy-query">查询</button>
         <a href="/fhsms/form_mail/"><button type="button" class="btn btn-primary">收件箱</button></a>
         <a href="/fhsms/to_mail/"><button type="button" class="btn btn-primary">发件箱</button></a>
+        <button type="button" class="btn btn-primary btn-lg mail_btn" data-toggle="modal"
+                data-target="#myModal" id="many_del1" style="margin-left: 600px">
+            <i class="ace-icon fa fa-envelope-o bigger-10" title="发送站内信"></i>
+        </button>
     </div>
     <div class="mail_list" style="margin-top: 20px; text-align: center">
         <div class="table-responsive">
@@ -107,10 +111,6 @@
         </div>
     </div>
     <!-- 发送邮箱弹出模态框 -->
-    <button type="button" class="btn btn-primary btn-lg mail_btn" data-toggle="modal"
-            data-target="#myModal" id="many_del1">
-        <i class="ace-icon fa fa-envelope-o bigger-10" title="发送站内信"></i>
-    </button>
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content mail_modal">
@@ -152,7 +152,9 @@
             </div>
         </div>
     </div>
-
+    <div class="mod_page" style="margin-left: 400px">
+        {% include 'user_management_html/checkdata_page.html' %}
+    </div>
     <script src="/static/mail/mail_js/fuzzy_query.js"></script>
     <script charset="utf-8" src="/static/kindeditor/kindeditor-all.js"></script>
     <script>

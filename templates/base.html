@@ -15,6 +15,8 @@
     <link href="/static/assets/js/morris/morris-0.4.3.min.css" rel="stylesheet"/>
     <!-- Custom Styles-->
     <link href="/static/assets/css/custom-styles.css" rel="stylesheet"/>
+    <link href="/static/mail/mail_remind.css" rel="stylesheet"/>
+
     <!-- Google Fonts-->
     <link href='/static/assets/css/abc.css' rel='stylesheet' type='text/css'/>
     <link href="/static/css/base.css" rel="stylesheet" type="text/css"/>
@@ -52,25 +54,27 @@
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
                     <i class="fa fa-envelope fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    <span> {{ sum_email }}</span>
                 </a>
                 <ul class="dropdown-menu dropdown-messages">
-                    <li>
-                        <a href="#">
-                            <div>
-                                <strong>John Doe</strong>
-                                <span class="pull-right text-muted">
-                                        <em>Today</em>
-                                    </span>
+                    <li style="margin-bottom: 1px;border-bottom: 1px solid black">
+                        <a href="/fhsms/form_mail/">
+                            <div class="text-center">
+                                <span>收件箱 </span>
+                                <span> 未读 {{ sum_email}}</span>
                             </div>
-                            <div>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s...</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/fhsms/to_mail">
+                            <div class="text-center">
+                                <span>发件箱</span>
+                            </div>
                         </a>
                     </li>
 
                     <li>
-                        <a class="text-center" href="#">
-                            <strong>Read All Messages</strong>
-                            <i class="fa fa-angle-right"></i>
-                        </a>
+                        <span class="text-center"></span>
                     </li>
                 </ul>
                 <!-- /.dropdown-messages -->
@@ -168,6 +172,25 @@
         <!-- /. PAGE INNER  -->
     </div>
     <!-- /. PAGE WRAPPER  -->
+    <!-- 消息框判断 -->
+    {% if sum_email != 0 %}
+        <div class="mail_remind">
+            <div class="remind_header">
+                <button class="close" aria-label="Close"><span aria-hidden="true"
+                                                               style="margin-right: 15px">&times;</span>
+                </button>
+            </div>
+            <div class="remind_body">
+                <p style="margin-left: 15px"> 你有{{ sum_email }}封邮件未读！</p>
+                <br/>
+                <a href="/fhsms/form_mail/"><p style="margin-left: 55px">点击查看</p></a>
+            </div>
+        </div>
+        <script>$(".close").click(function () {
+            $(".mail_remind").css("display", 'none')
+        })</script>
+    {% else %}
+    {% endif %}
 </div>
 <script type="text/javascript">
     $(function () {
