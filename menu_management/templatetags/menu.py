@@ -29,7 +29,6 @@ def get_menu(request):
             flag1=models.First_Menu.objects.filter(action=first.title).first()
             # print('flag1',flag1)
             if not flag1 and first.is_del == 0:
-                print('***',first.title)
                 new_menu=models.First_Menu.objects.create(title=first.title,action=first.title)
             else:
                 new_menu=models.First_Menu.objects.filter(action=first.title).first()
