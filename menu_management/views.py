@@ -126,7 +126,6 @@ def add_second_menu(request):
             first_menu = models.First_Menu.objects.get(nid=first_menu_id)
             per_group = per_models.PermissionGroup.objects.get(title=first_menu.title)
             per_models.PermissionGroup.objects.create(title=menu_title,action='second')
-
             per_models.Permission.objects.create(title=menu_title,url=menu_path,group_id=per_group.id,action='list_second')
         if menu_status == '1':
             status = True
