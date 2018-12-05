@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'user_management.apps.UserManagementConfig',
     'permission',
     'menu_management',
+    'SpiderDB',
 ]
 
 MIDDLEWARE = [
