@@ -26,12 +26,14 @@ from account import urls as account_urls
 from menu_management import urls as menu_urls
 from permission import urls as permission_urls
 from organization import urls as organization_urls
+from SpiderDB import  urls as spider_urls
 
 urlpatterns = [
     url(r'^xadmin/', site.urls),
     url(r'^menu/', include(menu_urls)),
     url(r'^user_management/', include(user_management_url)),
     url(r'^permission/', include(permission_urls)),
+    url(r'^spider/', include(spider_urls)),
     url(r'^account/', include(account_urls)),
     url(r'^organization/', include(organization_urls)),
     url(r'^login/$', login, name="login"),
