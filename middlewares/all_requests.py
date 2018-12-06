@@ -1,5 +1,7 @@
 from django.utils.deprecation import MiddlewareMixin
+from django.shortcuts import render, redirect, HttpResponse
 from mail.models import Fhsms
+
 
 class AllRequest(object):
     def __init__(self):
@@ -25,8 +27,10 @@ def get_online_requests_count(request):
 
 def base(request):
     user_id = request.user.id
-    fhsms_list = Fhsms.objects.filter(from_user_id=user_id)
+    status_id = Fhsms.objects.filter(from_user_id=user_id).values('status_id_id')
+    print(status_id)
     sum_email = 0
-    for i in range(len(fhsms_list)):
-        sum_email += 1
+    for i in status_id:
+        if i['status_id_id'] == 0:
+            sum_email += 1
     return {'sum_email': sum_email}
