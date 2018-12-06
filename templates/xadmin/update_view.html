@@ -10,35 +10,42 @@
         <br/>
     </div>
     <br/>
+    <div align="center">
+        <h2><strong>{{ current_model_name }}表</strong></h2>
+    </div>
     <br/>
-    <form action="" method="post" class="form-horizontal">
-        {% csrf_token %}
-        {% for field in form %}
-            <div class="form-group">
-                {{ field.label_tag }}
-                <div class="col-sm-5">
-                    {{ field }}
+    <br/>
+    <br/>
+    <div class="col-md-offset-3">
+        <form action="" method="post" class="form-horizontal">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    <div class="col-sm-5">
+                        {{ field }}
+                    </div>
                 </div>
+            {% endfor %}
+            {% for cross_table_info in cross_tables_info %}
+                <div class="form-group">
+                    <label
+                            for="{{ cross_table_info.app_label }}/{{ cross_table_info.model_name }}"
+                            class="col-sm-2 control-label"></label>
+                    <div class="col-sm-5">
+                        <a href="/xadmin/{{ cross_table_info.app_label }}/{{ cross_table_info.model_name }}/add/?prev_url={{ request.path_info }}"
+                           id="{{ cross_table_info.app_label }}/{{ cross_table_info.model_name }}"
+                           class="btn btn-success"><i class="fa fa-plus"></i>
+                            <span>向{{ cross_table_info.verbose_name }}添加数据</span></a>
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="form-group">
+                <button type="submit" class="btn btn-info col-md-offset-2" style="width: 200px;">保存</button>
+                <button type="reset" class="btn btn-warning" style="width: 200px;">取消</button>
             </div>
-        {% endfor %}
-        {% for cross_table_info in cross_tables_info %}
-        <div class="form-group">
-            <label
-                    for="{{ cross_table_info.app_label }}/{{ cross_table_info.model_name }}"
-                    class="col-sm-2 control-label"></label>
-            <div class="col-sm-5">
-            <a href="/xadmin/{{ cross_table_info.app_label }}/{{ cross_table_info.model_name }}/add/?prev_url={{ request.path_info }}"
-               id="{{ cross_table_info.app_label }}/{{ cross_table_info.model_name }}"
-               class="btn btn-success"><i class="fa fa-plus"></i>
-                <span>向{{ cross_table_info.verbose_name }}添加数据</span></a>
-            </div>
-        </div>
-        {% endfor %}
-        <div class="form-group">
-            <button type="submit" class="btn btn-info col-md-offset-2" style="width: 200px;">保存</button>
-            <button type="reset" class="btn btn-warning" style="width: 200px;">取消</button>
-        </div>
-    </form>
+        </form>
+    </div>
     <script>
         $(function () {
             $("form div input").addClass("form-control");

@@ -214,7 +214,6 @@ def online_users(request):
 @csrf_exempt
 def check_usernumber(request):
     data = {}
-    print(request.is_ajax())
     if request.is_ajax():
         adduser_number = request.POST.get("adduser_number", None)
         user = models.UserInfo.objects.filter(user_number=adduser_number).first()
@@ -231,11 +230,13 @@ def check_usernumber(request):
 
 @csrf_exempt
 def check_userphone(request):
+    print('czxcczxczxczxcz')
     data = {}
     print(request.is_ajax())
 
     if request.is_ajax():
-        user_phone = request.POST.get("user_phone", None)
+        user_phone = request.POST.get("ckuser_phone", None)
+        print(type(user_phone))
         if len(user_phone) == 11:
             user = models.UserInfo.objects.filter(user_phone=user_phone).first()
             if user:
@@ -253,7 +254,6 @@ def check_userphone(request):
 @csrf_exempt
 def check_usercard(request):
     data = {}
-    print(request.is_ajax())
     if request.is_ajax():
         user_id_card = request.POST.get("user_id_card", None)
         user = models.UserInfo.objects.filter(user_id_card=user_id_card).first()
@@ -527,5 +527,37 @@ def all_email(request):
         # send_mail(subject=title, message=content, from_email=settings.EMAIL_FROM,
         #               recipient_list=user2)
 
+        return JsonResponse({"status": True})
+    return JsonResponse({"status": False})
+
+
+
+
+''' 发送短信'''
+def send_message(request):
+    from user_management import message
+    if request.method == 'POST':
+        mobile=request.POST.get("mes_phone")
+
+        mes_content = request.POST.get("mes_content")
+        text = "您的验证码是：" + str(mes_content) + "。请不要把验证码泄露给其他人。 "
+        text = "您的验证码是：087654。请不要把验证码泄露给其他人。"
+        message.send_sms(mobile,text)
+        print('welcome new world')
+    return redirect('/user_management/user_info/')
+
+
+
+''' 群发信息'''
+def group_sms(request):
+    print('群发站信cccccccccccccccccccccccccccccc')
+    from user_management import message
+    if request.is_ajax():
+        userinfo_list = request.POST.getlist("delete_id_list")
+        user_list = models.UserInfo.objects.filter(id__in=userinfo_list)
+        content = request.POST.get("content")
+        for i in user_list:
+            moble=i.user_phone
+            message.send_sms(content,moble)
         return JsonResponse({"status": True})
     return JsonResponse({"status": False})
