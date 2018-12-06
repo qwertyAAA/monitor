@@ -51,6 +51,8 @@ def upload_img(request):
         print(master_id)
         obj = request.FILES.get('files')
         print(obj)
+        form1 = request.FILES.get('form')
+        print(form1)
         obj_name = request.POST.get('files_name')
         # media路径下的图片 回传到富文本 json数据格式   服务器上图片的路径  img的方式回传到
         # 构建服务器的图片的路径
@@ -262,3 +264,6 @@ def fhsms(request):
     return render(request, 'mail_pictures/fhsms.html', {'mail_list': mail_list, 'status_list': status_list})
 
 # https://mail.163.com/
+def spider_message(request):
+    return render(request, 'mail_pictures/Spider_message/spider_message.html')
+
