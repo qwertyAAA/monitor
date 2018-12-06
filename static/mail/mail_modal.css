@@ -1,0 +1,85 @@
+
+.mail_modal {
+    width: 700px;
+
+}
+.search-one-modal .modal-header {
+    font-size: 24px;
+    color: white;
+    height: 50px;
+    background-color: purple;
+}
+.search-one-body {
+    height: 400px;
+    text-align: left;
+    margin: 10px 10px;
+    border: 1px dashed #1ebfae;
+}
+.email_body1 {
+    border: 1px dashed #1ebfae;
+    margin-bottom: 5px;
+    padding: 5px 10px;
+}
+
+.email_body2 {
+    height: 336px;
+    padding: 5px 10px;
+    border: 1px dashed #1ebfae;
+}
+
+.pictures_content {
+    width: 690px;
+    height: 600px;
+}
+
+#checkbox_on {
+    height: 21px;
+    width: 21px;
+}
+
+.mail_list th {
+    text-align: center;
+}
+.mail_list tbody tr td{
+    line-height: 29px;
+}
+
+.pictures tbody tr td {
+    line-height: 52px;
+}
+
+.pictures_body {
+    height: 420px;
+    margin: 5px 5px;
+    border: 1px dashed #1ebfae;
+}
+
+.border_body {
+    height: 100%;
+    margin: 5px 5px;
+}
+
+.btn_content {
+    position: absolute;
+    top: 250px;
+    left: 150px;
+}
+
+.btn_content button {
+    position: absolute;
+    bottom: 50px;
+    left: 85px;
+}
+
+.input-search .form-control {
+    width: 160px;
+    margin-right: 5px;
+}
+
+.input-search #select_text {
+    width: 80px;
+}
+
+.input-search .btn {
+    margin-right: 5px;
+}
