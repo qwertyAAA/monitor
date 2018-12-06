@@ -10,14 +10,17 @@ class Article(models.Model):
     title = models.CharField(max_length=128)  # 舆情文章标题
     content = models.TextField()  # 舆情文章内容
     url = models.CharField(max_length=1024)  # 文章url
-    author = models.ForeignKey(to='Author')  #文章作者
+    author = models.ForeignKey(to='Author')  # 文章作者
     create_time = models.DateTimeField()  # 文章的发布时间
     status = models.BooleanField(default=False)  # 状态
     source = models.ForeignKey(to='Source')  # 文章来源
+    affected_count = models.IntegerField(default=0)  # 受影响人数
+
 
 class Author(models.Model):
-    author=models.CharField(max_length=32)
-    author_url=models.CharField(max_length=1024)
+    author = models.CharField(max_length=32)
+    author_url = models.CharField(max_length=1024)
+
 
 # 文章的来源    （来源于微博或贴吧等）
 class Source(models.Model):
