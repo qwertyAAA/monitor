@@ -7,14 +7,17 @@ from user_management.models import UserInfo
 
 # 舆情文章表
 class Article(models.Model):
-    title = models.CharField(max_length=128)  # 舆情文章标题
+    title = models.CharField(max_length=1024)  # 舆情文章标题
     content = models.TextField()  # 舆情文章内容
+    detail = models.TextField()  # 文章简介
     url = models.CharField(max_length=1024)  # 文章url
     author = models.ForeignKey(to='Author')  # 文章作者
     create_time = models.DateTimeField()  # 文章的发布时间
     status = models.BooleanField(default=False)  # 状态
     source = models.ForeignKey(to='Source')  # 文章来源
     affected_count = models.IntegerField(default=0)  # 受影响人数
+    keywords = models.CharField(max_length=2048, default="")  # 该文章涉及的关键字
+    article_type = models.CharField(max_length=32, default="")  # 该文章的类型，分为纯文本、图文、视频
 
 
 class Author(models.Model):
