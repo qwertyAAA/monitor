@@ -26,6 +26,7 @@ from account import urls as account_urls
 from menu_management import urls as menu_urls
 from permission import urls as permission_urls
 from organization import urls as organization_urls
+from report import urls as report_urls
 from SpiderDB import  urls as spider_urls
 
 urlpatterns = [
@@ -36,6 +37,7 @@ urlpatterns = [
     url(r'^spider/', include(spider_urls)),
     url(r'^account/', include(account_urls)),
     url(r'^organization/', include(organization_urls)),
+    url(r'^report/', include(report_urls)),
     url(r'^login/$', login, name="login"),
     url(r'^register/$', register, name="register"),
     url(r'^logout/$', logout, name="logout"),

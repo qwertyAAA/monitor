@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'permission',
     'menu_management',
     'SpiderDB',
+    'report',
 ]
 
 MIDDLEWARE = [
