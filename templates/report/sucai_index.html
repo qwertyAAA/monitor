@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+    <script src="/static/organization/jquery-3.3.1.min.js"></script>
+    <div class="container-fluid">
+        <div class="col-sm-1">
+            <ul class="nav nav-pills nav-stacked">
+                <li><a href="/report/index/">列表</a>&nbsp;&nbsp;</li>
+                <li class="active"><a href="/report/sucai/">素材</a>&nbsp;&nbsp;</li>
+                <li><a href="/report/collection/">收藏</a>&nbsp;&nbsp;</li>
+                <li><a href="/report/mould/">模板</a>&nbsp;&nbsp;</li>
+            </ul>
+
+
+        </div>
+        <div class="col-sm-11">
+            <table class="table table-bordered">
+                <thead>
+                <tr class="warning">
+                    <td>
+                        <a class="btn btn-warning">删除选中</a>
+                         &nbsp;&nbsp;&nbsp;
+                        <a class="btn btn-warning">清空素材</a>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        已加入条数：<h3 style="display: inline-block; color: orange">2条</h3>
+                        <a href="" class="btn btn-warning" style="float: right; margin-top: 10px">生成简报</a>
+                    </td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="col-sm-4">
+                        经典简报<br>
+                        简报模板：<a>经典版</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+{% endblock %}
