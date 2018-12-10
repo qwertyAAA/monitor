@@ -11,6 +11,7 @@ def get_menu(request):
     if not request.user.is_anonymous:
         per_first_list=request.session.get('first_menu_list')
         per_second_list=request.session.get('second_menu_list')
+        print(per_first_list,per_second_list)
         # print(per_first_list)
         # print(per_second_list)
         try:
@@ -34,8 +35,8 @@ def get_menu(request):
                 new_menu=models.First_Menu.objects.filter(action=first.title).first()
             for second in per_second_menu:
                 # print('second_url',second.url)
-                flag2=models.Second_Menu.objects.filter(action=second.url,title=second.title)
-                if (not flag2) and (second.group_id == first.id) and second.is_del == 0:
+                flag2=models.Second_Menu.objects.filter(action=second.url,title=second.title).first()
+                if (not flag2) and (second.group.title == first.title) and second.is_del == 0:
                     models.Second_Menu.objects.create(title=second.title,url=second.url,action=second.url,first_menu_id=new_menu.nid)
         #获取所有有权限的菜单的action
         for first in per_first_menu:
