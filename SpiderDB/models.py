@@ -52,3 +52,10 @@ class Material(models.Model):
     user=models.ForeignKey(to=User)
     article = models.ForeignKey(to=Article)
 
+
+#收藏表
+class CollectionArticle(models.Model):
+    nid = models.AutoField(primary_key=True)
+    user=models.ForeignKey(to=User)
+    article = models.ForeignKey(to=Article)
+
