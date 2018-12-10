@@ -1,4 +1,15 @@
+from permission.models import Role
+from permission.models import Permission
 def init_permission(user_obj, request):
+    print(user_obj.is_superuser)
+    if user_obj.is_superuser:
+        #如果是超级用户登录，获得角色表中的第一个角色，并为其赋予所有权限，并将  该超级用户与该角色对应
+        role_obj=Role.objects.all().first()
+        permisson_list=Permission.objects.all()
+        role_obj.permissions.clear()
+        role_obj.permissions.add(*permisson_list)
+        user_obj.role_set.clear()
+        user_obj.role_set.add(role_obj)
     # 方案1
     # request.session['user_id'] = user_obj.pk
     # # 查询当前用户的所有的权限  放在session中
