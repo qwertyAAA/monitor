@@ -27,7 +27,7 @@ def user_role(request):
 
 def role_permission(request,id):
     # models.Role.objects.filter(Q)
-
+    role_super=models.Role.objects.all().first()
     role_group_id = int(id)                                             #角色组id
     try:
         role_group_obj=models.RoleGroup.objects.get(id=role_group_id)       #该角色组对象,如果id不匹配，异常
