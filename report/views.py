@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.db.models import Q
 import time
 from datetime import *
+from SpiderDB import models as m2
 
 
 # Create your views here.
@@ -11,7 +12,6 @@ def index(request):
 
 
 def search(request):
-    # time.strptime()
     report_name = request.POST.get("report_name", None)
     start_time = request.POST.get("start_time")
     end_time = request.POST.get("end_time")
@@ -22,7 +22,12 @@ def search(request):
 
 
 def sucai(request):
-    return render(request, 'report/sucai_index.html')
+    nid = request.user.id
+    obj = m2.Material.objects.filter(user_id=nid)
+    return render(request, 'report/sucai_index.html',
+                  {
+                      'obj': obj
+                  })
 
 
 def mould(request):
