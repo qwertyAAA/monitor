@@ -28,7 +28,7 @@ class Author(models.Model):
 # 文章的来源    （来源于微博或贴吧等）
 class Source(models.Model):
     source = models.CharField(max_length=32)
-    source_img = models.FileField(upload_to="avatars/")
+    source_img = models.FileField(upload_to="avatars/", default="")
 
 
 # 分类表
