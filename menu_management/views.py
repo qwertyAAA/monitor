@@ -12,7 +12,7 @@ from Myutils.pageutil import Page
 
 def check_first_menu(request):
     menu_list = models.First_Menu.objects.all()
-    return render(request, 'first_menu_manage.html', {'menu_list': menu_list,})
+    return render(request, 'first_menu_manage.html', {'menu_list': menu_list})
 
 
 def check_second_menu(request, id):
