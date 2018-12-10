@@ -45,17 +45,10 @@ class Rule(models.Model):
     exclude_keyword = models.CharField(max_length=1024)
     articles=models.ManyToManyField(to='Article')
 
-class ArticleCollection(models.Model):
-    """
-    收藏表
-    """
-    nid = models.AutoField(primary_key=True)
-    user = models.ForeignKey(to=User)
-    article = models.ForeignKey(to=Article)
-
 
 #素材表
 class Material(models.Model):
     nid = models.AutoField(primary_key=True)
     user=models.ForeignKey(to=User)
     article = models.ForeignKey(to=Article)
+
