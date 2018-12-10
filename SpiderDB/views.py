@@ -69,6 +69,12 @@ def yuqinglist(request,id):
         list_ex_key=ex_key.split()
         print(list_ex_key)
 
+        key_words=key_huo+" "+key_yu
+        key_lists=list_huo+list_yu
+        print(key_words)
+        print(key_lists)
+
+
         # return render(request,'fei/index.html')
 
         return render(request, 'yuqing.html', locals())
