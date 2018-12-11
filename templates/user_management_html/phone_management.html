@@ -45,6 +45,7 @@
                     </th>
                     <th class="center">微信号</th>
                     <th class="center">备注</th>
+                    <th class="center">单位</th>
 
                     <th class="center">操作</th>
                 </tr>
@@ -60,17 +61,147 @@
 
 
                         <td style="width: 200px">
-                            <a title="发送电子邮件" style="text-decoration:none;cursor:pointer; "
-                               onclick="sendEmail('{{ mail.mail_email }}');"> {{ mail.mail_email }}&nbsp;<i
-                                    class="ace-icon fa fa-envelope-o"></i></a>
+                            <a title="发送电子邮件" style="text-decoration:none;cursor:pointer;" href="https://mail.qq.com/cgi-bin/loginpage"> {{ mail.mail_email }}<i class="ace-icon fa fa-envelope-o"></i></a>
+
+
                         </td>
                         <td style="width: 50px"> {{ mail.mail_weixin_number }}</td>
                         <td style="width: 80px"> {{ mail.mail_remarks }}</td>
+                        <td style="width: 80px"> {{ mail.mail_company }}</td>
 
 
                         <td style="width: 190px">
                             <!-- 操作界面 -->
+                            <!-- 编辑start-->
+                            <a class="btn btn-xs btn-success" title="编辑" data-toggle="modal"
+                               data-target="#editmailnmyModal{{ forloop.counter }}">
+                                <i class="ace-icon fa fa-pencil-square-o bigger-120" title="编辑"></i>
 
+                            </a>
+                            <div class="modal fade" id="editmailnmyModal{{ forloop.counter }}" tabindex="-1"
+                                 role="dialog"
+                                 aria-labelledby="myModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close"><span aria-hidden="true">x</span>
+                                            </button>
+                                        </div>
+
+                                        <div class="modal-body">
+
+                                            <!-- 编辑员工start-->
+                                            <div align="center">
+                                                <p class="btn btn-default" style="width: 200px;height: 40px">修
+                                                    &nbsp;改&nbsp; {{ mail.mail_name }} 的&nbsp;通&nbsp;讯&nbsp;信&nbsp;
+                                                    息</p>
+                                            </div>
+                                            <hr/>
+
+
+                                            <div class="col-md-offset-1">
+
+
+                                                <form action="/user_management/edit_mail/{{ mail.pk }}/" method="post"
+                                                      class="form-horizontal">
+                                                    {% csrf_token %}
+                                                    <input type="text" name="id" value="{{ mail.pk }}"
+                                                           style="display: none">
+                                                    <div class="form-group">
+                                                        <label for="username"
+                                                               class="col-sm-3 control-label">联系人：</label>
+                                                        <div class="col-sm-5">
+                                                            <input type="text" class="form-control" id="mail_name"
+                                                                   name="mail_name"
+                                                                   value="{{ mail.mail_name }}">
+                                                        </div>
+                                                    </div>
+                                                    <hr/>
+                                                    <div class="form-group">
+                                                        <label for="username"
+                                                               class="col-sm-3 control-label">手机号：</label>
+                                                        <div class="col-sm-5">
+                                                            <input type="text" class="form-control" id="editmail_phone"
+                                                                   name="mail_phone"
+                                                                   value="{{ mail.mail_phone }}">
+                                                            <span id="editphonemessage" style="color: red"></span>
+                                                        </div>
+                                                    </div>
+                                                    <hr/>
+                                                    <div class="form-group">
+                                                        <label for="username"
+                                                               class="col-sm-3 control-label">邮箱：</label>
+                                                        <div class="col-sm-5">
+                                                            <input type="text" class="form-control" id="mail_email"
+                                                                   name="mail_email"
+                                                                   value="{{ mail.mail_email }}">
+                                                        </div>
+                                                    </div>
+                                                    <hr/>
+                                                    <div class="form-group">
+                                                        <label for="username"
+                                                               class="col-sm-3 control-label">微信号：</label>
+                                                        <div class="col-sm-5">
+                                                            <input type="text" class="form-control" id="weixin_number"
+                                                                   name="weixin_number"
+                                                                   value="{{ mail.mail_weixin_number }}">
+                                                        </div>
+                                                    </div>
+                                                    <hr/>
+
+
+                                                    <div class="form-group">
+                                                        <label for="username"
+                                                               class="col-sm-3 control-label">备注：</label>
+                                                        <div class="col-sm-5">
+                                                            <input type="text" class="form-control" id="mail_remarks"
+                                                                   name="mail_remarks" placeholder="15000"
+                                                                   value="{{ mail.mail_remarks }}">
+                                                        </div>
+                                                    </div>
+                                                    <hr/>
+
+                                                    <div class="form-group">
+                                                        <label for="username"
+                                                               class="col-sm-3 control-label">单位：</label>
+                                                        <div class="col-sm-5">
+                                                            <input type="text" class="form-control" id="mail_company"
+                                                                   name="mail_company" placeholder="15000"
+                                                                   value="{{ mail.mail_company }}">
+                                                        </div>
+                                                    </div>
+                                                    <hr/>
+
+
+                                                    <div class="modal-footer">
+
+
+                                                        <button type="button" class="btn btn-default danger"
+                                                                data-dismiss="modal" style="color: #1ebfae">
+                                                            我再想想
+                                                        </button>
+                                                        <button type="submit" class="btn btn-default" id="editmailpost">
+                                                            保存
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+
+
+                                            <!--编辑预警信息end -->
+
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- 编辑end-->
 
                             <!-- 删除模态框start-->
                             <a class="btn btn-xs btn-danger" title="删除" data-toggle="modal"
@@ -224,8 +355,8 @@
                                     <div class="modal-footer">
 
                                         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-{#                                        <button type="button" class="btn btn-primary">保存</button>#}
-                                         <button type="submit" class="btn btn-default" id="save">
+                                        {#                                        <button type="button" class="btn btn-primary">保存</button>#}
+                                        <button type="submit" class="btn btn-default" id="save">
                                             保存
                                         </button>
                                     </div>
@@ -249,6 +380,7 @@
     <!-- 验证输入的字段 start-->
     <script src="/static/js/check_box.js"></script>
     <script src="/static/user_management/mail_phone.js"></script>
+    <script src="/static/user_management/edit_mail.js"></script>
     <script src="/static/user_management/id_card.js"></script>
 
     <!-- 群发短信-->
@@ -300,6 +432,45 @@
                     }
                 });
         });
+
+    </script>
+    <script>
+        //CSRF设置
+        $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
+        });
+
+        $('body').delegate('#adduser_number', 'blur', function () {
+            var usernumber_var = $("#adduser_number").val();
+            if (usernumber_var != "") {
+
+                $.post(
+                    "/user_management/check_usernumber/",
+                    {
+                        "adduser_number": usernumber_var
+                    },
+                    function (data) {
+                        console.log(data.message);
+                        if (data.message == 1) {
+
+                            $("#message").text("编号已被占用");
+
+                            {#$('#save').css('display','none');#}
+                            $('#save').addClass("disabled");
+
+                        }
+                        else {
+                            <!-- $('#message').css('display','none'); 不能这样设置 当第二次判断的时候 即使是错的的也无法进行错误提示显示  -->
+                            $("#message").text("");
+
+                            $('#save').removeClass("disabled");
+
+                        }
+                    }
+                )
+            }
+        });
+
 
     </script>
     <script>
