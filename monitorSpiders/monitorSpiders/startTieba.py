@@ -24,23 +24,15 @@ def Singleton(cls, *args, **kwargs):
 @Singleton
 class Starter(object):
 
-    def __init__(self):
-        self.keywords = []
-
     def start_tieba(self):
         os.chdir("D:\\monitor\\monitorSpiders\\monitorSpiders")
-        os.system("scrapy crawl tieba --nolog")
+        os.system("scrapy crawl tieba")
 
-    def set_keywords(self,args):
-        self.keywords = args
-
-    def get_keywords(self):
-        return self.keywords
 
 
 tieba = Starter()
 # tieba3 = Starter()
 # print(tieba2,tieba3)
 
-# if __name__ == '__main__':
-#     tieba2.start_tieba()
+if __name__ == '__main__':
+    tieba.start_tieba()

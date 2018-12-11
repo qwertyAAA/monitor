@@ -15,6 +15,7 @@ from monitor import settings
 from django.core.mail import send_mail
 from Myutils.pageutil import Page
 from django.core.files.uploadedfile import TemporaryUploadedFile
+from django.db.models import OneToOneField, ForeignKey, ManyToManyField
 
 
 # Create your views here.
@@ -304,11 +305,34 @@ def spider_message(request):
                   {'message_list': sum[0], 'page_html': sum[1], 'material': material})
 
 
+# 将qs的结果组装成一个字典
+def get_data_list(qs):
+    fields = []
+    for field in Article._meta.fields:
+        fields.append(field.name)
+    data_list = []
+    for item in qs:
+        data = {}
+        for field in fields:
+            if field == "author":
+                continue
+            if field == "source":
+                data["source"] = getattr(item, field).source
+                data["source_img"] = str(getattr(item, field).source_img)
+                continue
+            if field == "content":
+                continue
+            data[field] = getattr(item, field)
+        if data["detail"] == "":
+            continue
+        data_list.append(data)
+    return data_list
+
+
 # 舆情条件查询
 def submit_query(request):
     # 获取当前时间戳
     new_time = int(time.time())
-    message_list = []
     if request.is_ajax():
         arr_click = request.POST.getlist("arr_click")
         time_size = arr_click[0]  # 时间范围
@@ -327,7 +351,7 @@ def submit_query(request):
         # for field in Article._meta.fields:
         #     fields.append(field.name)
         if time_size == "今日" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "全部":
-            message_list = serializers.serialize("json", Article.objects.order_by("title"))
+            message_list = get_data_list(Article.objects.order_by("title")[:100])
 
             # message = {}
             # for item in Article.objects.order_by("title"):

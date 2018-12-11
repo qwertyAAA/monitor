@@ -100,7 +100,6 @@ class MonitorspidersDownloaderMiddleware(object):
             if self.conn.sadd("fingerPrints", fp.hexdigest()):
                 return response
             else:
-                print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                 raise IgnoreRequest
         return response
 
