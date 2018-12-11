@@ -184,30 +184,42 @@ def edit_rule(request,id):
     if request.method=='POST':
         str1=''
         str2=''
+        key_yu=''
+        key_huo=''
         rule_title=request.POST.get('rule_title')
         area_key =request.POST.get('area_key')
         area_radio=request.POST.get('area_radio')
         if area_radio == '1':
+            key_huo+=area_key+' '
             str1+=' a-r-e-a-1 '+area_key+' a-r-e-a-1 '
         else:
+            key_yu+=area_key+' '
             str2 += ' a-r-e-a-0 ' + area_key + ' a-r-e-a-0 '
         person_key=request.POST.get('person_key')
         person_radio=request.POST.get('person_radio')
         if person_radio == '1':
+            key_huo += person_key + ' '
             str1 += ' p-e-r-s-o-n-1 '+person_key+' p-e-r-s-o-n-1 '
         else:
+            key_yu+=person_key+' '
             str2 += ' p-e-r-s-o-n-0 ' + person_key + ' p-e-r-s-o-n-0 '
         event_key=request.POST.get('event_key')
         event_radio=request.POST.get('event_radio')
 
         if event_radio == '1':
+            key_huo += event_key + ' '
             str1 += ' e-v-e-n-t-1 '+event_key+' e-v-e-n-t-1 '
         else:
+            key_yu+=event_key+' '
             str2 += ' e-v-e-n-t-0 ' + event_key + ' e-v-e-n-t-0 '
         str3=str1+' | '+str2
         key_all=event_key + ' ' + person_key + ' ' + area_key
         conn = redis.Redis(host="10.25.116.62", port=6379)
-        conn.rpush("exists_keywords",key_all )
+        list_huo = key_huo.split()
+        for i in list_huo:
+            conn.rpush("exists_keywords", i)
+        # conn.rpush("exists_keywords",key_all )
+        conn.rpush("exists_keywords", key_yu)
         # print(str3)
         del_key=request.POST.get('del_key')
         rule_obj.title=rule_title
@@ -215,7 +227,6 @@ def edit_rule(request,id):
         rule_obj.exclude_keyword=del_key
         rule_obj.save()
         return redirect('/spider/yuqing/')
-
 
 
 
@@ -257,8 +268,11 @@ def add_rule2(request,id):
         del_key=request.POST.get('del_key')
         key_all=event_key+' '+person_key+' '+area_key
         conn = redis.Redis(host="10.25.116.62", port=6379)
-        conn.rpush("exists_keywords",key_all )
-        # conn.rpush("exists_keywords", person_key)
+        list_huo = key_huo.split()
+        for i in list_huo:
+            conn.rpush("exists_keywords", i)
+        # conn.rpush("exists_keywords",key_all )
+        conn.rpush("exists_keywords",key_yu )
         # conn.rpush("exists_keywords", area_key)
         models.Rule.objects.create(title=rule_title,keyword=str3,exclude_keyword=del_key,classify=cla_obj)
 
