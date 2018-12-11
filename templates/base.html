@@ -38,7 +38,51 @@
             <a class="navbar-brand" href="base.html"><i class="fa fa-gear"></i> <strong>舆情监控</strong></a>
         </div>
 
+
         <ul class="nav navbar-top-links navbar-right">
+            <!-- 系统设置start-->
+            <div class="btn-group">
+                <button type="button" class="glyphicon glyphicon-cog" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+
+                    舆情设置 <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="#" class="glyphicon glyphicon-bell">预警设置</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#" class="glyphicon glyphicon-phone">通讯录管理</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#" class="glyphicon glyphicon-edit">精准问题反馈</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#" class="glyphicon glyphicon-zoom-in">新增抓取</a></li>
+                    <li role="separator" class="divider"></li>
+
+                    <li><a href="#" class="glyphicon glyphicon-wrench">偏好设置</a></li>
+
+
+                    <li>
+                        <a href="#"></a>
+                        <ul>
+                            <li><a href="#">删除信息</a></li>
+                            <li><a href="#">全局来源设置</a></li>
+
+                        </ul>
+                    </li>
+
+
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#" class="glyphicon glyphicon-sound-dolby">日志</a></li>
+                    <li>
+                        <a href="#"></a>
+                        <ul>
+
+                            <li><a href="#">日志查看</a></li>
+
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!-- 系统设置end-->
             <li>
                 <a href="/xadmin/">
                     <i class="fa fa-cogs"></i>
@@ -61,7 +105,7 @@
                         <a href="/fhsms/form_mail/">
                             <div class="text-center">
                                 <span>收件箱 </span>
-                                <span> 未读 {{ sum_email}}</span>
+                                <span> 未读 {{ sum_email }}</span>
                             </div>
                         </a>
                     </li>

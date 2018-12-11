@@ -7,13 +7,17 @@ from middlewares.all_requests import all_requests
 from .Myutilss.pageutil import Page
 from permission.models import Role
 from mail.models import Fhsms
+
 ''' 发送站内信需要导入的包'''
 from mail.models import Fhsms, StatusMail
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.core.mail import send_mail
+from Myutils.pageutil import Page
+
 '''当导入这个方法的时候：用的时候必须是  models.表明'''
 from . import models
+
 ''' 当导入这个时候跟上面的区别是直接用不用加.'''
 
 
@@ -25,11 +29,7 @@ def search_user(request):
 
 
 ''' 添加用户'''
-
-
 def aadd_user(request):
-    print('czx')
-
     if request.method == "POST":
         user_id = request.POST.get('user_id')
         user_name = request.POST.get('user_name')
@@ -69,13 +69,11 @@ def main(request):
 
 
 ''' 用户角色'''
-
-
 def user_info(request):
     # user_list = models.UserInfo.objects.all()
     from permission.service.DataPermission import has_data
-    ret=has_data(request)
-    user_list=ret['user_list']
+    ret = has_data(request)
+    user_list = ret['user_list']
     userlists = models.User.objects.all()
     '''查询所有的用户对应的角色'''
     roles_list = Role.objects.filter(user__userinfo__in=user_list)
@@ -94,8 +92,6 @@ def user_info(request):
 
 
 ''' 编辑页面'''
-
-
 def edit_user(request, user_id):
     print('编辑页面')
     edit_user = models.UserInfo.objects.filter(pk=user_id).first()
@@ -134,8 +130,6 @@ def edit_user(request, user_id):
 
 
 ''' 删除页面'''
-
-
 def delete_user(request, num=None):
     if num:
         '''  对于删除先删除第三张表再删除作者表 id  注意页面的格式问题'''
@@ -153,8 +147,6 @@ def delete_user(request, num=None):
 
 
 ''' 用户详情'''
-
-
 def details_user(request, editemp_id):
     edit_staff = models.UserInfo.objects.filter(pk=editemp_id).first()
     result = models.Department.objects.all()
@@ -162,8 +154,6 @@ def details_user(request, editemp_id):
 
 
 ''' 模糊查询'''
-
-
 def user_search(request):
     if request.method == "POST":
         search_key = request.POST.get("search_key")
@@ -312,8 +302,6 @@ def check_usercard(request):
 #             print('xxxxxxxxxccccccccccccccccccccccccccccccc')
 #         return JsonResponse(ret)
 ''' 在线查询'''
-
-
 def online_users_search_data(request):
     if request.is_ajax():
         keyword = request.POST.get("keyword")
@@ -366,8 +354,6 @@ def online_users_search_data(request):
 
 
 ''' 批量下线'''
-
-
 def online_users_batch_delete(request):
     if request.is_ajax():
         delete_id_list = request.POST.getlist("delete_id_list")
@@ -381,8 +367,6 @@ def online_users_batch_delete(request):
 
 
 '''  单个下线'''
-
-
 def online_users_delete(request, delete_id):
     for item in all_requests.requests_list:
         if item.user.pk == int(delete_id):
@@ -427,8 +411,6 @@ def online_users_delete(request, delete_id):
 #
 
 ''' 单一发送站内信'''
-
-
 def user_mail(request):
     status_list = StatusMail.objects.all()
     if request.method == 'POST':
@@ -489,8 +471,6 @@ def allemail(request):
 
 
 '''群发站内信 '''
-
-
 def all_email(request):
     print('开始群发站内信')
     from user_management import allEmail
@@ -531,21 +511,18 @@ def all_email(request):
     return JsonResponse({"status": False})
 
 
-
-
 ''' 发送短信'''
 def send_message(request):
     from user_management import message
     if request.method == 'POST':
-        mobile=request.POST.get("mes_phone")
+        mobile = request.POST.get("mes_phone")
 
         mes_content = request.POST.get("mes_content")
         text = "您的验证码是：" + str(mes_content) + "。请不要把验证码泄露给其他人。 "
-        text = "您的验证码是：087654。请不要把验证码泄露给其他人。"
-        message.send_sms(mobile,text)
+
+        message.send_sms(mobile, text)
         print('welcome new world')
     return redirect('/user_management/user_info/')
-
 
 
 ''' 群发信息'''
@@ -557,7 +534,201 @@ def group_sms(request):
         user_list = models.UserInfo.objects.filter(id__in=userinfo_list)
         content = request.POST.get("content")
         for i in user_list:
-            moble=i.user_phone
-            message.send_sms(content,moble)
+            moble = i.user_phone
+            message.send_sms(content, moble)
         return JsonResponse({"status": True})
     return JsonResponse({"status": False})
+
+
+''' 舆情'''
+def serach_emotion(request):
+    return render(request, "user_management_html/search_emotion.html")
+
+
+def erach_emotions(request):
+
+    if request.method == "POST":
+        search_key = request.POST.get("search_key")
+        if search_key:
+            system_list = models.System_setup.objects.filter(Scheme_name__icontains=search_key)
+        return render(request, 'user_management_html/search_emotion.html', locals())
+
+
+def add_emotion(request):
+    return render(request, "user_management_html/add_emotion.html")
+
+
+def phone_management(request):
+    return render(request, "user_management_html/phone_management.html")
+
+
+# 通讯录信息
+def mails(request):
+    mails_list = models.Mail_list.objects.all()
+    page = Page(mails_list, request, 10, 10)
+    sum = page.Sum()
+    return render(request, 'user_management_html/phone_management.html', {'mails_list': sum[0], 'page_html': sum[1]})
+
+
+''' 添加通讯录 '''
+
+
+def add_mail(request):
+    print('czx')
+    if request.method == "POST":
+        mail_phone = request.POST.get('mail_phone')
+        mail_name = request.POST.get('mail_name')
+        mail_remarks = request.POST.get('mail_remarks')
+        mail_email = request.POST.get('mail_email')
+        mail_weixin_number = request.POST.get('mail_weixin_number')
+        mail_company = request.POST.get('mail_company')
+
+        Mail_list = models.Mail_list.objects.create(
+            mail_phone=mail_phone,
+            mail_name=mail_name,
+            mail_remarks=mail_remarks,
+            mail_email=mail_email,
+            mail_weixin_number=mail_weixin_number,
+            mail_company=mail_company,
+
+        )
+
+        return redirect("/user_management/mails/")
+    return render(request, "user_management_html/phone_management.html", locals())
+
+
+def delete_mail(request, num=None):
+    if num:
+        '''  对于删除先删除第三张表再删除作者表 id  注意页面的格式问题'''
+        del_obj = models.Mail_list.objects.filter(id=num)
+
+        del_obj.delete()
+        return redirect('/user_management/mails/')
+    if request.is_ajax():
+        delete_id_list = request.POST.getlist("delete_id_list")
+        for delete_id in delete_id_list:
+            models.Mail_list.objects.filter(id=delete_id).delete()
+        return JsonResponse({"status": True})
+    return JsonResponse({"status": False})
+
+
+''' 精准问题反馈表'''
+
+
+def problem_feedback(request):
+    return render(request, "user_management_html/problem_feedback.html")
+
+
+def serch_feedback(request):
+    if request.method == "POST":
+        search_key = request.POST.get("search_key")
+        print(search_key)
+        choice_title = request.POST.get("choice_title")
+        if choice_title == "员工编号":
+            staff_list = models.Staff.objects.filter(id__icontains=search_key)
+        elif choice_title == "员工姓名":
+            staff_list = models.Staff.objects.filter(staff_name__icontains=search_key)
+        elif choice_title == "职位名称":
+            staff_list = models.Staff.objects.filter(staff_job__icontains=search_key)
+        elif choice_title == "职务级别":
+            staff_list = models.Staff.objects.filter(staff_job_level__icontains=search_key)
+    return render(request, 'employee_management/search_employee.html', locals())
+
+
+''' 检查通讯录的手机号'''
+
+
+@csrf_exempt
+def check_mailphone(request):
+    print('通讯录验证')
+    data = {}
+    print(request.is_ajax())
+
+    if request.is_ajax():
+        user_phone = request.POST.get("mail_phone", None)
+        print(type(user_phone), user_phone)
+        if len(user_phone) == 11:
+            print('885555')
+            user = models.Mail_list.objects.filter(mail_phone=user_phone).first()
+            print('1111')
+            if user:
+                data["message"] = 1
+            else:
+                data["message"] = 0
+            print(data["message"])
+            return JsonResponse(data)
+        else:
+            data["message"] = 1
+
+        return JsonResponse(data)
+
+
+''' 预警设置'''
+
+
+def System_setup(request):
+    system_list = models.System_setup.objects.all()
+    page = Page(system_list, request, 10, 10)
+    sum = page.Sum()
+    return render(request, 'user_management_html/emotion_info.html', {'system_list': sum[0], 'page_html': sum[1]})
+
+
+def delete_system(request, num=None):
+    print('删除啊')
+    if num:
+        '''  对于删除先删除第三张表再删除作者表 id  注意页面的格式问题'''
+        del_obj = models.System_setup.objects.filter(id=num)
+
+        del_obj.delete()
+
+        return redirect('/user_management/System_setup/')
+
+
+
+'''添加预警信息'''
+def yujing(request):
+    if request.method=='POST':
+        Scheme_name=request.POST.get('rule_name')
+        source = request.POST.get('source')
+        switch = request.POST.get('switch')
+        warning_content =request.POST.get('content')
+        warning_mode=request.POST.get('type')
+        Content = models.System_setup.objects.create(
+            Scheme_name=Scheme_name,
+            warning_type=source,
+            switch=switch,
+            warning_mode=warning_mode,
+            warning_content=warning_content,
+
+        )
+
+        return redirect("/user_management/System_setup")
+
+    return render(request, "user_management_html/emotion_info.html", locals())
+
+
+
+''' 修改预警信息'''
+def edit_emotion(request,system_id):
+    print('x x x x')
+    if request.method == 'POST':
+        # system_id = request.POST.get('id')
+        Scheme_name = request.POST.get('Scheme_name')
+        warning_type = request.POST.get('warning_type')
+        switch = request.POST.get('switch')
+        warning_mode = request.POST.get('warning_mode')
+        warning_content = request.POST.get('warning_content')
+        emotion = models.System_setup.objects.filter(pk=system_id)
+        print(emotion)
+        emotion.update(
+            Scheme_name = Scheme_name,
+            warning_type = warning_type,
+            switch = switch,
+            warning_mode = warning_mode,
+            warning_content = warning_content,
+
+        )
+        return redirect("/user_management/System_setup")
+
+    return render(request, "user_management_html/emotion_info.html", locals())
+

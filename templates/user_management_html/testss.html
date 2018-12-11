@@ -1,0 +1,459 @@
+{% extends "base.html" %}
+{% block content %}
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
+    <link href="/static/user_management/sear.css" rel="stylesheet">
+    <div>
+        <div>
+            <button type="button" class="btn btn-primary">预 &nbsp警&nbsp设&nbsp置</button>
+        </div>
+
+
+        <div class="panel panel-default">
+            <!--预警开关start -->
+
+            <div class="panel-footer">
+                <div class="panel-footer">
+                    <a>预警开关</a>
+                </div>
+
+            </div>
+            <div class="switch_type">
+                <div class="panel-body">
+                    <ul class="nav nav-pills">
+
+                        <li role="presentation" class="active"><a id="#">预警开关:</a></li>
+                        &nbsp&nbsp&nbsp&nbsp
+
+                        <span type="button" class="btn btn-default spans click" id="switch_1" role="button"
+                              onclick="attrbuteACommon(0,this)" name="switch">打开</span>
+                        <span type="button" class="btn btn-default spans" id="switch_2" role="button"
+                              onclick="attrbuteACommon(1,this)">关闭</span>
+                    </ul>
+                    </ul>
+                </div>
+            </div>
+            <!--预警开关end -->
+            <!--预警条件设置start -->
+
+
+            <div class="panel-footer">
+                <a>监测方案选择<span class="glyphicon glyphicon-ok-circle"></span> </a>
+                <a>大庆油田舆情监测</a>
+            </div>
+            <br/>
+
+            <div class="container  col-md-offset-0 ">
+                <div class="row">
+                    <div class="  col-md-2 form-group" style="width: 150px">
+                        <label for="username" class="control-label">
+
+                            <ul class="nav nav-pills">
+                                <li role="presentation" class="active"><a id="#">方案名称:</a></li>
+                            </ul>
+                        </label>
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <input type="text" class="form-control" id="ckuser_phone"
+                               name="ckuser_phone" placeholder="请在这里输入您的方案名称">
+                    </div>
+                    <div class="col-md-2">
+                        <span id="phonemessage" style="color: red"></span>
+
+                    </div>
+                </div>
+                <!-- -->
+                <div class="row">
+                    <div class="conent_ype">
+                        <div class=" col-md-2 form-group" style="width: 150px">
+                            <label for="username" class="control-label">
+                                <ul class="nav nav-pills">
+                                    <li role="presentation" class="active"><a id="#">预警内容:</a></li>
+                                </ul>
+                            </label>
+                        </div>
+                        <div class="col-md-2 form-group">
+                            <ul class="nav nav-pills">
+                                <span type="button" class="btn btn-default spans click" id="conent_1" role="button"
+                                      onclick="parXuCommon(0,this)">全部</span>
+                                <span type="button" class="btn btn-default spans" id="conent_2" role="button"
+                                      onclick="parXuCommon(1,this)">敏感</span>
+                            </ul>
+                        </div>
+                        <div class="col-md-2">
+                            <span id="phonemessage" style="color: red"></span>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- -->
+                <!-- -->
+
+                <div class="row">
+                    <div class="source_type">
+                        <div class=" col-md-2 form-group" style="width: 150px">
+                            <label for="username" class="control-label">
+                                <ul class="nav nav-pills">
+                                    <li role="presentation" class="active"><a id="#">来源类型:</a></li>
+                                </ul>
+                            </label>
+                        </div>
+                        <div class="col-md-8 form-group">
+                            <ul class="nav nav-pills">
+
+
+                            <span type="button" class="btn btn-default spans click" id="source_1" role="button"
+                                  onclick="changeList(0,this)">全部</span>
+                                <span type="button" class="btn btn-default spans" id="source_2" role="button"
+                                      onclick="changeList(1,this)">微博</span>
+                                <span type="button" class="btn btn-default spans" id="source_3" role="button"
+                                      onclick="changeList(2,this)">百度贴吧</span>
+
+
+                            </ul>
+                        </div>
+                        <div class="col-md-2">
+                            <span id="phonemessage" style="color: red"></span>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- -->
+                <!-- -->
+                <div class="row">
+                    <div class="title_type">
+                        <div class=" col-md-2 form-group" style="width: 150px">
+                            <label for="username" class="control-label">
+                                <ul class="nav nav-pills">
+                                    <li role="presentation" class="active"><a id="#">相似文章:</a></li>
+                                </ul>
+                            </label>
+                            <ul class="nav nav-pills">
+
+
+                            </ul>
+                        </div>
+                        <div class="col-md-2 form-group ">
+                            <ul class="nav nav-pills">
+
+                           <span type="button" class="btn btn-default spans click" id="title_1" role="button"
+                                 onclick="changeLista(0,this)">合并</span>
+                                <span type="button" class="btn btn-default spans" id="title_2" role="button"
+                                      onclick="changeLista(1,this)">不合并</span>
+                            </ul>
+                        </div>
+                        <div class="col-md-2">
+                            <span id="phonemessage" style="color: red"></span>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- -->
+                <!-- -->
+                <div class="row">
+                    <div class="pro">
+                        <div class=" col-md-2 form-group" style="width: 150px">
+                            <label for="username" class="control-label">
+                                <ul class="nav nav-pills">
+                                    <li role="presentation" class="active"><a id="#">信息区域:</a></li>
+                                </ul>
+                            </label>
+                        </div>
+                        <div class="col-md-5 form-group">
+
+                            <ul class="nav nav-pills">
+
+                                <div class="dropdown">
+                                    <span type="button" class="btn btn-default spans click" id="pro_1" role="button"
+                                          onclick="changeListpro(0,this)">全国</span>
+                                    <span type="button" class="btn btn-default spans" id="pro_2" role="button"
+                                          onclick="changeListpro(1,this)">省内</span>
+                                    <span type="button" class="btn btn-default spans" id="pro_3" role="button"
+                                          onclick="changeListpro(2,this)">省外</span>
+                                    </button>
+                                    {#                                <ul class="dropdown-menu" aria-labelledby="dLabel">#}
+                                    {#                                    <li><a href="#">山东</a></li>#}
+                                    {#                                    <li><a href="#">大连</a></li>#}
+                                    {#                                    <li><a href="#">青岛</a></li>#}
+                                    {#                                    <li><a href="#">辽宁</a></li>#}
+                                    {#                                </ul>#}
+
+                                </div>
+
+
+                            </ul>
+                        </div>
+                        <div class="col-md-2">
+                            <span id="phonemessage" style="color: red"></span>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- -->
+                <!-- -->
+                <div class="row">
+                    <div class="Source_website">
+                        <div class=" col-md-2 form-group" style="width: 150px">
+                            <label for="username" class="control-label">
+                                <ul class="nav nav-pills">
+                                    <li role="presentation" class="active"><a id="#">来源网站:</a></li>
+                                </ul>
+                            </label>
+                        </div>
+                        <div class="col-md-2 form-group">
+                            <ul class="nav nav-pills">
+
+                           <span type="button" class="btn btn-default spans click" id="Source_1" role="button"
+                                 onclick="Sourcewebsite(0,this)">全国</span>
+                                <span type="button" class="btn btn-default spans" id="Source_2" role="button"
+                                      onclick="Sourcewebsite(1,this)">省内</span>
+                            </ul>
+                        </div>
+                        <div class="col-md-2">
+                            <span id="phonemessage" style="color: red"></span>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- -->
+                <!-- -->
+                <div class="row">
+                    <div class="information_type">
+                        <div class=" col-md-2 form-group" style="width: 150px">
+                            <label for="username" class="control-label">
+                                <ul class="nav nav-pills">
+                                    <li role="presentation" class="active"><a id="#">结果呈现:</a></li>
+                                </ul>
+                            </label>
+                        </div>
+                        <div class="col-md-5 form-group">
+                            <ul class="nav nav-pills">
+                             <span type="button" class="btn btn-default spans click" id="information_1" role="button"
+                                   onclick="informationtype(0,this)">正常信息</span>
+                                <span type="button" class="btn btn-default spans" id="information_2" role="button"
+                                      onclick="informationtype(1,this)">精准信息</span>
+
+
+                            </ul>
+                        </div>
+                        <div class="col-md-2">
+                            <span id="phonemessage" style="color: red"></span>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- -->
+                <!-- -->
+                <div class="row">
+                    <div class="display_type">
+                        <div class=" col-md-2 form-group" style="width: 150px">
+                            <label for="username" class="control-label">
+                                <ul class="nav nav-pills">
+                                    <li role="presentation" class="active"><a id="#">转发微博:</a></li>
+                                </ul>
+                            </label>
+                        </div>
+                        <div class="col-md-2 form-group">
+                            <ul class="nav nav-pills">
+                             <span type="button" class="btn btn-default spans click" id="display_1" role="button"
+                                   onclick="displaytype(0,this)">显示</span>
+                                <span type="button" class="btn btn-default spans" id="display_2" role="button"
+                                      onclick="displaytype(1,this)">不显示</span>
+                            </ul>
+                        </div>
+                        <div class="col-md-2">
+                            <span id="phonemessage" style="color: red"></span>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- -->
+
+
+            </div>
+
+
+            <!--预警条件设置end -->
+            <!-- 监测方案选择方案选择start-->
+            {##}
+            {#            <div class="panel-footer">#}
+            {#                <div class="panel-footer">#}
+            {#                    <a>监测方案选择<span class="glyphicon glyphicon-ok-circle"></span> </a>#}
+            {#                    <a>大庆油田舆情监测</a>#}
+            {#                </div>#}
+            {##}
+            {##}
+            {#            </div>#}
+            {#            <br/>#}
+            {#            <div class="container col-md-offset-0">#}
+            {##}
+            {#                <div class="row">#}
+            {#                    <div class=" col-md-2    form-group" style="width: 150px">#}
+            {#                        <label for="username" class="control-label">#}
+            {#                            <ul class="nav nav-pills">#}
+            {#                                <li role="presentation" class="active"><a id="#">舆情监测:</a></li>#}
+            {#                            </ul>#}
+            {#                        </label>#}
+            {#                    </div>#}
+            {#                    <div class="col-md-8 form-group">#}
+            {#                        <ul class="nav nav-pills">#}
+            {##}
+            {#                            <li role="presentation"><a>方案：</a></li>#}
+            {##}
+            {##}
+            {#                        </ul><x></x>#}
+            {#                    </div>#}
+            {#                    <div class="col-md-2">#}
+            {#                        <span id="phonemessage" style="color: red"></span>#}
+            {##}
+            {#                    </div>#}
+            {#                </div>#}
+            {#            </div>#}
+            <!--  监测方案选择end-->
+            <!--  预警开关start-->
+
+            <div class="panel-footer">
+                <div class="panel-footer">
+                    <a>预警开关</a>
+                </div>
+
+
+            </div>
+            <div class="container col-md-offset-0">
+
+                <div class="row">
+                    <div class="warning_type">
+                        <div class=" col-md-2 form-group " style="width: 150px">
+                            <label for="username" class="control-label ">
+                                <ul class="nav nav-pills">
+                                    <li role="presentation" class="active"><a id="#">预警内容:</a></li>
+                                </ul>
+                            </label>
+                        </div>
+                        <div class="col-md-8 form-group">
+                            <ul class="nav nav-pills">
+                             <span type="button" class="btn btn-default spans" id="warning_1" role="button"
+                                   onclick="warningtype(0,this)" name="war" >全部预警</span>
+                                <span type="button" class="glyphicon glyphicon-envelope btn btn-default spans click"
+                                      id="warning_2" role="button"
+                                      onclick="warningtype(1,this)"  name="war">邮件预警</span>
+                                <span type="button" class="glyphicon glyphicon-phone btn btn-default spans"
+                                      id="warning_3" role="button"
+                                      onclick="warningtype(2,this)" name="war">短信预警</span>
+                            </ul>
+                        </div>
+                        <div class="col-md-2">
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--  预警开关end-->
+            <!--  预警方案选择start-->
+
+            <div class="panel-footer">
+                <div class="panel-footer">
+                    <a>预警词<span class="glyphicon glyphicon-question-sign"></span> </a>
+                </div>
+
+
+            </div>
+            <br/>
+            <div class="container col-md-offset-0">
+
+                <div class="row">
+                    <div class=" col-md-2    form-group" style="width: 150px">
+                        <label for="username" class="control-label">
+                            <ul class="nav nav-pills">
+                                <li role="presentation" class="active"><a id="#">预警词:</a></li>
+                            </ul>
+                        </label>
+                    </div>
+                    <div class="col-md-8 form-group">
+                        <ul class="nav nav-pills">
+
+
+                            <input type="text" class="form-control" id="yujing"
+                                   name="ckuser_phone" placeholder="请在这里输入您的预警词">
+                        </ul>
+                    </div>
+                    <div class="col-md-2">
+                        <span id="phonemessage" style="color: red"></span>
+
+                    </div>
+                </div>
+            </div>
+            <!--  预警方案选择end-->
+
+            <div class="col-md-offset-4">
+                <button type="button" class="btn btn-info" id="button">保存</button>
+
+                <!-- Indicates caution should be taken with this action -->
+                <button type="button" class="btn btn-warning">取消</button>
+            </div>
+        </div>
+    </div>
+
+
+    </div>
+    <script src="/static/user_management/search.js"></script>
+    <script>
+     $(function () {
+            $(".warning_1").click(function () {
+                var val=$(this).attr("id");
+                alert(val);
+            })
+
+            $("#student").click(function () {
+                var val=$(this).attr("name");
+                alert(val);
+            })
+            $(".warning_1").click(function () {
+                var val=$(this).val();
+                alert(val)
+            })
+        })
+
+
+
+    </script>
+    <script src="text/javascript">
+        $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
+        });
+        {#var h = document.getElementById("h");#}
+
+        $(document).ready(function () {
+            $("button").click(function () {
+                var lists = $("#spId").text()
+                if (lists != "") {
+
+                    $.post(
+                        "/user_management/add_content/",
+                        {
+                            "lists": lists
+                        },
+                        function (data) {
+                            console.log(data.message);
+                            if (data.message == 1) {
+
+                                alert('成功')
+                            }
+                            else {
+
+                               alert('失败')
+                            }
+                        }
+                    )
+                }
+
+            });
+        });
+
+
+    </script>
+
+
+{% endblock %}
+

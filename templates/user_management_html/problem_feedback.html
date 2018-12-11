@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% block content %}
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
+    <div align="center">
+
+    </div>
+
+    <div>
+
+
+        <div>
+
+            <button type="button" class="btn btn-primary">精 &nbsp准&nbsp问&nbsp题&nbsp反&nbsp馈&nbsp表</button>
+            <!-- 查询start-->
+            <div class="col-md-offset-7">
+                <form action=" /user_management/serach_title/" method="post" class="form-inline">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        关键词：
+                        <input type="text" class="form-control" name="search_key" id="value" placeholder="在此输入查询"/>
+
+                    </div>
+
+                    <div class="form-group">
+                        状态：
+                        <select class="form-control" id="key" name="choice_title">
+                            <option value="用户姓名">全部</option>
+                            <option value="用户住址">未处理</option>
+                            <option value="用户编号">已经处理</option>
+
+                        </select>
+                    </div>
+                    <button type="submit" id="select_user" class="btn btn-info" style="width: 100px;">查询</button>
+
+                </form>
+            </div>
+            <!-- 查询end-->
+
+
+            <table class="table table-hover table-bordered">
+                <thead>
+                <tr>
+
+                    <th class="center">问题类型</th>
+                    <th class="center">标题</th>
+                    <th class="center">敏感</th>
+                    <th class="center">涉及词</th>
+                    <th class="center">方案</th>
+                    <th class="center">反馈人</th>
+                    <th class="center">操作</th>
+                </tr>
+                <tbody>
+                {% for user in userlists %}
+                    <tr>
+                        <td style="width: 70px"><input type="checkbox" class='choice_item' name='select_pk' id="choice"
+                                                       value='{{ staff.pk }}'></td>
+                        <td style="width: 50px">{{ forloop.counter }}不被</td>
+                        <td style="width: 50px">{{ user.id }}方法</td>
+                        <td style="width: 80px">{{ user.user.username }}方法</td>
+                        <td style="width: 80px">{{ user.user_name }}方法</td>
+
+                        <td style="width: 80px">方法
+                            {% for role in   user.user.role_set.all %}
+                                {{ role.title }}
+                            {% endfor %}
+                        </td>
+                        <td style="width: 50px">{{ user.user_age }}方法</td>
+
+                        <!-- 操作界面 -->
+
+
+                        <!-- 删除模态框start-->
+                        <a class="btn btn-xs btn-danger" title="删除" data-toggle="modal"
+                           data-target="#myModal{{ forloop.counter }}">
+                            <i class="ace-icon fa fa-trash-o bigger-120" title="删除"></i>
+                        </a>
+
+
+                        <div class="modal fade" id="myModal{{ forloop.counter }}" tabindex="-1" role="dialog"
+                             aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close"><span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <h4 class="modal-title">您是否决定删除
+                                            <hr/>
+                                            <h3>{{ user.user.username }}</h3>
+                                            <hr/>
+
+                                            用户的相关信息
+                                        </h4>
+
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>信息一旦删除将无法修复&hellip;!!!</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                                            我再想想
+                                        </button>
+                                        <a href="/user_management/delete_user/{{ user.pk }}/"
+                                           class="btn btn-danger">确定删除</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- 删除模态框end-->
+                        <!-- 操作界面 -->
+
+                        </td>
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+
+                </thead>
+
+            </table>
+        <span id="csrf" style="display: none">{{ csrf_token }}</span>
+        <!-- 分页-->
+        {% include "user_management_html/checkdata_page.html" %}
+
+
+
+        </div>
+
+
+    </div>
+    </div>
+
+{% endblock %}

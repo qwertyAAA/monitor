@@ -1,0 +1,345 @@
+{% extends "base.html" %}
+{% block content %}
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
+    <script src="/static/js/jquery-2.1.4.min.js"></script>
+    <script src="/static/js/check_box.js"></script>
+    <script src="/static/js/sweetalert.min.js"></script>
+    <div align="center">
+
+    </div>
+
+    <div>
+
+
+        <div>
+
+            <button type="button" class="btn btn-primary">通 &nbsp讯&nbsp录</button>
+
+            <form action="/user_management/batch_users/" method="post">
+                {% csrf_token %}
+            </form>
+            {#            <!-- form 多选-->#}
+
+            <div class="col-md-offset-9">
+                <button type="submit" class="btn btn-danger " id="batch_delete">
+                    批量删除
+                    <a class="btn btn-xs btn-danger" title="删除" data-toggle="modal"
+                       data-target="#plmyModal{{ forloop.counter }}">
+                        <i class="ace-icon fa fa-trash-o bigger-120" title="删除" style="height: 20px"></i>
+                    </a>
+
+
+                </button>
+            </div>
+
+            <table class="table table-hover table-bordered">
+                <thead>
+                <tr>
+                    <th class="center">全选<input type="checkbox" id="check_all"></th>
+                    <th class="center">序号</th>
+                    <th class="center">姓名</th>
+                    <th class="center">手机号码</th>
+                    <th class="center">
+                        <i class="ace-icon fa fa-envelope-o"></i>
+                        邮箱
+                    </th>
+                    <th class="center">微信号</th>
+                    <th class="center">备注</th>
+
+                    <th class="center">操作</th>
+                </tr>
+                <tbody>
+                {% for mail in mails_list %}
+                    <tr>
+                        <td style="width: 70px"><input type="checkbox" class='check_item' name='select_pk' id="choice"
+                                                       delete_id='{{ mail.pk }}' value="{{ mail.pk }}"></td>
+                        <td style="width: 50px">{{ forloop.counter }}</td>
+
+                        <td style="width: 80px">{{ mail.mail_name }}</td>
+                        <td style="width: 50px"> {{ mail.mail_phone }}</td>
+
+
+                        <td style="width: 200px">
+                            <a title="发送电子邮件" style="text-decoration:none;cursor:pointer; "
+                               onclick="sendEmail('{{ mail.mail_email }}');"> {{ mail.mail_email }}&nbsp;<i
+                                    class="ace-icon fa fa-envelope-o"></i></a>
+                        </td>
+                        <td style="width: 50px"> {{ mail.mail_weixin_number }}</td>
+                        <td style="width: 50px"> {{ mail.mail_remarks }}</td>
+
+
+                        <td style="width: 190px">
+                            <!-- 操作界面 -->
+
+
+                            <!-- 删除模态框start-->
+                            <a class="btn btn-xs btn-danger" title="删除" data-toggle="modal"
+                               data-target="#myModal{{ forloop.counter }}">
+                                <i class="ace-icon fa fa-trash-o bigger-120" title="删除"></i>
+                            </a>
+
+
+                            <div class="modal fade" id="myModal{{ forloop.counter }}" tabindex="-1" role="dialog"
+                                 aria-labelledby="myModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close"><span aria-hidden="true">&times;</span>
+                                            </button>
+                                            <h4 class="modal-title">您是否决定删除
+                                                <hr/>
+                                                <h3>{{ mail.mail_name }}</h3>
+
+                                                <hr/>
+
+                                                用户的相关信息
+                                            </h4>
+
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>信息一旦删除将无法修复&hellip;!!!</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                我再想想
+                                            </button>
+                                            <a href="/user_management/delete_mail/{{ mail.pk }}/"
+                                               class="btn btn-danger">确定删除</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- 删除模态框end-->
+                            <!-- 操作界面 -->
+
+                        </td>
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+                </thead>
+
+            </table>
+
+        </div>
+
+
+        <div>
+
+            <!-- 新增通讯录start -->
+            <a class="btn btn-xs btn-success" title="增加员工" data-toggle="modal"
+               data-target="#addmyModal">
+                <i class="btn btn-mini btn-success" style="width: 70px;height: 25px">新增</i>
+            </a>
+
+
+            <div class="modal fade" id="addmyModal" tabindex="-1" role="dialog"
+                 aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"
+                                    aria-label="Close"><span aria-hidden="true">x</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- 新增员工-->
+                            <div align="center">
+                                <p class="btn btn-default" style="width: 150px;height: 40px">新
+                                    &nbsp增&nbsp通&nbsp讯 &nbsp录</p>
+                            </div>
+
+                            <div class="col-md-offset-1">
+                                <hr/>
+                                <form action="/user_management/add_mail/" method="post" class="form-horizontal">
+                                    {% csrf_token %}
+
+                                    <div class="form-group">
+                                        <label for="username" class="col-sm-2 control-label">姓名：</label>
+                                        <div class="col-sm-5">
+                                            <input type="text" class="form-control" id="mail_name" name="mail_name"
+                                                   placeholder="在这里输入姓名">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="username" class="col-sm-2 control-label"><span
+                                                style="color: red"> * </span>手机：</label>
+                                        <div class="col-sm-5">
+                                            <input type="text" class="form-control" id="mail_phone"
+                                                   name="mail_phone" placeholder="请在这里输入11位手机号">
+                                            <span id="phonemessage" style="color: red"></span>
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="username" class="col-sm-2 control-label"><span
+                                                style="color: red"> * </span>微信：</label>
+                                        <div class="col-sm-5">
+                                            <input type="text" class="form-control" id="mail_weixin_number"
+                                                   name="mail_weixin_number" placeholder="请在这里输入您的微信号">
+                                            <span id="phonemessage" style="color: red"></span>
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="username" class="col-sm-2 control-label"><span
+                                                style="color: red"> * </span>邮箱：</label>
+                                        <div class="col-sm-5">
+                                            <input type="text" class="form-control" id="mail_email"
+                                                   name="mail_email" placeholder="请在这里输入您的邮箱">
+                                            <span id="phonemessage" style="color: red"></span>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="username" class="col-sm-2 control-label">单位：</label>
+                                        <div class="col-sm-5">
+                                            <input type="text" class="form-control" id="mail_company"
+                                                   name="mail_company" placeholder="请在这里输入您的单位">
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label for="username" class="col-sm-2 control-label">备注：</label>
+                                        <div class="col-sm-5">
+                                            <input type="text" class="form-control" id="mail_remarks"
+                                                   name="mail_remarks" placeholder="请在这里输入备注信息">
+                                        </div>
+                                    </div>
+
+
+                                    <br/>
+
+                                    <!-- 新增通讯录start -->
+
+                                    <!-- 对于模态框的使用一些按钮是无法乱改的 保存就是保存  取消就是取消 data-dismiss="modal"  就是取消   不用就删除掉再改 -->
+                                    <div class="modal-footer">
+
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+{#                                        <button type="button" class="btn btn-primary">保存</button>#}
+                                         <button type="submit" class="btn btn-default" id="save">
+                                            保存
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 新增通讯录end -->
+
+        </div>
+        <span id="csrf" style="display: none">{{ csrf_token }}</span>
+        <!-- 分页-->
+        {% include "user_management_html/checkdata_page.html" %}
+
+    </div>
+    </div>
+    <!-- 实现全选的功能 当下面的全部选中的时候 全选按钮也应该被选中 当全选时候，有一个取消的时候全选也跟着取消-->
+    <!-- 验证输入的字段 start-->
+    <script src="/static/js/check_box.js"></script>
+    <script src="/static/user_management/mail_phone.js"></script>
+    <script src="/static/user_management/id_card.js"></script>
+
+    <!-- 群发短信-->
+
+
+    <script>
+
+        $("body").delegate("#batch_delete", "click", function () {
+            var delete_id_list = [];
+            $(".check_item").each(function () {
+                if ($(this).prop("checked")) {
+                    var delete_id = $(this).attr("delete_id");
+                    delete_id_list.push(delete_id);
+                }
+            });
+            if (!delete_id_list.length) {
+                swal({
+                    title: "没有选中用户！",
+                    text: "请先选择要删除的用户",
+                    icon: "error",
+                    button: "好的"
+                });
+                return;
+            }
+            swal({
+                title: "是否决定删除",
+                text: "一旦删除将无法恢复",
+                icon: "warning",
+                buttons: ["我再想想", "删除信息"],
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            url: "/user_management/delete_mail/",
+                            type: "post",
+                            traditional: true,
+                            data: {
+                                "delete_id_list": delete_id_list,
+                                "csrfmiddlewaretoken": "{{ csrf_token }}"
+                            },
+                            success: function (data) {
+                                if (data.status)
+                                    window.location.reload()
+                            }
+                        });
+                    } else {
+                        swal("数据还是安全的！");
+                    }
+                });
+        });
+
+    </script>
+    <script>
+        //CSRF设置
+        $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
+        });
+
+        $('body').delegate('#adduser_number', 'blur', function () {
+            var usernumber_var = $("#adduser_number").val();
+            if (usernumber_var != "") {
+
+                $.post(
+                    "/user_management/check_usernumber/",
+                    {
+                        "adduser_number": usernumber_var
+                    },
+                    function (data) {
+                        console.log(data.message);
+                        if (data.message == 1) {
+
+                            $("#message").text("编号已被占用");
+
+                            {#$('#save').css('display','none');#}
+                            $('#save').addClass("disabled");
+
+                        }
+                        else {
+                            <!-- $('#message').css('display','none'); 不能这样设置 当第二次判断的时候 即使是错的的也无法进行错误提示显示  -->
+                            $("#message").text("");
+
+                            $('#save').removeClass("disabled");
+
+                        }
+                    }
+                )
+            }
+        });
+
+
+    </script>
+
+{% endblock %}
