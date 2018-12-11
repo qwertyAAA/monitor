@@ -11,7 +11,7 @@ def get_menu(request):
     if not request.user.is_anonymous:
         per_first_list=request.session.get('first_menu_list')
         per_second_list=request.session.get('second_menu_list')
-        print(per_first_list,per_second_list)
+        # print(per_first_list,per_second_list)
         # print(per_first_list)
         # print(per_second_list)
         try:

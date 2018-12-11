@@ -32,3 +32,4 @@ class TiebaItems(scrapy.Item):
     article_from = scrapy.Field()
     affected_count = scrapy.Field()
     article_type = scrapy.Field()
+    keyword = scrapy.Field()
