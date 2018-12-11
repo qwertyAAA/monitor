@@ -46,8 +46,8 @@
                     {% for i in result %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
-                        <td>{{ i.title |safe }}</td>
-                        <td>{{ i.detail }}</td>
+                        <td>{{ i.title | safe }}</td>
+                        <td>{{ i.detail | safe }}</td>
                         <td>{{ i.author.author }}</td>
                         <td>{{ i.create_time }}</td>
                         <td>{{ i.source.source }}</td>
@@ -57,8 +57,6 @@
                     {% endfor %}
                 </tbody>
             </table>
-                {% for i in result %}
-                {% endfor %}
             </div>
         </div>
     </div>
