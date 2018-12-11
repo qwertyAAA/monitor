@@ -80,7 +80,7 @@
                 <thead>
                 <th><input type="checkbox" id="checkbox_on"></th>
                 <th>序号</th>
-                <th>图片</th>
+{#                <th>图片</th>#}
                 <th>标题</th>
                 <th>ID</th>
                 <th>创建时间</th>
@@ -94,8 +94,8 @@
                         <td><input type="checkbox" value="{{ pictures.id }}" id="onclick_checkbox"
                                    name="onclick_checkbox"></td>
                         <td>{{ forloop.counter }}</td>
-                        <td><img class="media-object" src="/media/{{ pictures.path }}" alt="..."
-                                 style="width: 52px;height: 52px;"></td>
+{#                        <td><img class="media-object" src="/media/{{ pictures.path }}" alt="..."#}
+{#                                 style="width: 52px;height: 52px;"></td>#}
                         <td>{{ pictures.title }}</td>
                         <td>{{ pictures.name }}</td>
                         <td>{{ pictures.create_time }}</td>

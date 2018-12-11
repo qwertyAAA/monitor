@@ -40,14 +40,14 @@ $("#submit_query").click(function () {
                     '<button type="button" class="btn" data-toggle="tooltip" data-placement="bottom" id="in_heart_one" name="in_heart_one" title="加入收藏夹" value="' + this.id + '" >' +
                     '<i class="fa fa-heart" aria-hidden="true"></i>' +
                     '</button>' +
-                    '<button type="button" class="btn" data-toggle="tooltip" data-placement="bottom" id="in_tags_one" name="in_tags" data-original-title="加入简报素材" >' +
+                    '<button type="button" class="btn" data-toggle="tooltip" data-placement="bottom" id="in_tags_one" name="in_tags" data-original-title="加入简报素材" onclick="'+AddTags(this.pk,this)+'">' +
                     '<i class="fa fa-tags" aria-hidden="true"></i>' +
                     '</button>' +
                     '<button type="button" class="btn" data-toggle="tooltip" data-placement="bottom" name="in_square" data-original-title="转发舆情" >' +
                     '<i class="fa fa-share-square-o" aria-hidden="true"></i>' +
                     '<i class="fa fa-angle-down" aria-hidden="true"></i>' +
                     '</button>' +
-                    '<button type="button" class="btn" data-toggle="tooltip" data-placement="bottom" name="out_del_one" data-original-title="删除" >' +
+                    '<button type="button" class="btn" data-toggle="tooltip" data-placement="bottom" name="out_del_one" data-original-title="删除" onclick="'+DelOne(this.pk,this)+'">' +
                     '<i class="fa fa-trash-o fa-lg"></i>' +
                     '</button>' +
                     '<a href="' + this.url + '">' +
@@ -55,7 +55,7 @@ $("#submit_query").click(function () {
                     '<i class="fa fa-link fa-lg"></i>' +
                     '</button>' +
                     // 判断语句********************************
-                    '<button type="button" class="btn" data-toggle="tooltip" data-placement="bottom" name="in_eye" data-original-title="标已读" >' +
+                    '<button type="button" class="btn" data-toggle="tooltip" data-placement="bottom" name="in_eye" data-original-title="标已读" onclick="'+SeeEye(this.id,this)+'">' +
                     '<i class="fa fa-eye-slash" aria-hidden="true"></i>' +
                     '</button>' +
                     // ************************************
