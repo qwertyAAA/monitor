@@ -5,9 +5,10 @@ from django.http import JsonResponse
 import json
 from django.apps import apps
 import redis
+import time
 from permission import models as per_models
 from Myutils.pageutil import Page
-
+# from monitorSpiders.monitorSpiders.startTieba import tieba2
 # Create your views here.
 
 def check_first_menu(request):
@@ -17,7 +18,7 @@ def check_first_menu(request):
 
 def check_second_menu(request, id):
     menu_list = models.First_Menu.objects.filter(nid=id)[0].second_menu_set.all()
-    return render(request, 'second_menu_manage.html', {'menu_list': menu_list, 'id': id,})
+    return render(request, 'second_menu_manage.html', {'menu_list': menu_list, 'id': id})
 
 
 def add_first_menu(request):

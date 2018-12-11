@@ -7,20 +7,21 @@ from bs4 import BeautifulSoup
 import requests
 import datetime
 from w3lib.html import remove_tags
-from ..startTieba import tieba
-
-
+import redis
+key=redis.Redis(host="10.25.116.62",port=6379,max_connections=1000)
+keywords = key.get('newkeywords1').decode()
 class TiebaSpider(scrapy.Spider):
     name = 'tieba'
     allowed_domains = ['tieba.baidu.com']
     start_urls = ['http://tieba.baidu.com/']
-    key_words = ['大庆油田']
-    # key_words = tieba.get_keywords()
+    # key_words = ['中国石油']
+    key_words = [keywords]
     page_url = []
     article_url = []
 
     def start_requests(self):
         print('开始')
+        print(self.key_words)
         for key_word in self.key_words:
             urls = ['http://tieba.baidu.com/f/search/res?ie=utf-8&qw=%s']
             # meta = {'proxy': 'http://211.138.61.27'}
@@ -55,10 +56,8 @@ class TiebaSpider(scrapy.Spider):
     def storage(self, response):
         print('存储')
         print(response.url)
-        print()
         list = response.css('.s_post')
         for i in list:
-            print('***********************************************************')
             try:
                 article_title = remove_tags(i.xpath('.//span/a').extract_first(), 'a')
             except Exception:
@@ -77,17 +76,6 @@ class TiebaSpider(scrapy.Spider):
                 article_type = m[2]
                 content = m[0]
                 affected_count = m[1]
-                # yield Request(response.url,callback=self.parse)
-                # title=item["article"],
-                # content=item["article"],
-                # author = scrapy.Field()
-                # author_url = scrapy.Field()
-                # article = scrapy.Field()
-                # article_url = scrapy.Field()
-                # article_create_time = scrapy.Field()
-                # article_from = scrapy.Field()
-                # affected_count = scrapy.Field()
-                print(article_url, article_title, affected_count)
                 yield TiebaItems(
                     author=author,
                     author_url=author_url,
@@ -98,7 +86,8 @@ class TiebaSpider(scrapy.Spider):
                     article_create_time=create_time,
                     article_from='百度贴吧',
                     affected_count=affected_count,
-                    article_type=article_type
+                    article_type=article_type,
+                    keyword=self.key_words[0]
                 )
 
     # 获取文章详情和影响人数,文章类型
