@@ -51,15 +51,15 @@ ROBOTSTXT_OBEY = False
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
-# DOWNLOADER_MIDDLEWARES = {
-#    'monitorSpiders.middlewares.MonitorspidersDownloaderMiddleware': 543,
-# }
+DOWNLOADER_MIDDLEWARES = {
+    'monitorSpiders.middlewares.MonitorspidersDownloaderMiddleware': 543,
+}
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
 # EXTENSIONS = {
 #    'scrapy.extensions.telnet.TelnetConsole': None,
-# }
+# }            print(item["affected_count"], "!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
@@ -89,3 +89,4 @@ ITEM_PIPELINES = {
 # HTTPCACHE_DIR = 'httpcache'
 # HTTPCACHE_IGNORE_HTTP_CODES = []
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+DEPTH_LIMIT = 20

@@ -7,10 +7,14 @@ import time
 from ..items import WeiboItems
 from urllib.parse import unquote
 from w3lib.html import remove_tags
+import redis
 
 
 # 将微博的创建时间进行格式化
 def get_time(time_str):
+    if time_str.find("秒") != -1:
+        stamp = time.time() - float(re.sub(r"\D", " ", time_str).strip())
+        return time.localtime(stamp)
     time_str = re.sub(r"\D", " ", time_str)
     time_str = time_str.strip()
     if 5 < len(time_str) <= 12:
@@ -51,7 +55,7 @@ def get_normal_keyword(url):
     return unquote(url.split("=")[1].split("&")[0])
 
 
-def handle_article_detail(prev_content):
+def handle_article_content(prev_content):
     article_type = "text"
     videos = prev_content.xpath(".//video")
     videos_html = ""
@@ -72,7 +76,7 @@ def handle_article_detail(prev_content):
             videos_html += "<video controls><source src='{}'></video>".format(video.xpath("./@src").extract_first())
 
     detail = "<div class='content'>" + p_html + imgs_html + videos_html + "</div>"
-    return detail, article_type
+    return content, article_type
 
 
 class WeiboSpider(scrapy.Spider):
@@ -82,10 +86,17 @@ class WeiboSpider(scrapy.Spider):
         'https://s.weibo.com/weibo/{}',
         'https://s.weibo.com/article?q={}&Refer=weibo_article',
     ]
-    keywords = ["逮虾户", "大庆"]
 
     def start_requests(self):
-        for keyword in self.keywords:
+        keywords = []
+        conn = redis.Redis(host="10.25.116.62", port="6379")
+        keyword_list = conn.get("new_keywords") if conn.get("new_keywords") else conn.lrange("exists_keywords", 0, -1)
+        for li in keyword_list:
+            for item in li.decode().split(" "):
+                if item:
+                    keywords.append(item)
+        for keyword in keywords:
+            print(keyword)
             for url in self.start_urls:
                 yield Request(url=url.format(keyword), callback=self.parse)
 
@@ -112,7 +123,9 @@ class WeiboSpider(scrapy.Spider):
             author_url = author_url if author_url else ""
             article_title = remove_tags(card_wrap.xpath(".//div[@class='card-article-a']/h3/a").extract_first(),
                                         keep="em")
-            article_detail, article_type = handle_article_detail(content)
+            article_content, article_type = handle_article_content(content)
+            article_detail = remove_tags(content.xpath("./div[@class='detail']/p[@class='txt']").extract_first(),
+                                         keep="em")
             article_url = card_wrap.xpath(".//div[@class='card-article-a']/h3/a/@href").extract_first()
             create_info = content.xpath(".//div[@class='act']")
             create_time = get_time(create_info.xpath(".//div[1]/span[2]/text()").extract_first())
@@ -124,8 +137,8 @@ class WeiboSpider(scrapy.Spider):
                 author=author,
                 author_url=author_url,
                 article_title=article_title,
-                article_content="",
                 article_detail=article_detail,
+                article_content=article_content,
                 article_url=article_url,
                 article_type=article_type,
                 article_create_time=create_time,
@@ -145,7 +158,8 @@ class WeiboSpider(scrapy.Spider):
             author_url = content.css(".name::attr(href)").extract_first()
             article_title = re.sub(r"\s", "", remove_tags(
                 content.css(".txt").extract_first() if content.css(".txt").extract_first() else "", keep="em")).strip()
-            article_detail, article_type = handle_article_detail(content)
+            article_content, article_type = handle_article_content(content)
+            article_detail = remove_tags(content.xpath("./p[@class='txt']").extract_first(), keep="em")
             create_info = content.xpath("./p[@class='from']")
             create_time = get_time(create_info.xpath("./a[1]/text()").extract_first())
             forwarding = get_count(card_wrap.xpath(".//div[@class='card-act']//li[2]/a/text()").extract_first())
@@ -164,7 +178,7 @@ class WeiboSpider(scrapy.Spider):
                 author=author,
                 author_url=author_url,
                 article_title=article_title,
-                article_content="",
+                article_content=article_content,
                 article_detail=article_detail,
                 article_url="",
                 article_type=article_type,
