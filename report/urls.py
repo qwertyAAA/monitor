@@ -8,4 +8,9 @@ urlpatterns = [
     url(r'^sucai/', views.sucai),
     url(r'^collection/', views.collection),
     url(r'^mould/', views.mould),
+    url(r'^edit/', views.sucai_edit),
+    url(r'^delete/', views.delete),
+    url(r'^lot_delete/', views.lot_delete),
+    url(r'^del_all/', views.del_all),
+
 ]
