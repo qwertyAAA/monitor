@@ -26,9 +26,13 @@
             {% include 'tree2.html' %}
 
 
-            <a class="btn-sm btn btn-warning pull-right" data-toggle="modal"
-                           data-target="#add_role">增加角色</a>
+            <a class="btn-sm btn btn-warning " data-toggle="modal"
+               data-target="#add_role">增加角色</a>
         </div>
+
+        <h1>超级管理员（含有所有权限）：{{ role_super.title }}</h1>
+
+
         <table class="table table-striped center">
             <thead>
             <th style="text-align: center;" class="col-md-1">序号</th>
@@ -43,17 +47,21 @@
                     <td>{{ forloop.counter }}</td>
                     <td>{{ role.title }}</td>
                     <td>
-
-                          <a class="button btn btn-sm btn-primary" data-toggle="modal"
-                           data-target="#accredit_role{{ forloop.counter }}">角色授权</a>
-                            {% include 'role_accredit.html' %}
-
-                            {% include 'old.html' %}
-
-
-         </td>
-                    <td>
+                        {% if role == role_super %}
+                            <a class="button btn btn-sm btn-primary disabled">角色授权</a>
+                        {% else %}
                             <a class="button btn btn-sm btn-primary" data-toggle="modal"
+                                     data-target="#accredit_role{{ forloop.counter }}">角色授权</a>
+                        {% endif %}
+
+                        {% include 'role_accredit.html' %}
+
+                        {% include 'old.html' %}
+
+
+                    </td>
+                    <td>
+                        <a class="button btn btn-sm btn-primary" data-toggle="modal"
                            data-target="#data_permission{{ forloop.counter }}">查看数据权限</a>
                         <div class="modal fade" id="data_permission{{ forloop.counter }}" tabindex="-1" role="dialog"
                              aria-labelledby="myModalLabel">
@@ -66,19 +74,24 @@
                                         </button>
                                         <h2>该角色的数据权限</h2>
                                     </div>
-                                        <div class="modal-body">
-                                           <h4>{{ role.data_per.title }}</h4>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭
-                                            </button>
-                                        </div>
+                                    <div class="modal-body">
+                                        <h4>{{ role.data_per.title }}</h4>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
-                          <a class="button btn btn-sm btn-primary" data-toggle="modal"
+                        {% if role == role_super %}
+                             <a class="button btn btn-sm btn-primary disabled" data-toggle="modal"
                            data-target="#data_accredit{{ forloop.counter }}">数据授权</a>
+                        {% else %}
+                             <a class="button btn btn-sm btn-primary" data-toggle="modal"
+                           data-target="#data_accredit{{ forloop.counter }}">数据授权</a>
+                        {% endif %}
+
                         <div class="modal fade" id="data_accredit{{ forloop.counter }}" tabindex="-1" role="dialog"
                              aria-labelledby="myModalLabel">
                             <div class="modal-dialog" role="document">
@@ -90,7 +103,7 @@
                                         </button>
                                         <h2>数据权限列表</h2>
                                     </div>
-                                      <form action="/permission/data_permission/{{ role.id }}/?role_group_id={{ role_group_id }}"
+                                    <form action="/permission/data_permission/{{ role.id }}/?role_group_id={{ role_group_id }}"
                                           method="post">
                                         {% csrf_token %}
                                         <div class="modal-body">
@@ -139,8 +152,16 @@
                                 </div>
                             </div>
                         </div>
-                        <a class="btn-sm btn btn-warning" data-toggle="modal"
+
+                         {% if role == role_super %}
+                             <a class="btn-sm btn btn-warning disabled" data-toggle="modal"
                            data-target="#delete_user{{ forloop.counter }}">删除角色</a>
+                        {% else %}
+                              <a class="btn-sm btn btn-warning" data-toggle="modal"
+                           data-target="#delete_user{{ forloop.counter }}">删除角色</a>
+                        {% endif %}
+
+
                         <div class="modal fade" id="delete_user{{ forloop.counter }}" tabindex="-1" role="dialog"
                              aria-labelledby="myModalLabel8">
                             <div class="modal-dialog" role="document">
@@ -178,11 +199,11 @@
             $(".role_group2").click(function () {
                 if ($(this).parent().next().attr('attr2') == 'yes') {
                     $(this).parent().next().css("display", "none");
-                    $(this).parent().next().attr('attr2','no');
+                    $(this).parent().next().attr('attr2', 'no');
                 }
                 else {
                     $(this).parent().next().css("display", "block");
-                     $(this).parent().next().attr('attr2','yes');
+                    $(this).parent().next().attr('attr2', 'yes');
                 }
 
             });
@@ -191,13 +212,13 @@
         {% comment %}角色授权的二级菜单的点击事件{% endcomment %}
         <script type="text/javascript">
             $(".second_title2").click(function () {
-                 if ($(this).parent().next().attr('attr2') == 'yes') {
+                if ($(this).parent().next().attr('attr2') == 'yes') {
                     $(this).parent().next().css("display", "none");
-                    $(this).parent().next().attr('attr2','no');
+                    $(this).parent().next().attr('attr2', 'no');
                 }
                 else {
                     $(this).parent().next().css("display", "block");
-                     $(this).parent().next().attr('attr2','yes');
+                    $(this).parent().next().attr('attr2', 'yes');
                 }
             });
         </script>
@@ -208,12 +229,12 @@
         <script type="text/javascript">
             $(function () {
                 $('.select_all').click(function () {
-                    $(this).next().next().find(':checkbox').prop('checked',true);
+                    $(this).next().next().find(':checkbox').prop('checked', true);
                     {#$('input[type=checkbox]').prop('checked',true)#}
                 });
-                 $('.no_select_all').click(function () {
+                $('.no_select_all').click(function () {
                     {#$('input[type=checkbox]').prop('checked',false)#}
-                      $(this).next().find(':checkbox').prop('checked',false);
+                    $(this).next().find(':checkbox').prop('checked', false);
                 });
             })
         </script>
@@ -223,27 +244,26 @@
             $(function () {
                 $('.first_group2').click(function () {
                     var $check1 = $(this);
-                    var is_check=$check1[0].checked;
-                    if(is_check){
-                         $(this).next().next().find(':checkbox').prop('checked',true);
+                    var is_check = $check1[0].checked;
+                    if (is_check) {
+                        $(this).next().next().find(':checkbox').prop('checked', true);
                     }
-                    else{
-                         $(this).next().next().find(':checkbox').prop('checked',false);
+                    else {
+                        $(this).next().next().find(':checkbox').prop('checked', false);
                     }
                 });
                 $('.second_group2').click(function () {
                     var $check1 = $(this);
-                    var is_check=$check1[0].checked;
-                    if(is_check){
-                         $(this).next().next().find(':checkbox').prop('checked',true);
+                    var is_check = $check1[0].checked;
+                    if (is_check) {
+                        $(this).next().next().find(':checkbox').prop('checked', true);
                     }
-                    else{
-                         $(this).next().next().find(':checkbox').prop('checked',false);
+                    else {
+                        $(this).next().next().find(':checkbox').prop('checked', false);
                     }
                 });
             })
         </script>
-
 
 
         <!-- Modal -->
@@ -309,34 +329,34 @@
             </div>
         </div>
         <div class="modal fade" id="add_role" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal"
-                                                aria-label="Close"><span
-                                                aria-hidden="true">&times;</span></button>
-                                        <h4 class="modal-title" id="myModalLabel">添加角色信息</h4>
-                                    </div>
-                                    <form action="/permission/add_role/?role_group_id={{ role_group_id }}"
-                                          method="post">
-                                        {% csrf_token %}
-                                        <div class="modal-body">
-                                            <p>角色名<input type="text" name="role_title"></p>
-                                            角色组<select name="role_group_id">
-                                            {% for role_group in role_group_list %}
-                                                <option value="{{ role_group.id }}">{{ role_group.title }}</option>
-                                            {% endfor %}
-                                        </select>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭
-                                            </button>
-                                            <button type="submit" class="btn btn-primary">保存</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">添加角色信息</h4>
+                    </div>
+                    <form action="/permission/add_role/?role_group_id={{ role_group_id }}"
+                          method="post">
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            <p>角色名<input type="text" name="role_title"></p>
+                            角色组<select name="role_group_id">
+                            {% for role_group in role_group_list %}
+                                <option value="{{ role_group.id }}">{{ role_group.title }}</option>
+                            {% endfor %}
+                        </select>
                         </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                            </button>
+                            <button type="submit" class="btn btn-primary">保存</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
     </div>
 {% endblock %}

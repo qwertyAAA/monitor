@@ -2,7 +2,7 @@
 {% block content %}
     <div class="container">
         <div class="row">
-            <div class=" col-md-8">
+            <div class="col-md-offset-2 col-md-8">
                 <a class="btn btn-success btn-lg pull-left" data-toggle="modal"
                    data-target="#add_classify">+添加分类</a>
                 <div class="modal fade" id="add_classify" tabindex="-1" role="dialog"
@@ -49,7 +49,7 @@
                                 {% csrf_token %}
                                 <div class="modal-body">
                                     <select name="choose_cla" class="form-control">
-                                        {% for classify in classify_list %}
+                                        {% for classify in request.user.classify_set.all %}
                                             <option value="{{ classify.id }}">{{ classify.title }}</option>
                                         {% endfor %}
                                     </select>
@@ -66,24 +66,28 @@
                 </div>
 
                 <br> <br> <br>
-                <form action="/spider/add_rule/" method="post" class="form-horizontal">
+                <div class="form-horizontal">
                     <div class="form-group">
                         <label for="search_1" class="control-label">
-                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-search" id="search_rule" aria-hidden="true"></span>
                         </label>
                         <div class="col-sm-11">
                             <input type="text" class="form-control" id="search_1" placeholder="搜索监测方案或文件夹">
                         </div>
                     </div>
-                </form>
-                <ul class="list-group">
-                    {% for classify in classify_list %}
+                </div>
+                <p>分类列表如下，点击方案查询舆情</p>
+                <ul class="list-group" id="rule_list">
+                    {% for classify in request.user.classify_set.all %}
                         <li class="list-group-item cla first_li col-md-11">
-                            <span style="font-size: large">{{ classify.title }}</span>
+                            <button type="button" class="btn btn-default " aria-label="Left Align">
+                              <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>
+                            </button>
+                            <span style="font-size: large;text-indent: 10px " name="cla_rule">{{ classify.title }}</span>
                         </li>
-                        <a class="btn btn-success col-md-1" style="margin: 2px auto;" data-toggle="modal"
-                           data-target="#delete">删除</a>
-                        <div class="modal fade" id="delete" tabindex="-1" role="dialog"
+                        <a class="btn btn-success btn-lg col-md-1" style="margin: 2px auto;" data-toggle="modal"
+                           data-target="#delete{{ forloop.counter }}">删除</a>
+                        <div class="modal fade" id="delete{{ forloop.counter }}" tabindex="-1" role="dialog"
                              aria-labelledby="myModalLabel">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
@@ -107,8 +111,39 @@
                         </div>
                         <ul class="list-group" style="display: none;" attr="no">
                             {% for rule in classify.rule_set.all %}
-                                <li class="list-group-item cla col-md-11">
-                                   <span style="text-align: center">{{ rule.title }}</span></li>
+                                <li class="list-group-item cla  col-md-offset-1 col-md-6">
+                                     <span class=" glyphicon glyphicon-minus" aria-hidden="true"></span>
+                                    <span style="text-align: center" name="cla_rule">{{ rule.title }}</span>
+                                </li>
+                                <a class="btn btn-success col-md-2" style="margin: 2px auto;"
+                                    href="/spider/yuqinglist/{{ rule.id }}/">舆情显示</a>
+                                 <a class="btn btn-success col-md-2" style="margin: 2px auto;"
+                                    href="/spider/edit_rule/{{ rule.id }}/">查看修改</a>
+                                 <a class="btn btn-success col-md-1" style="margin: 2px auto;" data-toggle="modal"
+                                   data-target="#delete2{{ rule.id }}">删除</a>
+                                <div class="modal fade" id="delete2{{ rule.id }}" tabindex="-1" role="dialog"
+                                     aria-labelledby="myModalLabel">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close"><span
+                                                        aria-hidden="true">&times;</span>
+                                                </button>
+                                                <h2>确认删除{{ rule.title }}么？</h2>
+                                            </div>
+                                            <form action="/spider/delete_rule/{{ rule.id }}/" method="post">
+                                                {% csrf_token %}
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                                                    </button>
+                                                    <button type="submit" class="btn btn-primary">确认</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
                             {% endfor %}
                         </ul>
                     {% endfor %}
@@ -120,12 +155,38 @@
     </div>
     <script>
         $(function () {
+            $('#search_rule').click(function () {
+                var sea_val=$('#search_1').val();
+                var li_list=document.getElementsByName('cla_rule');
+                for (var i = 0; i <li_list.length ; i++) {
+                    var jq_obj=$(li_list[i]);
+                    jq_obj.parent().css("color","black")
+                    if ( jq_obj.text().search(sea_val) != -1 && sea_val!=''){
+                        jq_obj.parent().css("color","red")
+                        jq_obj.parent().parent().css({'display':'block'})
+                    }
+                }
+            })
+        })
+    </script>
+    <script>
+        $(function () {
             $(".cla").mouseenter(function () {
                 $(this).css("background-color", "gray");
             });
             $(".cla").mouseleave(function () {
                 $(this).css("background-color", "white");
             });
+
+          {% comment %}  $(".first_li").mouseover(function () {
+                $(this).next().next().next().css('display', 'block');
+            });{% endcomment %}
+
+           {% comment %} $(".first_li").mouseout(function () {
+                $(this).next().next().next().css("display", "none");
+            });{% endcomment %}
+
+
             $(".first_li").click(function () {
                 if ($(this).next().next().next().attr('attr') == 'no') {
                     $(this).next().next().next().css('display', 'block')
@@ -134,9 +195,10 @@
                 else {
                     $(this).next().next().next().css("display", "none");
                     $(this).next().next().next().attr('attr', 'no');
-                }
-            });
+                }});
 
-        })
+
+        });
+
     </script>
 {% endblock %}

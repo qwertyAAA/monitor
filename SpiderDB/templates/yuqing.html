@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% for list in list_ke %}
+      {% for ar in list %}
+         <p>    {{ ar.title }}</p>
+       {% endfor %}
+
+        <br>
+    {% endfor %}
+
+
+{% endblock %}
