@@ -70,9 +70,10 @@ class TiebaPipeline(object):
             print(author_url)
             # 判断同一篇文章是否是一个作者写的,如果不是那么插入数据库
             if author_url == item["author_url"]:
-                if article_url.keywords != item['keyword']:
-                    article_url.keywords = article_url.keywords + ' ' + item['keyword']
-                    self.session.commit()
+                pass
+                # if article_url.keywords != item['keyword']:
+                #     article_url.keywords = article_url.keywords + ' ' + item['keyword']
+                #     self.session.commit()
             else:
                 article_source = self.session.query(Source).filter(Source.source == item['article_from']).first()
                 if not article_source:
