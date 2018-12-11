@@ -128,6 +128,8 @@ class WeiboSpider(scrapy.Spider):
             article_detail = remove_tags(content.xpath("./div[@class='detail']/p[@class='txt']").extract_first(),
                                          keep="em").strip()
             article_url = card_wrap.xpath(".//div[@class='card-article-a']/h3/a/@href").extract_first()
+            if not article_url:
+                article_url = "#"
             create_info = content.xpath(".//div[@class='act']")
             create_time = get_time(create_info.xpath(".//div[1]/span[2]/text()").extract_first())
             shares = get_count(create_info.xpath(".//li[1]/a/text()").extract_first())
