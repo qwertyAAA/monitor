@@ -9,13 +9,35 @@ import datetime
 from w3lib.html import remove_tags
 import redis
 key=redis.Redis(host="10.25.116.62",port=6379,max_connections=1000)
-keywords = key.get('newkeywords1').decode()
+try:
+    keywords = [key.get('newkeywords1').decode()]
+except Exception:
+    keywords = []
+key_word_redislist=key.lrange('exists_keywords',0,-1)
+key_word_list=[]
+key_list=[]
+for i in key_word_redislist:
+    if i.decode() == '':
+        continue
+    if i.decode().strip() not in key_word_list:
+        key_word_list.append(i.decode().strip())
+for i in key_word_list:
+    key_list+=i.split(' ')
+key_list=set(key_list)
+key_list=list(key_list)
+try:
+    key_list.remove('')
+except Exception:
+    print('无空字符串')
+
 class TiebaSpider(scrapy.Spider):
     name = 'tieba'
     allowed_domains = ['tieba.baidu.com']
     start_urls = ['http://tieba.baidu.com/']
-    # key_words = ['中国石油']
-    key_words = [keywords]
+    if len(keywords)>0:
+        key_words = keywords
+    else:
+        key_words =key_word_list
     page_url = []
     article_url = []
 
@@ -30,16 +52,6 @@ class TiebaSpider(scrapy.Spider):
 
     def parse(self, response):
         print('解析')
-        # print(response.text)
-        # self.page_url.append('http://tieba.baidu.com/f/search/res?isnew=1&kw=&qw=%B4%F3%C7%EC%D3%CD%CC%EF&rn=10&un=&only_thread=0&sm=1&sd=&ed=&pn=1')
-        # 通过获取尾页url来获取全部url
-        # end_href=brower.find_element_by_xpath('/html/body/div[4]/div/div[2]/div[5]/a[11]').get_attribute('href')
-        # num=end_href.rindex('=')
-        # end_page=end_href[num+1:]
-        # print(end_page)
-        # page_list = brower.find_elements_by_xpath('/html/body/div[4]/div/div[2]/div[5]/a')
-        # for i in range(1,int(end_page)+1):
-        #     yield Request(url=end_href[0:num+1]+str(i), callback=self.index)
         # 直接获取当前页面下的所有分页
         n = response.css('.pager-search')
         page_list = n.xpath('./a')
@@ -55,7 +67,8 @@ class TiebaSpider(scrapy.Spider):
 
     def storage(self, response):
         print('存储')
-        print(response.url)
+        # print(response.url)
+        print(response)
         list = response.css('.s_post')
         for i in list:
             try:
@@ -65,7 +78,9 @@ class TiebaSpider(scrapy.Spider):
             # 判断内容不是一个回复且不是一个贴吧名字
             if article_title[0:2] != '回复' and not i.xpath('.//p'):
                 article_url = 'http://tieba.baidu.com' + i.xpath('.//span/a/@href').extract_first()
-                article_detail = i.xpath('.//div/text()').extract_first()
+                article_detail = remove_tags(i.css('.p_content').extract_first(),which_ones=('div',))
+                if not article_detail:
+                    article_detail='无文章简介'
                 author = i.xpath('.//a[2]/font/text()').extract_first()
                 if not author:
                     author = '无作者'
@@ -76,6 +91,9 @@ class TiebaSpider(scrapy.Spider):
                 article_type = m[2]
                 content = m[0]
                 affected_count = m[1]
+                # print(response.text)
+                keyword=response.css('.tb_header_search_input').xpath('./@value').extract_first()
+                print(keyword)
                 yield TiebaItems(
                     author=author,
                     author_url=author_url,
@@ -87,7 +105,7 @@ class TiebaSpider(scrapy.Spider):
                     article_from='百度贴吧',
                     affected_count=affected_count,
                     article_type=article_type,
-                    keyword=self.key_words[0]
+                    keyword=keyword,
                 )
 
     # 获取文章详情和影响人数,文章类型
@@ -95,7 +113,10 @@ class TiebaSpider(scrapy.Spider):
         response = requests.get(url=url)
         html = response.text
         soup = BeautifulSoup(html, 'lxml')
-        content = soup.find_all(attrs={'class': 'd_post_content'})[0]
+        try:
+            content = soup.find_all(attrs={'class': 'd_post_content'})[0]
+        except Exception:
+            content = '文章为空'
         if soup.find_all('title')[0].text[0:4] == '【图片】':
             article_type = 'img'
         elif soup.find_all('title')[0].text[0:4] == '【视频】':

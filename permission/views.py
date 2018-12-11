@@ -163,7 +163,10 @@ def add_role(request):
     role_group_id_old= request.GET.get('role_group_id')
     role_title = request.POST.get('role_title')
     role_group_id = request.POST.get('role_group_id')
-    models.Role.objects.create(title=role_title,group_id=role_group_id)
+    role_group_obj=models.RoleGroup.objects.get(id=role_group_id)
+    perlist=role_group_obj.permissions.all()
+    new_role_obj=models.Role.objects.create(title=role_title,group_id=role_group_id)
+    new_role_obj.permissions.add(*perlist)
     return redirect('/permission/role_permission/' + role_group_id_old + '/')
 
 

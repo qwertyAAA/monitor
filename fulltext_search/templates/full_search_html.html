@@ -1,18 +1,64 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<form action="/search/full_search/" method="post">
-    {% csrf_token %}
-        <input name="keywords">
-        <button type="submit">提交</button>
-</form>
+{% extends 'base.html' %}
+{% block content %}
+        <style type="text/css">
+        em{
+            color: red;
+        }
+    </style>
+    <div class="row">
+        <div class="col-lg-6 col-lg-offset-3">
+            <form action="/search/full_search/" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    {#                    <label for="inputPassword2" class="col-sm-3 control-label" style="font-size: large">全网搜索:</label>#}
+                    <div class="col-lg-9" id="keywords">
+                        <input type="text" id="keywords" class="form-control" name="keywords"
+                               placeholder="请输入关键词" style="">
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <button class="btn btn-primary" type="submit">提交</button>
+                </div>
 
-    {% for i in result %}
-        {{ i.title }}
-    {% endfor %}
-</body>
-</html>
+            </form>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 50px">
+        <div class="panel panel-default">
+            <div class="panel-body" style="text-align: center">
+                <strong style="font-size: large">文章详情</strong>
+            </div>
+            <div class="panel-footer">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>文章标题</th>
+                        <th>文章简介</th>
+                        <th>文章作者</th>
+                        <th>创建时间</th>
+                        <th>文章来源</th>
+                        <th>原文链接</th>
+                        <th>是否敏感</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in result %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ i.title | safe }}</td>
+                        <td>{{ i.detail | safe }}</td>
+                        <td>{{ i.author.author }}</td>
+                        <td>{{ i.create_time }}</td>
+                        <td>{{ i.source.source }}</td>
+                        <td><a href="{{ i.url }}">原文链接</a></td>
+                        <td>{{ i.status }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
