@@ -4,8 +4,8 @@
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-# from .spidersORM import DBSession, Author, Article, Source
 from .spidersORM import DBSession, Article, Author, Source
+
 
 class WeiboPipeline(object):
     def __init__(self):
@@ -59,11 +59,14 @@ class TiebaPipeline(object):
         self.session = DBSession()
 
     def process_item(self, item, spider):
-        # print('DB write')
         article_url = self.session.query(Article).filter(Article.url == item['article_url']).first()
         if not article_url:
+            article_source = self.session.query(Source).filter(Source.source == item['article_from']).first()
+            if not article_source:
+                article_source = Source(source=item['article_from'])
+                self.session.add(article_source)
+                self.session.commit()
             author = self.session.query(Author).filter(Author.author_url == item['author_url']).first()
-            source = self.session.query(Source).filter(Source.source == '百度贴吧').first()
             if not author:
                 print('DB write')
                 author = Author(author=item["author"], author_url=item["author_url"])
@@ -79,10 +82,10 @@ class TiebaPipeline(object):
                 create_time=item["article_create_time"],
                 # 此处的状态（是否危险）如何判断?
                 status=0,
-                source_id=source.id,
+                source_id=article_source.id,
                 affected_count=item["affected_count"],
-                keywords='',
-                article_type=item['article_type']
+                keywords=item['keyword'],
+                article_type=item['article_type'],
             )
             self.session.add(article)
             self.session.commit()

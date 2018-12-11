@@ -28,6 +28,7 @@ from permission import urls as permission_urls
 from organization import urls as organization_urls
 from report import urls as report_urls
 from SpiderDB import  urls as spider_urls
+from fulltext_search import urls as search_urls
 
 urlpatterns = [
     url(r'^xadmin/', site.urls),
@@ -47,6 +48,7 @@ urlpatterns = [
     url(r'^pictures/', include(mail_urls)),
     url(r'^fuzzy_query/', mali_vi.fuzzy_query),
     url(r'^fuzzy_query1/', mali_vi.fuzzy_query1),
+    url(r'^search/',include(search_urls)),
     url(r'del_all/', mali_vi.del_all),
     # media的相关的路由设置
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
