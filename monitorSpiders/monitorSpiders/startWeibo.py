@@ -4,10 +4,6 @@ import redis
 
 
 class Starter(object):
-
-    def __init__(self):
-        self.keywords = []
-
     @staticmethod
     def start_weibo():
         os.chdir("C:\\Users\\40829\\PycharmProjects\\monitor\\monitorSpiders\\monitorSpiders")

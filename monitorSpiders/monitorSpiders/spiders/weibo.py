@@ -75,7 +75,7 @@ def handle_article_content(prev_content):
         for video in videos:
             videos_html += "<video controls><source src='{}'></video>".format(video.xpath("./@src").extract_first())
 
-    detail = "<div class='content'>" + p_html + imgs_html + videos_html + "</div>"
+    content = "<div class='content'>" + p_html + imgs_html + videos_html + "</div>"
     return content, article_type
 
 
