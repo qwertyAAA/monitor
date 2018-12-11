@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <link href="/static/mail/spider_message/message_header.css" rel="stylesheet">
+    <link href="/static/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <div>
+        <span>******</span>
+        <a href="#" style="margin-left: 900px">标准视图</a> | <a href="#">精简视图</a>
+    </div>
+    <div class="message_header">
+        信息列表
+    </div>
+    <div class="span_header">
+        <div class="time_size">
+            <span>时间范围:</span>
+            <span role="button" class="spans">今日</span>
+            <span role="button" class="spans">24小时</span>
+            <span role="button" class="spans">2天</span>
+            <span role="button" class="spans">3天</span>
+            <span role="button" class="spans">7天</span>
+            <span role="button" class="spans">10天</span>
+            <span role="button" class="spans">自定义</span>
+        </div>
+        <div class="article_ranking">
+            <span>文章排序:</span>
+            <span role="button" class="spans">智能排序</span>
+            <span role="button" class="spans">时间降序</span>
+            <span role="button" class="spans">时间升序</span>
+            <span role="button" class="spans">相似文章</span>
+            <span role="button" class="spans">采集顺序</span>
+            <span class="span_right">敏感属性:
+                <span role="button" class="spans">全部</span>
+                <span role="button" class="spans">非敏感</span>
+                <span role="button" class="spans">敏感</span>
+            </span>
+        </div>
+        <div class="results_show">
+            <span>结果程序:</span>
+            <span role="button" class="spans">正常显示</span>
+            <span role="button" class="spans">精准信息</span>
+            <span role="button" class="spans">疑似垃圾</span>
+            <span class="span_right">相似文章:
+                <span role="button" class="spans">不合并</span>
+                <span role="button" class="spans">合并</span>
+            </span>
+        </div>
+        <div class="micro_blog">
+            <span>转发微博:</span>
+            <span role="button" class="spans">显示</span>
+            <span role="button" class="spans">不显示</span>
+            <span class="span_right">涉及方式:
+                <span role="button" class="spans">全部</span>
+                <span role="button" class="spans">内容涉及</span>
+                <span role="button" class="spans">定位涉及</span>
+            </span>
+        </div>
+        <div class="region">
+            <span>信源区域:</span>
+            <span role="button" class="spans">*全部*</span>
+            <span role="button" class="spans">省内</span>
+            <span role="button" class="spans">省外</span>
+            <span class="span_right">匹配方式:
+                <span role="button" class="spans">按全文</span>
+                <span role="button" class="spans">按标题</span>
+                <span role="button" class="spans">按正文</span>
+            </span>
+        </div>
+        <div class="blog_content">
+            <span>微博内容:</span>
+            <span role="button" class="spans">全部</span>
+            <span role="button" class="spans">按文本</span>
+            <span role="button" class="spans">按图文</span>
+            <span role="button" class="spans">按视频</span>
+            <span role="button" class="spans">按短链</span>
+        </div>
+        <div class="source_website">
+            <span>来源网站:</span>
+            <span role="button" class="spans">全部</span>
+            <span role="button" class="spans">贴吧</span>
+            <span role="button" class="spans">定向信源</span>
+            <span role="button" class="spans"><i class="fa-edit-pen"
+                                                 style="cursor: pointer;font-size: 16px;"></i></span>
+        </div>
+    </div>
+    <div class="source_message">
+        <span>来源信息<span>(多选)</span>:</span>
+        <span role="button" class="spans">全部()</span>
+        <span role="button" class="spans">微信()</span>
+        <span role="button" class="spans">网站()</span>
+        <span role="button" class="spans">客户端()</span>
+        <span role="button" class="spans">论坛()</span>
+    </div>
+    <div class="btn_submit">
+        <button type="button" class="btn btn-default btn_query">查询</button>
+        <button type="button" class="btn btn-default btn_keep">保存</button>
+        <span role="button" class="spans">基础筛选</span>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="panel panel-default">
+                <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                    <tr class="color_tr">
+                        <td></td>
+                        <td class="style_title"><span>标题</span></td>
+                        <td><span>相似文章数</span></td>
+                        <td><span>来源</span></td>
+                        <td><span>时间</span></td>
+                    </tr>
+                    <tr>
+                        <td style="line-height: 40px"><input type="checkbox"></td>
+                        <td>批量操作:
+                            <button type="button" class="btn mini tooltips tooltipsR " data-placement="bottom"
+                                    data-original-title="加入收藏夹">
+                                <i class="fa fa-heart" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" class="btn mini tooltips tooltipsR " data-placement="bottom"
+                                    data-original-title="加入简报素材">
+                                <i class="fa fa-tags" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" class="btn mini tooltips tooltipsR " data-placement="bottom"
+                                    data-original-title="转发舆情">
+                                <i class="fa fa-share-square-o" aria-hidden="true"></i>
+                                <i class="fa fa-angle-down" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" class="btn mini tooltips tooltipsR " data-placement="bottom"
+                                    data-original-title="删除">
+                                <i class="fa fa-trash-o fa-lg"></i>
+                            </button>
+                            <button type="button" class="btn mini tooltips tooltipsR " data-placement="bottom"
+                                    data-original-title="标已读">
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" class="btn mini tooltips tooltipsR " data-placement="bottom"
+                                    data-original-title="导出">
+                                <i class="fa fa-sign-out" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" class="btn mini tooltips tooltipsR " data-placement="bottom"
+                                    data-original-title="全选信息加入简报素材(最多1000条)">
+                                <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                            </button>
+                            <div class="query_text">
+                                <input type="text" class="form-control" placeholder="在搜索结果中显示，支持单个字符"
+                                       style="width: 250px">
+                                <button type="button" class="btn btn-default">搜索</button>
+                            </div>
+                        </td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="input_checkbox line_height"><input type="checkbox"></td>
+                        <td>
+                            <div>
+                                <img src="/media/avatars/百度.jpg" class="img-circle" style="width:50px;height: 50px;">
+                                <a href="#"><span>[长春求职吧]:沈阳东软睿道教育服务有限公司</span></a><br>
+                                <span>摘要:1楼，沈阳东软睿道教育服务有限公司有谁知道吗 那么爱我为啥 10:35</span><br>
+                                <span>涉及词:东软睿道</span><br>
+                                <span>信源区域：北京</span><span>行业： 其他  招生招聘 </span>
+                            </div>
+                        </td>
+                        <td class="line_height"><span>1</span></td>
+                        <td class="line_height"><span>百度贴吧</span></td>
+                        <td class="line_height"><span>11月30日 10:34</span></td>
+                    </tr>
+                    <tr>
+                        <td class="input_checkbox"><input type="checkbox"></td>
+                        <td><span>标题</span></td>
+                        <td><span>标题</span></td>
+                        <td><span>标题</span></td>
+                        <td><span>标题</span></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

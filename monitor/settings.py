@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'menu_management',
     'SpiderDB',
     'fulltext_search'
+    'report',
 ]
 
 MIDDLEWARE = [

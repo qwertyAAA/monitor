@@ -8,7 +8,7 @@
     animation: myfirst 5s;
     -webkit-animation: myfirst 5s;
     position: fixed;
-    left: 1300px;
+    left: 85%;
     top: 550px;
 }
 
@@ -26,12 +26,12 @@
 /*消息框动画效果*/
 @-webkit-keyframes myfirst {
     0% {
-        left: 1300px;
+        left: 85%;
         top: 670px;
         opacity: 0;
     }
     100% {
-        left: 1300px;
+        left: 85%;
         top: 550px;
         opacity: 1;
     }
