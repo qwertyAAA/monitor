@@ -11,7 +11,7 @@
     <link href="/static/assets/css/bootstrap.css" rel="stylesheet"/>
     <link href="/static/css/bootstrap.min.css" rel="stylesheet"/>
     <!-- FontAwesome Styles-->
-    <link href="/static/assets/css/font-awesome.css" rel="stylesheet"/>
+    <link href="/static/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet"/>
     <!-- Morris Chart Styles-->
     <link href="/static/assets/js/morris/morris-0.4.3.min.css" rel="stylesheet"/>
     <!-- Custom Styles-->
@@ -39,10 +39,65 @@
             <a class="navbar-brand" href="base.html"><i class="fa fa-gear"></i> <strong>舆情监控</strong></a>
         </div>
 
+
         <ul class="nav navbar-top-links navbar-right">
+            <!-- 系统设置start-->
+            <div class="btn-group">
+                <span type="button" class="glyphicon glyphicon-cog" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false" style="color: white">
+
+                    <a href="#" style="color: white"> 舆情设置</a> <span class="caret"></span>
+                </span>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="/user_management/System_setup/" class="glyphicon glyphicon-bell">预警设置</a>
+                        <ul>
+                            <li class="glyphicon glyphicon-eye-open"><a href="/user_management/System_setup/">查看预警信息</a></li>
+                            <li class="glyphicon glyphicon-search"><a href="/user_management/serach_emotion/">预警信息查找</a></li>
+                            <li class="glyphicon glyphicon-pencil"><a href="/user_management/add_emotion/">预警信息添加</a></li>
+
+
+                        </ul>
+
+
+                    </li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="/user_management/mails/" class="glyphicon glyphicon-phone">通讯录管理</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="/user_management/problem_feedback/" class="glyphicon glyphicon-edit">精准问题反馈</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#" class="glyphicon glyphicon-zoom-in">新增抓取</a></li>
+                    <li role="separator" class="divider"></li>
+
+                    <li><a href="#" class="glyphicon glyphicon-wrench">偏好设置</a></li>
+
+
+                    <li>
+                        <a href="#"></a>
+                        <ul>
+                            <li class="glyphicon glyphicon-trash"><a href="/user_management/System_setup/">删除方案</a></li>
+
+
+                        </ul>
+                    </li>
+
+
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#" class="glyphicon glyphicon-sound-dolby">日志</a></li>
+                    <li>
+                        <a href="#"></a>
+                        <ul>
+
+                            <li><a href="#">日志查看</a></li>
+
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!-- 系统设置end-->
             <li>
                 <a href="/xadmin/">
-                    <i class="fa fa-cogs"></i>
+                    <i class="fa fa-user-secret"></i>
                     <span>管理员入口</span>
                 </a>
             </li>
@@ -62,7 +117,7 @@
                         <a href="/fhsms/form_mail/">
                             <div class="text-center">
                                 <span>收件箱 </span>
-                                <span> 未读 {{ sum_email}}</span>
+                                <span> 未读 {{ sum_email }}</span>
                             </div>
                         </a>
                     </li>
