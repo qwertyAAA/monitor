@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block content %}
+    <script src="/static/organization/jquery-3.3.1.min.js"></script>
+    <div class="container-fluid">
+        <div class="col-sm-1">
+            <ul class="nav nav-pills nav-stacked">
+                <li><a href="/report/index/">列表</a>&nbsp;&nbsp;</li>
+                <li><a href="/report/sucai/">素材</a>&nbsp;&nbsp;</li>
+                <li><a href="/report/collection/">收藏</a>&nbsp;&nbsp;</li>
+                <li class="active"><a href="/report/mould/">模板</a>&nbsp;&nbsp;</li>
+            </ul>
+
+
+        </div>
+        <div class="col-sm-10">
+            <nav class="navbar">
+                <div class="container-fluid">
+                    <form class="navbar-form navbar-left" method="post" action="/report/search/" role="search">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="title">标题</label>
+                            <input id="title" type="text" name="report_name" class="form-control" placeholder="请输入简报标题">
+                            <label for="start_time">开始</label>
+                            <input id="start_time" type="date" name="start_time" class="form-control">
+                            <label for="end_time">结束</label>
+                            <input id="end_time" type="date" name="end_time" class="form-control">
+                        </div>
+                        <button type="submit" class="btn btn-primary">查询</button>
+                    </form>
+                </div>
+            </nav>
+            <table class="table table-bordered">
+                <thead>
+                <tr class="danger">
+                    <td>简报名称</td>
+                    <td>生成日期</td>
+                    <td>操作</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="col-sm-4">
+                        经典简报<br>
+                        简报模板：<a>经典版</a>
+                    </td>
+                    <td class="col-sm-4">发布时间：2018/12/06 15:32</td>
+                    <td class="col-sm-4">
+                        <button class="CreateReport btn btn-sm btn-default" ReportType="docx">Doc</button>
+                        <button class="CreateReport btn btn-sm btn-default" ReportType="pdf">PDF</button>
+                        <a class="btn btn-sm btn-default">删除</a>
+                        <a class="btn btn-sm btn-default">修改</a>
+                        <a class="btn btn-sm btn-default">提取</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+{% endblock %}

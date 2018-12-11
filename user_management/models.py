@@ -18,7 +18,7 @@ class UserInfo(models.Model):
     user_remarks = models.CharField(max_length=255, null=True, verbose_name="备注")
     user_recent_ip = models.CharField(max_length=16, verbose_name="最近的ip")
     user_id_card = models.CharField(max_length=20, unique=True, verbose_name="身份证号")
-    user_image = models.ImageField(upload_to="image", default="image/default.jpg", verbose_name="头像")
+    user_image = models.ImageField(upload_to="avatars/", default="avatars/default.jpg", verbose_name="头像")
     user = models.OneToOneField(to=User)
 
 

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block content %}
+    <script src="/static/organization/jquery-3.3.1.min.js"></script>
+    <style type="text/css">
+        .ebtn{
+            float: right;
+            margin-right: 10px;
+        }
+    </style>
+    <div class="container-fluid">
+        <div class="col-sm-1">
+            <ul class="nav nav-pills nav-stacked">
+                <li><a href="/report/index/">列表</a>&nbsp;&nbsp;</li>
+                <li class="active"><a href="/report/sucai/">素材</a>&nbsp;&nbsp;</li>
+                <li><a href="/report/collection/">收藏</a>&nbsp;&nbsp;</li>
+                <li><a href="/report/mould/">模板</a>&nbsp;&nbsp;</li>
+            </ul>
+
+
+        </div>
+        <div class="col-sm-11">
+            <table class="table table-bordered">
+                <thead>
+                <tr class="warning">
+                    <td><input type="checkbox">
+                        <a class="btn btn-warning">删除选中</a>
+                        &nbsp;&nbsp;&nbsp;
+                        <a class="btn btn-warning">清空素材</a>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        已加入条数：<h3 style="display: inline-block; color: orange">2条</h3>
+                        <a href="" class="btn btn-warning" style="float: right; margin-top: 10px">生成简报</a>
+                    </td>
+                </tr>
+                </thead>
+                <tbody>
+                {% for i in obj %}
+                    <tr>
+                        <td><input type="checkbox">
+                            <a href="{{ i.article.url }}" target="_blank">{{ i.article.title }}</a>
+                            <button class="btn btn-warning ebtn">删除</button>
+                            <button class="btn btn-warning ebtn">编辑</button><br>
+                            <ul style="list-style: none; font-size: small; color: grey;"><li>发布时间：{{ i.article.create_time }} &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: indianred">来源：{{ i.article.source.source }}</span></li></ul>
+                            {{ i.article.detail | safe }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

@@ -12,7 +12,7 @@ from Myutils.pageutil import Page
 
 def check_first_menu(request):
     menu_list = models.First_Menu.objects.all()
-    return render(request, 'first_menu_manage.html', {'menu_list': menu_list,})
+    return render(request, 'first_menu_manage.html', {'menu_list': menu_list})
 
 
 def check_second_menu(request, id):
@@ -22,10 +22,8 @@ def check_second_menu(request, id):
 
 def add_first_menu(request):
     if request.is_ajax():
-        print('一级菜单')
         menu_title=request.GET.get('menu_name')
         menu = models.First_Menu.objects.filter(title=menu_title).first()
-        print('menu',menu)
         rep = {}
         rep['span'] = '1'
         if menu:
@@ -46,7 +44,7 @@ def add_first_menu(request):
             status = True
         else:
             status = False
-        new_menu = models.First_Menu.objects.create(title=menu_title, status=status)
+        new_menu = models.First_Menu.objects.create(title=menu_title, status=status,action=menu_title)
         return redirect('/menu/check/first/')
 
 
@@ -56,7 +54,6 @@ def edit_first_menu(request,id):
         menu = models.First_Menu.objects.filter(title=menu_title).first()
         menu_id=request.GET.get('menu_id')
         flag = models.First_Menu.objects.get(nid=menu_id)
-        # print('menu',menu)
         rep = {}
         if menu:
             #排除用户点击输入框却没有进行修改时,也会出现警告的BUG
@@ -75,7 +72,6 @@ def edit_first_menu(request,id):
         menu_id = id
         menu_name = request.POST.get('menu_name')
         menu_status = request.POST.get('menu_status')
-        print(menu_status)
         menu = models.First_Menu.objects.filter(nid=menu_id).first()
         permissiongroup = per_models.PermissionGroup.objects.filter(title=menu.title)[0]
         permission = per_models.Permission.objects.filter(title=menu.title)[0]
@@ -91,7 +87,6 @@ def edit_first_menu(request,id):
             menu.status = False
         menu.save()
         permissiongroup.save()
-        print(permission)
         permission.save()
         return redirect('/menu/check/first/')
 
@@ -101,13 +96,9 @@ def add_second_menu(request):
     if request.is_ajax():
         menu_title=request.GET.get('menu_name')
         menu_path=request.GET.get('menu_path')
-        # print('menu_title',menu_title)
-        # print('menu_path',menu_path)
         menu_p=models.Second_Menu.objects.filter(url=menu_path).first()
         menu = models.Second_Menu.objects.filter(title=menu_title).first()
         permission = per_models.Permission.objects.filter(url=menu_path).first()
-        # print('menu',menu)
-        # print('menu_p',menu_p)
         rep = {}
         rep['span'] = '1'
         #判断是菜单名和路径是否已经存在
@@ -134,6 +125,7 @@ def add_second_menu(request):
         else:
             first_menu = models.First_Menu.objects.get(nid=first_menu_id)
             per_group = per_models.PermissionGroup.objects.get(title=first_menu.title)
+            per_models.PermissionGroup.objects.create(title=menu_title,action='second')
             per_models.Permission.objects.create(title=menu_title,url=menu_path,group_id=per_group.id,action='list_second')
         if menu_status == '1':
             status = True
@@ -141,7 +133,6 @@ def add_second_menu(request):
             status = False
         else:
             status = True
-        print(status)
         new_menu = models.Second_Menu.objects.create(title=menu_title, url=menu_path, first_menu_id=first_menu_id, status=status,action=menu_path)
         return redirect('/menu/check/second/%s/' % new_menu.first_menu_id)
 
@@ -153,9 +144,7 @@ def edit_second_menu(request, id):
         menu_path = request.GET.get('menu_path')
         menu = models.Second_Menu.objects.filter(title=menu_title).first()
         menu_p=models.Second_Menu.objects.filter(url=menu_path).first()
-        # print('menu_id',menu_id)
         flag = models.Second_Menu.objects.get(nid=menu_id)
-        # print('menu',menu)
         rep = {}
         if menu:
             #排除用户点击输入框却没有进行修改时,也会出现警告的BUG
@@ -211,7 +200,6 @@ def del_first_menu(request, id):
 
 def del_second_menu(request, id):
     del_id = id
-    print(del_id)
     del_menu = models.Second_Menu.objects.get(nid=del_id)
     del_per=per_models.Permission.objects.get(url=del_menu.action)
     del_per.is_del = True

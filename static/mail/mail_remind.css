@@ -8,8 +8,8 @@
     animation: myfirst 5s;
     -webkit-animation: myfirst 5s;
     position: fixed;
-    right: 0%;
-    bottom: 0%;
+    left: 85%;
+    top: 550px;
 }
 
 .remind_header {
@@ -26,13 +26,13 @@
 /*消息框动画效果*/
 @-webkit-keyframes myfirst {
     0% {
-        right: 0px;
-        bottom: 0px;
+        left: 85%;
+        top: 670px;
         opacity: 0;
     }
     100% {
-        right: 0%;
-        bottom: 0%;
+        left: 85%;
+        top: 550px;
         opacity: 1;
     }
 }
