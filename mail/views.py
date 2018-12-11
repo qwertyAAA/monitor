@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.http import JsonResponse
 from .models import *
-
+from SpiderDB.models import *
+import time
 import os
 from django.db.models import Q
+from django.core import serializers
 import json
 from mail import models
 from django.contrib.auth.models import User
@@ -40,7 +42,6 @@ def del_all(request):
     if request.method == 'POST':
         val_obj = request.POST.getlist("check_val")
         url = request.POST.get("url")
-        print(val_obj)
         if url == '/fhsms/':
             for i in val_obj:
                 del_obj = models.Fhsms.objects.filter(id=i)
@@ -143,6 +144,7 @@ def fuzzy_query(request):
         action_time = request.POST.get('action_time')
         end_time = request.POST.get('end_time')
         select_id = request.POST.get('select_id')
+        print(search)
         print(select_id)
         count = 0
         q = Q()
@@ -275,7 +277,7 @@ def fhsms(request):
         from_user = request.POST.getlist("from_user")
         status_id = request.POST.get("status_id")  # 默认未读
         user_id = User.objects.filter(email=from_user[0]).values('id').first()
-        print(user_id['id'])
+        print(status_id)
         if from_user:
             Fhsms.objects.create(title=title, content=content, to_user=settings.EMAIL_FROM,
                                  status_id_id=status_id, from_user_id=user_id['id'])
@@ -285,7 +287,157 @@ def fhsms(request):
     return render(request, 'mail_pictures/fhsms.html',
                   {'mail_list': sum[0], 'page_html': sum[1], 'status_list': status_list})
 
+
+# ************************************************************8
+# 舆情信息展示
+
+
 # https://mail.163.com/
 def spider_message(request):
+    message_list = Article.objects.all()
+    material = Material.objects.all()
+    page = Page(message_list, request, 10, 10)
+    sum = page.Sum()
+    # keywords = Material.objects.filter(id=material[0].id).values('keywords')
+    return render(request, 'mail_pictures/Spider_message/spider_message.html',
+                  {'message_list': sum[0], 'page_html': sum[1], 'material': material})
+
+
+# 舆情条件查询
+def submit_query(request):
+    # 获取当前时间戳
+    new_time = int(time.time())
+    message_list = []
+    if request.is_ajax():
+        arr_click = request.POST.getlist("arr_click")
+        time_size = arr_click[0]            # 时间范围
+        article_ranking = arr_click[1]      # 文章排序
+        attribute_right = arr_click[2]      # 敏感信息
+        results_show = arr_click[3]         # 结果呈现
+        merge_right = arr_click[4]          # 相似文章
+        micro_blog = arr_click[5]           # 转发微博
+        involve_right = arr_click[6]        # 涉及方式
+        region = arr_click[7]               # 信源区域
+        matching_right = arr_click[8]       # 匹配方式
+        blog_content = arr_click[9]         # 微博内容
+        source_website = arr_click[10]      # 来源网站
+        # source_message = arr_click[11]    # 来源信息
+        # fields = []
+        # for field in Article._meta.fields:
+        #     fields.append(field.name)
+        if time_size == "今日" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "全部":
+            message_list = serializers.serialize("json", Article.objects.order_by("title"))
+
+            # message = {}
+            # for item in Article.objects.order_by("title"):
+            #     for field in fields:
+            #         message[field] = getattr(item, field)
+            #     print(message)
+            #     message_list.append(message)
+        # elif time_size == "今日" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "全部":
+        #     message_list["message"] = Article.objects.order_by("-create_time")
+        # elif time_size == "今日" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "全部":
+        #     message_list["message"] = Article.objects.order_by("create_time")
+        # elif time_size == "今日" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "全部":
+        #     message_list["message"] = Article.objects.order_by("id")
+        # elif time_size == "今日" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "贴吧":
+        #     message_list["message"] = Article.objects.filter(socure_id='2').order_by("title")
+        # elif time_size == "今日" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "贴吧":
+        #     message_list["message"] = Article.objects.filter(socure_id='2').order_by("-create_time")
+        # elif time_size == "今日" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "贴吧":
+        #     message_list["message"] = Article.objects.filter(socure_id='2').order_by("create_time")
+        # elif time_size == "今日" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "贴吧":
+        #     message_list["message"] = Article.objects.filter(socure_id='2').order_by("id")
+        # elif time_size == "今日" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "微博":
+        #     message_list["message"] = Article.objects.filter(socure_id='1').order_by("title")
+        # elif time_size == "今日" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "微博":
+        #     message_list["message"] = Article.objects.filter(socure_id='1').order_by("-create_time")
+        # elif time_size == "今日" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "微博":
+        #     message_list["message"] = Article.objects.filter(socure_id='1').order_by("create_time")
+        # elif time_size == "今日" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "微博":
+        #     message_list["message"] = Article.objects.filter(socure_id='1').order_by("id")
+    return JsonResponse(message_list, safe=False)
+
+
+# 加入收藏
+def add_heart(request):
+    user_id = request.user.id
+    if request.is_ajax():
+        message_id = request.POST.get("message_id")
+        CollectionArticle.objects.create(article_id=message_id, user_id=user_id)
+    return HttpResponse("OK")
+
+
+# 加入简报
+def add_tags(request):
+    user_id = request.user.id
+    if request.is_ajax():
+        message_id = request.POST.get("message_id")
+        Material.objects.create(article_id=message_id, user_id=user_id)
+    return HttpResponse("ok")
+
+
+# 标为已读
+def see_eye(request):
+    if request.is_ajax():
+        message_id = request.POST.get('message_id')
+        Article.objects.filter(id=message_id).update(already_read=True)
+    return HttpResponse("OK")
+
+
+# 单个删除舆情信息
+def del_one(request):
+    if request.is_ajax():
+        message_id = request.POST.get('message_id')
+        del_obj = Article.objects.filter(id=message_id).first()
+        del_obj.delete()
+    return HttpResponse("OK")
+
+
+# 批量删除
+def spider_del_all(request):
+    if request.method == 'POST':
+        val_obj = request.POST.getlist("check_val")
+        print(type(val_obj))
+        for i in val_obj:
+            print(1)
+            del_obj = Article.objects.filter(id=i).first()
+            print(del_obj)
+            del_obj.delete()
     return render(request, 'mail_pictures/Spider_message/spider_message.html')
 
+
+# 批量加入收藏
+def spider_add_heart_all(request):
+    if request.is_ajax():
+        user_id = request.user.id
+        val_obj = request.POST.getlist("check_val")
+        for i in val_obj:
+            CollectionArticle.objects.create(article_id=i, user_id=user_id)
+    return HttpResponse("ok")
+
+
+# Article详情页
+def article_detail(request, title, num):
+    print(title)
+    print(num)
+    return HttpResponse('ok')
+
+
+# 批量标为已读
+def spider_change_see(request):
+    if request.is_ajax():
+        val_obj = request.POST.getlist("check_val")
+        for i in val_obj:
+            Article.objects.filter(id=i).update(already_read=True)
+    return HttpResponse("ok")
+
+
+# 批量加入简报素材
+def spider_add_tags_all(request):
+    if request.is_ajax():
+        user_id = request.user.id
+        val_obj = request.POST.getlist("check_val")
+        for i in val_obj:
+            Material.objects.create(article_id=i, user_id=user_id)
+    return HttpResponse("ok")
