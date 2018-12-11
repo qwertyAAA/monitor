@@ -615,6 +615,33 @@ def delete_mail(request, num=None):
     return JsonResponse({"status": False})
 
 
+
+def edit_mail(request,mail_id):
+    print('welcome new  world')
+    print(mail_id)
+    if request.method == 'POST':
+        mail_name = request.POST.get('mail_name')
+        mail_phone = request.POST.get('mail_phone')
+        mail_email = request.POST.get('mail_email')
+        mail_weixin_number = request.POST.get('weixin_number')
+        mail_remarks = request.POST.get('mail_remarks')
+        mail_company = request.POST.get('mail_company')
+        mailss = models.Mail_list.objects.filter(pk=mail_id)
+        print(mailss)
+        mailss.update(
+            mail_phone = mail_phone,
+            mail_name = mail_name,
+            mail_email = mail_email,
+            mail_weixin_number = mail_weixin_number,
+            mail_remarks = mail_remarks,
+            mail_company = mail_company
+
+        )
+        return redirect("/user_management/mails")
+
+    return render(request, "user_management_html/phone_management.html", locals())
+
+
 ''' 精准问题反馈表'''
 
 

@@ -43,6 +43,8 @@ urlpatterns = [
     url(r"^add_mail/$", views.add_mail),
     url(r"^delete_mail/(\d+)/$", views.delete_mail),
     url(r"^delete_mail/$", views.delete_mail),
+    url(r"^edit_mail/(\d+)/$", views.edit_mail),
+
 
     # 舆情问题反馈表
     url(r"^problem_feedback/$", views.problem_feedback),
