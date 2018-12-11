@@ -14,6 +14,7 @@ from monitor import settings
 from django.core.mail import send_mail
 from Myutils.pageutil import Page
 from django.core.files.uploadedfile import TemporaryUploadedFile
+from django.db.models import OneToOneField, ForeignKey, ManyToManyField
 
 
 # Create your views here.
@@ -303,30 +304,54 @@ def spider_message(request):
                   {'message_list': sum[0], 'page_html': sum[1], 'material': material})
 
 
+# 将qs的结果组装成一个字典
+def get_data_list(qs):
+    fields = []
+    for field in Article._meta.fields:
+        fields.append(field.name)
+    data_list = []
+    for item in qs:
+        data = {}
+        for field in fields:
+            if field == "author":
+                continue
+            if field == "source":
+                data["source"] = getattr(item, field).source
+                data["source_img"] = str(getattr(item, field).source_img)
+                continue
+            if field == "content":
+                continue
+            data[field] = getattr(item, field)
+        print(data["detail"] == "")
+        if data["detail"] == "":
+            continue
+        data_list.append(data)
+    return data_list
+
+
 # 舆情条件查询
 def submit_query(request):
     # 获取当前时间戳
     new_time = int(time.time())
-    message_list = []
     if request.is_ajax():
         arr_click = request.POST.getlist("arr_click")
-        time_size = arr_click[0]            # 时间范围
-        article_ranking = arr_click[1]      # 文章排序
-        attribute_right = arr_click[2]      # 敏感信息
-        results_show = arr_click[3]         # 结果呈现
-        merge_right = arr_click[4]          # 相似文章
-        micro_blog = arr_click[5]           # 转发微博
-        involve_right = arr_click[6]        # 涉及方式
-        region = arr_click[7]               # 信源区域
-        matching_right = arr_click[8]       # 匹配方式
-        blog_content = arr_click[9]         # 微博内容
-        source_website = arr_click[10]      # 来源网站
+        time_size = arr_click[0]  # 时间范围
+        article_ranking = arr_click[1]  # 文章排序
+        attribute_right = arr_click[2]  # 敏感信息
+        results_show = arr_click[3]  # 结果呈现
+        merge_right = arr_click[4]  # 相似文章
+        micro_blog = arr_click[5]  # 转发微博
+        involve_right = arr_click[6]  # 涉及方式
+        region = arr_click[7]  # 信源区域
+        matching_right = arr_click[8]  # 匹配方式
+        blog_content = arr_click[9]  # 微博内容
+        source_website = arr_click[10]  # 来源网站
         # source_message = arr_click[11]    # 来源信息
         # fields = []
         # for field in Article._meta.fields:
         #     fields.append(field.name)
         if time_size == "今日" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "全部":
-            message_list = serializers.serialize("json", Article.objects.order_by("title"))
+            message_list = get_data_list(Article.objects.order_by("title")[:100])
 
             # message = {}
             # for item in Article.objects.order_by("title"):
