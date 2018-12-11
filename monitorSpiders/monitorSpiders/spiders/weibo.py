@@ -91,12 +91,9 @@ class WeiboSpider(scrapy.Spider):
         keywords = []
         conn = redis.Redis(host="10.25.116.62", port="6379")
         keyword_list = conn.get("new_keywords") if conn.get("new_keywords") else conn.lrange("exists_keywords", 0, -1)
-        for li in keyword_list:
-            for item in li.decode().split(" "):
-                if item:
-                    keywords.append(item)
+        for keyword in keyword_list:
+                keywords.append(keyword.decode())
         for keyword in keywords:
-            print(keyword)
             for url in self.start_urls:
                 yield Request(url=url.format(keyword), callback=self.parse)
 
@@ -129,7 +126,7 @@ class WeiboSpider(scrapy.Spider):
                                         keep="em")
             article_content, article_type = handle_article_content(content)
             article_detail = remove_tags(content.xpath("./div[@class='detail']/p[@class='txt']").extract_first(),
-                                         keep="em")
+                                         keep="em").strip()
             article_url = card_wrap.xpath(".//div[@class='card-article-a']/h3/a/@href").extract_first()
             create_info = content.xpath(".//div[@class='act']")
             create_time = get_time(create_info.xpath(".//div[1]/span[2]/text()").extract_first())
@@ -163,7 +160,7 @@ class WeiboSpider(scrapy.Spider):
             article_title = re.sub(r"\s", "", remove_tags(
                 content.css(".txt").extract_first() if content.css(".txt").extract_first() else "", keep="em")).strip()
             article_content, article_type = handle_article_content(content)
-            article_detail = remove_tags(content.xpath("./p[@class='txt']").extract_first(), keep="em")
+            article_detail = remove_tags(content.xpath("./p[@class='txt']").extract_first(), keep="em").strip()
             create_info = content.xpath("./p[@class='from']")
             create_time = get_time(create_info.xpath("./a[1]/text()").extract_first())
             forwarding = get_count(card_wrap.xpath(".//div[@class='card-act']//li[2]/a/text()").extract_first())
