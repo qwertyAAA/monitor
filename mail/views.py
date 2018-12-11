@@ -322,7 +322,6 @@ def get_data_list(qs):
             if field == "content":
                 continue
             data[field] = getattr(item, field)
-        print(data["detail"] == "")
         if data["detail"] == "":
             continue
         data_list.append(data)
