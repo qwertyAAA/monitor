@@ -21,12 +21,13 @@ from xadmin.service.xadmin import x_admin_site as site
 from django.conf.urls import url, include
 from user_management import urls as user_management_url
 from mail import urls as mail_urls
+from mail import urls2 as spider_message
 from account.views import *
 from account import urls as account_urls
 from menu_management import urls as menu_urls
 from permission import urls as permission_urls
 from organization import urls as organization_urls
-from SpiderDB import  urls as spider_urls
+from SpiderDB import urls as spider_urls
 
 urlpatterns = [
     url(r'^xadmin/', site.urls),
@@ -43,6 +44,7 @@ urlpatterns = [
     url(r'^fhsms/', include(mail_urls)),
     url(r'^pictures/$', mali_vi.pictures),
     url(r'^pictures/', include(mail_urls)),
+    url(r'^index/', include(spider_message)),
     url(r'^fuzzy_query/', mali_vi.fuzzy_query),
     url(r'^fuzzy_query1/', mali_vi.fuzzy_query1),
     url(r'del_all/', mali_vi.del_all),
