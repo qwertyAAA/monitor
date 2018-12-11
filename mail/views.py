@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from .models import *
 from SpiderDB.models import *
 import time
+from django.db.models import F, Count
 import os
 from django.db.models import Q
 from django.core import serializers
@@ -310,17 +311,17 @@ def submit_query(request):
     message_list = []
     if request.is_ajax():
         arr_click = request.POST.getlist("arr_click")
-        time_size = arr_click[0]            # 时间范围
-        article_ranking = arr_click[1]      # 文章排序
-        attribute_right = arr_click[2]      # 敏感信息
-        results_show = arr_click[3]         # 结果呈现
-        merge_right = arr_click[4]          # 相似文章
-        micro_blog = arr_click[5]           # 转发微博
-        involve_right = arr_click[6]        # 涉及方式
-        region = arr_click[7]               # 信源区域
-        matching_right = arr_click[8]       # 匹配方式
-        blog_content = arr_click[9]         # 微博内容
-        source_website = arr_click[10]      # 来源网站
+        time_size = arr_click[0]  # 时间范围
+        article_ranking = arr_click[1]  # 文章排序
+        attribute_right = arr_click[2]  # 敏感信息
+        results_show = arr_click[3]  # 结果呈现
+        merge_right = arr_click[4]  # 相似文章
+        micro_blog = arr_click[5]  # 转发微博
+        involve_right = arr_click[6]  # 涉及方式
+        region = arr_click[7]  # 信源区域
+        matching_right = arr_click[8]  # 匹配方式
+        blog_content = arr_click[9]  # 微博内容
+        source_website = arr_click[10]  # 来源网站
         # source_message = arr_click[11]    # 来源信息
         # fields = []
         # for field in Article._meta.fields:
@@ -334,28 +335,28 @@ def submit_query(request):
             #         message[field] = getattr(item, field)
             #     print(message)
             #     message_list.append(message)
-        # elif time_size == "今日" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "全部":
-        #     message_list["message"] = Article.objects.order_by("-create_time")
-        # elif time_size == "今日" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "全部":
-        #     message_list["message"] = Article.objects.order_by("create_time")
-        # elif time_size == "今日" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "全部":
-        #     message_list["message"] = Article.objects.order_by("id")
+        elif time_size == "今日" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "全部":
+            message_list = serializers.serialize("json", Article.objects.order_by("-create_time"))
+        elif time_size == "今日" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "全部":
+            message_list = serializers.serialize("json", Article.objects.order_by("create_time"))
+        elif time_size == "今日" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "全部":
+            message_list = serializers.serialize("json", Article.objects.order_by("id"))
         # elif time_size == "今日" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "贴吧":
-        #     message_list["message"] = Article.objects.filter(socure_id='2').order_by("title")
+        #     message_list = Article.objects.filter(socure_id='2').order_by("title")
         # elif time_size == "今日" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "贴吧":
-        #     message_list["message"] = Article.objects.filter(socure_id='2').order_by("-create_time")
+        #     message_list = Article.objects.filter(socure_id='2').order_by("-create_time")
         # elif time_size == "今日" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "贴吧":
-        #     message_list["message"] = Article.objects.filter(socure_id='2').order_by("create_time")
+        #     message_list = Article.objects.filter(socure_id='2').order_by("create_time")
         # elif time_size == "今日" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "贴吧":
-        #     message_list["message"] = Article.objects.filter(socure_id='2').order_by("id")
+        #     message_list = Article.objects.filter(socure_id='2').order_by("id")
         # elif time_size == "今日" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "微博":
-        #     message_list["message"] = Article.objects.filter(socure_id='1').order_by("title")
+        #     message_list = Article.objects.filter(socure_id='1').order_by("title")
         # elif time_size == "今日" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "微博":
-        #     message_list["message"] = Article.objects.filter(socure_id='1').order_by("-create_time")
+        #     message_list = Article.objects.filter(socure_id='1').order_by("-create_time")
         # elif time_size == "今日" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "微博":
-        #     message_list["message"] = Article.objects.filter(socure_id='1').order_by("create_time")
+        #     message_list = Article.objects.filter(socure_id='1').order_by("create_time")
         # elif time_size == "今日" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "微博":
-        #     message_list["message"] = Article.objects.filter(socure_id='1').order_by("id")
+        #     message_list = Article.objects.filter(socure_id='1').order_by("id")
     return JsonResponse(message_list, safe=False)
 
 
@@ -418,10 +419,9 @@ def spider_add_heart_all(request):
 
 
 # Article详情页
-def article_detail(request, title, num):
-    print(title)
-    print(num)
-    return HttpResponse('ok')
+def article_detail(request, num):
+    detail = Article.objects.filter(id=num).first()
+    return render(request, 'mail_pictures/Spider_message/article_detail.html', {'detail': detail})
 
 
 # 批量标为已读
