@@ -183,7 +183,7 @@ class WeiboSpider(scrapy.Spider):
                 article_title=article_title,
                 article_content=article_content,
                 article_detail=article_detail,
-                article_url="",
+                article_url="#",
                 article_type=article_type,
                 article_create_time=create_time,
                 affected_count=affected_count,
