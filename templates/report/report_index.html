@@ -12,7 +12,7 @@
 
 
         </div>
-        <div class="col-sm-10">
+        <div class="col-sm-11">
             <nav class="navbar">
                 <div class="container-fluid">
                     <form class="navbar-form navbar-left" method="post" action="/report/search/" role="search">
@@ -38,42 +38,137 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td class="col-sm-4">
-                        经典简报<br>
-                        简报模板：<a>经典版</a>
-                    </td>
-                    <td class="col-sm-4">发布时间：2018/12/06 15:32</td>
-                    <td class="col-sm-4">
-                        <button class="CreateReport btn btn-sm btn-default" ReportType="docx">Doc</button>
-                        <button class="CreateReport btn btn-sm btn-default" ReportType="pdf">PDF</button>
-                        <a class="btn btn-sm btn-default">删除</a>
-                        <a class="btn btn-sm btn-default">修改</a>
-                        <a class="btn btn-sm btn-default">提取</a>
-                    </td>
-                </tr>
+                {% for i in obj %}
+                    <tr>
+                        <td class="col-sm-4">
+                            {{ i.name }}<br>
+                            简报模板：<a>{{ i.mould.name }}</a>
+                        </td>
+                        <td class="col-sm-4">{{ i.create_time }}</td>
+                        <td class="col-sm-4">
+                            <button nid="{{ i.id }}" class="CreateReport btn btn-sm btn-default" ReportType="docx">Doc
+                            </button>
+                            <button nid="{{ i.id }}" class="CreateReport btn btn-sm btn-default" ReportType="pdf">PDF
+                            </button>
+                            <a class="btn btn-sm btn-default for_delete" delete_id="{{ i.id }}">删除</a>
+                            {#                            <a class="btn btn-sm btn-default">修改</a>#}
+                        </td>
+                    </tr>
+                {% endfor %}
                 </tbody>
             </table>
+            <div class="text-center">
+                {% include 'user_management_html/checkdata_page.html' %}
+            </div>
+
         </div>
 
     </div>
     <script type="text/javascript" src="http://www.xdocin.com/xdoc.js"></script>
+    <script src="/static/js/sweetalert.min.js"></script>
     <script>
         $(function () {
+            $("body").delegate(".for_delete", "click", function () {
+                swal({
+                    title: "确定删除吗?",
+                    text: "一旦删除，数据将无法找回",
+                    icon: "warning",
+                    buttons: ["还是算了", "删了就删了"],
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            var nid = $(this).attr("delete_id");
+                            $.ajax({
+                                url: '/report/del_rep/?nid=' + nid,
+                                type: "get",
+                                success: function (data) {
+                                    if (data.status)
+                                        window.location.reload()
+                                }
+                            });
+                        } else {
+                            swal("数据还是安全的！");
+                        }
+                    });
+            });
             $(document).on('click', ".CreateReport", function () {
                 var ReportType = $(this).attr('ReportType');
-                XDoc.server = "http://www.xdocin.com";
-                XDoc.key = "";
-                XDoc.run("./10005.xdoc",
-                    ReportType, {
-                        "名称": "舆情简报",
-                        "标题": "今日舆情简要报告",
-                        "纪要编号": "〔2018〕1号",
-                        "发文机关": "东软睿道",
-                        "成文日期": "2018-12-7",
-                        "正文": "\t今日舆情"
-                    },
-                    "_blank");
+                var nid = $(this).attr('nid');
+                $.ajax({
+                    url: '/report/rep_detail/',
+                    type: 'post',
+                    data: {'nid': nid, 'csrfmiddlewaretoken': $("[name='csrfmiddlewaretoken']").val()},
+                    success: function (data) {
+                        url1 = data.url;
+                        key = data.key;
+                        id = data.id;
+                        create_time = data.create_time;
+                        tieba_num = data.tieba_num;
+                        blog_num = data.blog_num;
+                        sensitive = data.sensitive;
+                        no_sensitive = data.no_sensitive;
+                        maxname = '';
+                        maxvalue = 0;
+                        if (blog_num > tieba_num) {
+                            maxname = '新浪微博';
+                            maxvalue = blog_num;
+                        }
+                        else {
+                            maxname = '百度贴吧';
+                            maxvalue = tieba_num;
+                        }
+                        XDoc.server = "http://www.xdocin.com";
+                        XDoc.key = "6nhllqttojfr7e3p6u2ifxrclm";
+                        XDoc.run("./模板1.docx",
+                            ReportType, {
+                                "标题": "舆情简报",
+                                "编号": id,
+                                "时间": create_time,
+                                "！总数": tieba_num + blog_num,
+                                "最大": maxname,
+                                "数量": maxvalue,
+                                "！敏感数": sensitive,
+                                "！敏感比": sensitive / (sensitive + no_sensitive),
+                                "！非敏感数": no_sensitive,
+                                "！非敏感比": no_sensitive / (sensitive + no_sensitive),
+                                "贴数": tieba_num,
+                                "微博数": blog_num,
+                                '_filename': "舆情简报" + create_time
+                            },
+                            "_blank");
+                        maxname = '';
+                        maxvalue = 0;
+                        if (blog_num > tieba_num) {
+                            maxname = '新浪微博';
+                            maxvalue = blog_num;
+                        }
+                        else {
+                            maxname = '百度贴吧';
+                            maxvalue = tieba_num;
+                        }
+                        XDoc.server = "http://www.xdocin.com";
+                        XDoc.key = "6nhllqttojfr7e3p6u2ifxrclm";
+                        XDoc.run("./模板1.docx",
+                            ReportType, {
+                                "标题": "舆情简报",
+                                "编号": id,
+                                "时间": create_time,
+                                "！总数": tieba_num + blog_num,
+                                "最大": maxname,
+                                "数量": maxvalue,
+                                "！敏感数": sensitive,
+                                "！敏感比": sensitive / (sensitive + no_sensitive),
+                                "！非敏感数": no_sensitive,
+                                "！非敏感比": no_sensitive / (sensitive + no_sensitive),
+                                "贴数": tieba_num,
+                                "微博数": blog_num,
+                                '_filename': "舆情简报" + create_time
+                            },
+                            "_blank");
+                    }
+                });
+
             });
         })
     </script>
