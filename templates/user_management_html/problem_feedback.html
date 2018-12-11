@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
     <script src="/static/js/jquery-3.3.1.min.js"></script>
+
     <div align="center">
 
     </div>
@@ -12,8 +13,8 @@
 
             <button type="button" class="btn btn-primary">精 &nbsp准&nbsp问&nbsp题&nbsp反&nbsp馈&nbsp表</button>
             <!-- 查询start-->
-            <div class="col-md-offset-7">
-                <form action=" /user_management/serach_title/" method="post" class="form-inline">
+            <div class="col-md-offset-5">
+                <form action="" method="post" class="form-inline">
                     {% csrf_token %}
                     <div class="form-group">
                         关键词：
@@ -30,7 +31,9 @@
 
                         </select>
                     </div>
-                    <button type="submit" id="select_user" class="btn btn-info" style="width: 100px;">查询</button>
+                    <button type="submit" id="select_user" class="btn btn-info query " id="query" style="width: 100px;">
+                        查询
+                    </button>
 
                 </form>
             </div>
@@ -122,10 +125,9 @@
                 </thead>
 
             </table>
-        <span id="csrf" style="display: none">{{ csrf_token }}</span>
-        <!-- 分页-->
-        {% include "user_management_html/checkdata_page.html" %}
-
+            <span id="csrf" style="display: none">{{ csrf_token }}</span>
+            <!-- 分页-->
+            {% include "user_management_html/checkdata_page.html" %}
 
 
         </div>
@@ -133,5 +135,19 @@
 
     </div>
     </div>
+    <script>
+        //CSRF设置
+        $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
+        });
+
+        $('.query').click(function () {
+
+
+            alert('后期进行完善')
+
+
+        });
+    </script>
 
 {% endblock %}

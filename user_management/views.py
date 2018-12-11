@@ -558,6 +558,9 @@ def add_emotion(request):
     return render(request, "user_management_html/add_emotion.html")
 
 
+# def edit_emotion(request):
+#     return render(request, "user_management_html/add_emotion.html")
+
 def phone_management(request):
     return render(request, "user_management_html/phone_management.html")
 
@@ -687,18 +690,26 @@ def delete_system(request, num=None):
 
 '''添加预警信息'''
 def yujing(request):
+    print('添加添加')
     if request.method=='POST':
         Scheme_name=request.POST.get('rule_name')
-        source = request.POST.get('source')
+        print(Scheme_name)
+        source = request.POST.get('source_type')
+        print(source)
         switch = request.POST.get('switch')
-        warning_content =request.POST.get('content')
+
+        print(switch)
+        warningcontent =request.POST.get('contents')
+        print(warningcontent)
         warning_mode=request.POST.get('type')
+
+        print(warning_mode)
         Content = models.System_setup.objects.create(
             Scheme_name=Scheme_name,
             warning_type=source,
             switch=switch,
             warning_mode=warning_mode,
-            warning_content=warning_content,
+            warning_content=warningcontent,
 
         )
 
@@ -710,9 +721,7 @@ def yujing(request):
 
 ''' 修改预警信息'''
 def edit_emotion(request,system_id):
-    print('x x x x')
     if request.method == 'POST':
-        # system_id = request.POST.get('id')
         Scheme_name = request.POST.get('Scheme_name')
         warning_type = request.POST.get('warning_type')
         switch = request.POST.get('switch')

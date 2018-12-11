@@ -30,7 +30,7 @@ urlpatterns = [
     url(r'^online_users/(\d+)/delete/$', views.online_users_delete),
     url(r'^online_users/batch_delete/$', views.online_users_batch_delete),
 
-    # 舆情 详情操作s
+    # 舆情 详情操作edit_emotion
     url(r"^serach_emotion/$", views.serach_emotion),
     url(r"^erach_emotions/$", views.erach_emotions),
     url(r"^add_emotion/$", views.add_emotion),

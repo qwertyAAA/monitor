@@ -22,13 +22,14 @@
                 <div class="switch_type">
                     <div class="panel-body">
                         <ul class="nav nav-pills">
-                            <input name="switch" value="打开" style="display: none;">
-                            <li role="presentation" class="active"><a id="#">预警开关:</a></li>
-                            &nbsp&nbsp&nbsp&nbsp
+                            <input name="switch" value="打开" style="display: none;" id="sw">
 
-                            <span type="button" class="btn btn-default spans click" id="switch_1" role="button"
+                            <li role="presentation" class="active"><a id="#" class="switchss">预警开关:</a></li>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+
+                            <span type="button" class="btn btn-default spans click  switchss" id="switch_1" role="button"
                                   onclick="attrbuteACommon(0,this)" name="switch">打开</span>
-                            <span type="button" class="btn btn-default spans" id="switch_2" role="button"
+                            <span type="button" class="btn btn-default spans switchss" id="switch_2" role="button"
                                   onclick="attrbuteACommon(1,this)">关闭</span>
                         </ul>
                         </ul>
@@ -75,9 +76,9 @@
                             </div>
                             <div class="col-md-2 form-group">
                                 <ul class="nav nav-pills">
-                                     <input name="content" value="打开" style="display: none;">
-                                <span type="button" class="btn btn-default spans click" id="conent_1" role="button"
-                                      onclick="parXuCommon(0,this)">全部</span>
+                                    <input name="contents" value="全部" style="display: none;">
+                                    <span type="button" class="btn btn-default spans click" id="conent_1" role="button"
+                                          onclick="parXuCommon(0,this)">全部</span>
                                     <span type="button" class="btn btn-default spans" id="conent_2" role="button"
                                           onclick="parXuCommon(1,this)">敏感</span>
                                 </ul>
@@ -102,10 +103,11 @@
                             </div>
                             <div class="col-md-8 form-group">
                                 <ul class="nav nav-pills">
+                                    <input name="source_type" value="全部" style="display: none;">
 
 
-                            <span type="button" class="btn btn-default spans click" id="source_1" role="button"
-                                  onclick="changeList(0,this)">全部</span>
+                                    <span type="button" class="btn btn-default spans click" id="source_1" role="button"
+                                          onclick="changeList(0,this)">全部</span>
                                     <span type="button" class="btn btn-default spans" id="source_2" role="button"
                                           onclick="changeList(1,this)">微博</span>
                                     <span type="button" class="btn btn-default spans" id="source_3" role="button"
@@ -138,9 +140,10 @@
                             </div>
                             <div class="col-md-2 form-group ">
                                 <ul class="nav nav-pills">
+                                    <input name="title_type" value="合并" style="display: none;">
 
-                           <span type="button" class="btn btn-default spans click" id="title_1" role="button"
-                                 onclick="changeLista(0,this)">合并</span>
+                                    <span type="button" class="btn btn-default spans click" id="title_1" role="button"
+                                          onclick="changeLista(0,this)">合并</span>
                                     <span type="button" class="btn btn-default spans" id="title_2" role="button"
                                           onclick="changeLista(1,this)">不合并</span>
                                 </ul>
@@ -165,6 +168,7 @@
                             <div class="col-md-5 form-group">
 
                                 <ul class="nav nav-pills">
+                                    <input name="pro" value="全国" style="display: none;">
 
                                     <div class="dropdown">
                                     <span type="button" class="btn btn-default spans click" id="pro_1" role="button"
@@ -257,8 +261,9 @@
                             </div>
                             <div class="col-md-2 form-group">
                                 <ul class="nav nav-pills">
-                             <span type="button" class="btn btn-default spans click" id="display_1" role="button"
-                                   onclick="displaytype(0,this)">显示</span>
+                                    <input name="display_type" value="显示" style="display: none">
+                                    <span type="button" class="btn btn-default spans click" id="display_1" role="button"
+                                          onclick="displaytype(0,this)">显示</span>
                                     <span type="button" class="btn btn-default spans" id="display_2" role="button"
                                           onclick="displaytype(1,this)">不显示</span>
                                 </ul>
@@ -296,9 +301,9 @@
                             </div>
                             <div class="col-md-8 form-group ">
                                 <ul class="nav nav-pills">
-                                      <input name="type" value="邮件预警" style="display: none">
-                             <span type="button" class="btn btn-default spans" id="warning_1" role="button"
-                                   onclick="warningtype(0,this)" name="war">全部预警</span>
+                                    <input name="type" value="邮件预警" style="display: none">
+                                    <span type="button" class="btn btn-default spans" id="warning_1" role="button"
+                                          onclick="warningtype(0,this)" name="war">全部预警</span>
                                     <span type="button" class="glyphicon glyphicon-envelope btn btn-default spans click"
                                           id="warning_2" role="button" check="check"
                                           onclick="warningtype(1,this)" name="war">邮件预警</span>
@@ -350,12 +355,13 @@
                     </div>
                 </div>
                 <!--  预警方案选择end-->
-
+             <span id="messages" style="color: red"></span>
                 <div class="col-md-offset-4">
-                    <button type="submit" class="btn btn-info" id="button">保存</button>
+
+                    <button type="submit" class="btn btn-info saves" id="button ">保存</button>
 
                     <!-- Indicates caution should be taken with this action -->
-                    <button type="button" class="btn btn-warning">取消</button>
+                    <a   href="/user_management/System_setup/" class="btn btn-info ">取消</a>
                 </div>
             </form>
         </div>
@@ -389,42 +395,41 @@
 
 
     </script>
-    <script src="text/javascript">
+
+
+    {#验证 当点击关闭的时候 提示不能进行下一步操作#}
+    <script>
+        //CSRF设置
         $.ajaxSetup({
             data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
         });
-        {#var h = document.getElementById("h");#}
 
-       {% comment %} $(document).ready(function () {
-            $("button").click(function () {
-                var lists = $("#spId").text()
-                if (lists != "") {
+        $('.switchss').click( function () {
+            var switchs = $("#sw").val();
 
-                    $.post(
-                        "/user_management/add_content/",
-                        {
-                            "lists": lists
-                        },
-                        function (data) {
-                            console.log(data.message);
-                            if (data.message == 1) {
 
-                                alert('成功')
-                            }
-                            else {
+            if (switchs == "关闭") {
 
-                                alert('失败')
-                            }
-                        }
-                    )
-                }
+                alert('舆情监测已经关闭 继续选择无效')
+                $("#messages").text("舆情监测已经关闭 继续选择无效");
 
-            });
-        });{% endcomment %}
+                {#$('#save').css('display','none');#}
+                $('.saves').addClass("disabled");
+
+            }
+            else {
+                <!-- $('#message').css('display','none'); 不能这样设置 当第二次判断的时候 即使是错的的也无法进行错误提示显示  -->
+                $("#messages").text("");
+
+                $('.saves').removeClass("disabled");
+
+            }
+
+
+        });
 
 
     </script>
-
 
 {% endblock %}
 

@@ -38,5 +38,5 @@ class System_setup(models.Model):
     warning_content = models.CharField(max_length=32, default='name', verbose_name="预警内容", null=True)
     warning_type = models.CharField(max_length=255, null=True, verbose_name="预警类型")
     warning_mode = models.CharField(max_length=255, null=True, verbose_name="预警方式")
-    switch = models.CharField(max_length=16, unique=True, verbose_name="开关")
+    switch = models.CharField(max_length=16, verbose_name="开关")
 

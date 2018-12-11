@@ -42,17 +42,28 @@
         <ul class="nav navbar-top-links navbar-right">
             <!-- 系统设置start-->
             <div class="btn-group">
-                <button type="button" class="glyphicon glyphicon-cog" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
+                <span type="button" class="glyphicon glyphicon-cog" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false" style="color: white">
 
-                    舆情设置 <span class="caret"></span>
-                </button>
+                    <a href="#" style="color: white"> 舆情设置</a> <span class="caret"></span>
+                </span>
                 <ul class="dropdown-menu">
-                    <li><a href="#" class="glyphicon glyphicon-bell">预警设置</a></li>
+                    <li>
+                        <a href="/user_management/System_setup/" class="glyphicon glyphicon-bell">预警设置</a>
+                        <ul>
+                            <li class="glyphicon glyphicon-eye-open"><a href="/user_management/System_setup/">查看预警信息</a></li>
+                            <li class="glyphicon glyphicon-search"><a href="/user_management/serach_emotion/">预警信息查找</a></li>
+                            <li class="glyphicon glyphicon-pencil"><a href="/user_management/add_emotion/">预警信息添加</a></li>
+
+
+                        </ul>
+
+
+                    </li>
                     <li role="separator" class="divider"></li>
-                    <li><a href="#" class="glyphicon glyphicon-phone">通讯录管理</a></li>
+                    <li><a href="/user_management/mails/" class="glyphicon glyphicon-phone">通讯录管理</a></li>
                     <li role="separator" class="divider"></li>
-                    <li><a href="#" class="glyphicon glyphicon-edit">精准问题反馈</a></li>
+                    <li><a href="/user_management/problem_feedback/" class="glyphicon glyphicon-edit">精准问题反馈</a></li>
                     <li role="separator" class="divider"></li>
                     <li><a href="#" class="glyphicon glyphicon-zoom-in">新增抓取</a></li>
                     <li role="separator" class="divider"></li>
@@ -63,8 +74,8 @@
                     <li>
                         <a href="#"></a>
                         <ul>
-                            <li><a href="#">删除信息</a></li>
-                            <li><a href="#">全局来源设置</a></li>
+                            <li class="glyphicon glyphicon-trash"><a href="/user_management/System_setup/">删除方案</a></li>
+
 
                         </ul>
                     </li>
