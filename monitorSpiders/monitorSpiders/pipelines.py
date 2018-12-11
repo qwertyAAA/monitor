@@ -7,6 +7,7 @@
 # from .spidersORM import DBSession, Author, Article, Source
 from .spidersORM import DBSession, Article, Author, Source
 
+
 class WeiboPipeline(object):
     def __init__(self):
         self.session = DBSession()
@@ -56,11 +57,46 @@ class WeiboPipeline(object):
 
 class TiebaPipeline(object):
     def __init__(self):
+        print('DB start')
         self.session = DBSession()
 
     def process_item(self, item, spider):
         article_url = self.session.query(Article).filter(Article.url == item['article_url']).first()
-        if not article_url:
+        # 当文章存在时,判断是否是当前作者写的,如果也是当前作者写的,那么如果关键字不同那么在当前的关键字后面追加新的关键字
+        if article_url:
+            author_id = article_url.author_id
+            author = self.session.query(Author).filter(Author.id == author_id).first()
+            author_url = author.author_url
+            print(author_url)
+            # 判断同一篇文章是否是一个作者写的,如果不是那么插入数据库
+            if author_url == item["author_url"]:
+                if article_url.keywords != item['keyword']:
+                    article_url.keywords = article_url.keywords + ' ' + item['keyword']
+                    self.session.commit()
+            else:
+                article_source = self.session.query(Source).filter(Source.source == item['article_from']).first()
+                if not article_source:
+                    article_source = Source(source=item['article_from'])
+                    self.session.add(article_source)
+                    self.session.commit()
+                print('DB write')
+                article = Article(
+                    title=item["article_title"],
+                    content=item["article_content"],
+                    detail=item['article_detail'],
+                    url=item['article_url'],
+                    author_id=author.id,
+                    create_time=item["article_create_time"],
+                    # 此处的状态（是否危险）如何判断?
+                    status=0,
+                    source_id=article_source.id,
+                    affected_count=item["affected_count"],
+                    keywords=item['keyword'],
+                    article_type=item['article_type'],
+                )
+                self.session.add(article)
+                self.session.commit()
+        else:
             article_source = self.session.query(Source).filter(Source.source == item['article_from']).first()
             if not article_source:
                 article_source = Source(source=item['article_from'])
@@ -68,11 +104,11 @@ class TiebaPipeline(object):
                 self.session.commit()
             author = self.session.query(Author).filter(Author.author_url == item['author_url']).first()
             if not author:
-                print('DB write')
                 author = Author(author=item["author"], author_url=item["author_url"])
                 # source = Source(source=item["article_from"])
                 self.session.add(author)
                 self.session.commit()
+            print('DB write')
             article = Article(
                 title=item["article_title"],
                 content=item["article_content"],
