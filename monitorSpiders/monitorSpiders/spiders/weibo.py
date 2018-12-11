@@ -103,7 +103,11 @@ class WeiboSpider(scrapy.Spider):
     def parse(self, response):
         selector = Selector(response)
         page_list = selector.css(".m-page .s-scroll li")
+        count = 0
         for page in page_list:
+            count += 1
+            if count > 20:
+                break
             url = response.request.url + "&" + page.xpath(".//a/@href").extract_first().split("&")[-1]
             if url.split("/")[3] == "weibo":
                 yield Request(url=url, callback=self.handle_media_article)
