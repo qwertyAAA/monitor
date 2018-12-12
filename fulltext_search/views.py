@@ -2,9 +2,11 @@ from django.shortcuts import render
 from monitorSpiders.monitorSpiders.startTieba import tieba
 from SpiderDB import models
 import redis
+import threading
 # Create your views here.
 
 key=redis.Redis(host="10.25.116.62",port=6379,max_connections=1000)
+# t1 = threading.Thread(target=tieba.start_tieba())
 def full_search(request):
     if request.method == 'POST':
         keywords=request.POST.get('keywords')
@@ -15,3 +17,4 @@ def full_search(request):
         key.delete('newkeywords1')
         return render(request, 'full_search_html.html', {'result': result})
     return render(request,'full_search_html.html')
+
