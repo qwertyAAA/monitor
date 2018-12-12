@@ -7,6 +7,7 @@
 
 # !/usr/local/bin/python
 # -*- coding:utf-8 -*-
+'''修改 '''
 import http.client
 import urllib
 
@@ -14,15 +15,18 @@ host = "106.ihuyi.com"
 sms_send_uri = "/webservice/sms.php?method=Submit"
 
 # 用户名是登录用户中心->验证码短信->产品总览->APIID
+''' 注册显示的用户名与密码'''
 account = "C19785580"
 # 密码 查看密码请登录用户中心->验证码短信->产品总览->APIKEY
 password = "00cafaabe3110affd82c7c324bc49171"
 
 
 def send_sms(text, mobile):
+    ''' 加上parse'''
     params = urllib.parse.urlencode(
         {'account': account, 'password': password, 'content': text, 'mobile': mobile, 'format': 'json'})
     headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
+    ''' 改为http.client'''
     conn = http.client.HTTPConnection(host, port=80, timeout=30)
     conn.request("POST", sms_send_uri, params, headers)
     response = conn.getresponse()
@@ -33,7 +37,7 @@ def send_sms(text, mobile):
 
 if __name__ == '__main__':
     mobile = "17854292984"
-    text = "您的验证码是：000000。请不要把验证码泄露给其他人。"
-    # text = "您的验证码是：121254ddd。请不要把验证码泄露给其他人。"
+    # text = "您的验证码是：000000。请不要把验证码泄露给其他人。"
+    text = "您的验证码是：121254ddd。请不要把验证码泄露给其他人。"
 
     print(send_sms(text, mobile))
