@@ -6,6 +6,9 @@
 # https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
+from scrapy.exceptions import IgnoreRequest
+import hashlib
+import redis
 
 
 class MonitorspidersSpiderMiddleware(object):
@@ -60,6 +63,7 @@ class MonitorspidersDownloaderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the downloader middleware does not modify the
     # passed objects.
+    conn = redis.Redis(host="10.25.116.62", port=6379)
 
     @classmethod
     def from_crawler(cls, crawler):
@@ -87,6 +91,16 @@ class MonitorspidersDownloaderMiddleware(object):
         # - return a Response object
         # - return a Request object
         # - or raise IgnoreRequest
+        if spider.name == "weibo":
+            flag_html = response.xpath('.//div[@class="content"]//p[@class="txt"]').extract_first()
+            if not flag_html:
+                return response
+            fp = hashlib.sha1()
+            fp.update(flag_html.encode("utf-8"))
+            if self.conn.sadd("fingerPrints", fp.hexdigest()):
+                return response
+            else:
+                raise IgnoreRequest
         return response
 
     def process_exception(self, request, exception, spider):

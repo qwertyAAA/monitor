@@ -14,6 +14,7 @@ class Article(models.Model):
     author = models.ForeignKey(to='Author')  # 文章作者
     create_time = models.DateTimeField()  # 文章的发布时间
     status = models.BooleanField(default=False)  # 状态
+    already_read = models.BooleanField(default=False)  # 读取状态
     source = models.ForeignKey(to='Source')  # 文章来源
     affected_count = models.IntegerField(default=0)  # 受影响人数
     keywords = models.CharField(max_length=2048, default="")  # 该文章涉及的关键字
@@ -46,16 +47,17 @@ class Rule(models.Model):
     articles=models.ManyToManyField(to='Article')
 
 
-#素材表
+# 素材表
 class Material(models.Model):
     nid = models.AutoField(primary_key=True)
-    user=models.ForeignKey(to=User)
+    user = models.ForeignKey(to=User)
     article = models.ForeignKey(to=Article)
 
 
-#收藏表
 class CollectionArticle(models.Model):
+    """
+    收藏表
+    """
     nid = models.AutoField(primary_key=True)
-    user=models.ForeignKey(to=User)
+    user = models.ForeignKey(to=User)
     article = models.ForeignKey(to=Article)
-

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="detail_header">
+        <div>
+            <a href="/index/spider_message/"><span>舆情信息</span></a>
+            <span> | </span>
+            <a href="/index/spider_message/"><span>********</span></a>
+        </div>
+        <div class="header_title" style="margin-left: 200px;">
+            <h2>{{ detail.title }}</h2>
+        </div>
+        <div style="margin-top: 20px">
+            <span>{{ detail.create_time }}</span>
+            <span style="margin-left: 5px">{{ detail.source.source }}</span>
+            <a href="{{ detail.url }}" style="float: right;margin-right: 150px"><span>查看原文</span></a>
+        </div>
+    </div>
+    <div class="detail_body">
+        <div>{{ detail.content|safe }}</div>
+    </div>
+    <div class="detail_foot" style="margin-top: 30px;font-size: 20px">
+        <span>作者：{{ detail.author.author }}</span>
+    </div>
+{% endblock %}

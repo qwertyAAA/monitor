@@ -7,7 +7,27 @@
 
 .span_header .span_right {
     float: right;
-    margin-right: 200px;
+}
+
+.span_header .span_right .attribute_right {
+    margin-right: 260px;
+}
+
+.span_header .span_right .merge_right {
+    margin-right: 308px;
+}
+
+.span_header .span_right .involve_right {
+    margin-right: 218px;
+}
+
+.span_header .span_right .matching_right {
+    margin-right: 231px;
+}
+
+.span_header .span_right .other_time {
+    margin-right: 55px;
+    display: none;
 }
 
 .btn_submit {
@@ -55,7 +75,29 @@
 }
 
 .spans {
-    margin-left: 15px;
+    padding-left: 15px;
+    font-size: 14px;
+    /*color: #ff8500;*/
+}
+
+.spans2 {
+    padding-left: 15px;
+    font-size: 14px;
+    /*color: #ff8500;*/
+}
+
+.spans:hover {
+    font-weight: bold;
+    color: #ff8500;
+}
+
+.spans2:hover {
+    font-weight: bold;
+    color: #ff8500;
+}
+
+.click {
+    font-weight: bold;
     color: #ff8500;
 }
 
@@ -64,7 +106,7 @@
 }
 
 .input_checkbox {
-    width: 25px;
+    width: 21px;
 }
 
 .style_title {
@@ -73,20 +115,51 @@
 
 .query_text input {
     position: absolute;
-    top: 459px;
+    top: 429px;
     left: 870px;
+}
+
+.span_span {
+    position: absolute;
+    top: 468px;
+    left: 603px;
+}
+
+.span_span span {
+    font-size: 20px;
+    margin-right: 20px;
 }
 
 .query_text button {
     position: absolute;
-    top: 459px;
+    top: 429px;
     left: 1125px;
 }
 
+.content_50 img {
+    width: 150px;
+    height: 150px;
+    display: none;
+}
+
 .line_height span, .line_height input {
-    line-height: 120px;
+    line-height: 220px;
 }
 
 .panel-default .color_tr td, tbody tr td {
     text-align: center;
+}
+
+ul li {
+    list-style-type: none;
+    display: inline;
+}
+
+.tr_content {
+    width: 784px;
+    text-align: left;
+}
+
+.one_button a:link {
+    color: black;
 }
