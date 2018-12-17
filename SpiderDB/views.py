@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 import json
 import redis
+from Myutils.pageutil import Page
 
 
 def yuqinglist(request, id):
@@ -323,11 +324,12 @@ def set_sensitive_words(request):
 # 敏感词的view函数
 def sensitive_words_view(request):
     conn = redis.Redis(host="10.25.116.62", port=6379)
-    sensitive_words = conn.smembers("sensitive_words")
+    sensitive_words = list(conn.smembers("sensitive_words"))
+    print(sensitive_words, type(sensitive_words))
     if request.is_ajax():
         ret = {"data": list(sensitive_words)}
         return JsonResponse(ret)
-    return render(request, "sensitive_words.html", {"sensitive_words": sensitive_words})
+    return render(request, "sensitive_words.html", {"sensitive_words": sensitive_words, })
 
 
 # 删除敏感词信息
