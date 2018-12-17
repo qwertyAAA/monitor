@@ -26,12 +26,13 @@
                 <tr class="warning">
                     <td>
                         <input id="all_check" type="checkbox">
-                        <button id="lot_del" class="btn btn-warning" href="/report/lot_delete/">删除选中</button>
+                        <button id="lot_del" class="btn btn-warning">删除选中</button>
                         &nbsp;&nbsp;&nbsp;
                         <a class="btn btn-warning" href="/report/del_all/">清空素材</a>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         已加入条数：<h3 style="display: inline-block; color: orange">{{ len }}条</h3>
-                        <a href="" class="btn btn-warning" style="float: right; margin-top: 10px">生成简报</a>
+                        <button id="create_report" class="btn btn-warning" style="float: right; margin-top: 10px">生成简报
+                        </button>
                     </td>
                 </tr>
                 </thead>
@@ -41,9 +42,12 @@
                         <td>
                             <input class="lot_check" type="checkbox" name="{{ i.nid }}">
                             <a href="{{ i.article.url }}" target="_blank">{{ i.article.title }}</a>
-                            <button type="button" class="btn btn-warning ebtn" data-toggle="modal" data-target="#myModal2" del_id="{{ i.nid }}"
-                            del_name="{{ i.article.title }}" id="del">删除</button>
-                            <button type="button" nid="{{ i.article.id }}" class="btn btn-warning ebtn" data-toggle="modal"
+                            <button type="button" class="btn btn-warning ebtn" data-toggle="modal"
+                                    data-target="#myModal2" del_id="{{ i.nid }}"
+                                    del_name="{{ i.article.title }}" id="del">删除
+                            </button>
+                            <button type="button" nid="{{ i.article.id }}" class="btn btn-warning ebtn"
+                                    data-toggle="modal"
                                     id="edit"
                                     data-target="#myModal">编辑
                             </button>
@@ -58,6 +62,10 @@
                 {% endfor %}
                 </tbody>
             </table>
+        <div class="text-center">
+            {% include 'user_management_html/checkdata_page.html' %}
+        </div>
+
         </div>
     </div>
     <!-- Modal2 -->
@@ -155,49 +163,87 @@
             </div>
         </div>
     </div><!-- /.modal -->
+    <script src="/static/js/sweetalert.min.js"></script>
     <script type="text/javascript">
         $(function () {
-            $(document).on('click', '.lot_check', function () {
-                $('.lot_check').each(function () {
-                    if(!$(this).prop('checked'))
-                    {
-                        $('#all_check').prop('checked',false)
-                    }
-                })
-            });
-            $(document).on('click', '#all_check', function () {
-                var x = $(this).prop('checked');
-                if (x){
-                    $('.lot_check').prop('checked',true)
-                } else {
-                    $('.lot_check').prop('checked',false)
-                }
-            });
-            $(document).on('click', '#lot_del', function () {
+            $(document).on('click', '#create_report', function () {
                 var li = [];
                 $(".lot_check").each(function (i) {
                     var x = $(this).prop('checked');
                     {#console.log(x);#}
                     var v = $(this).prop('name');
                     {#console.log(v);#}
-                    if(x)
-                    {
+                    if (x) {
                         li.push(v);
                     }
                 });
                 console.log(li);
                 $.ajax({
-                        url:'/report/lot_delete/',
-                        type:'post',
-                        traditional:true,
-                        data:{
-                            'li':li,
-                            'csrfmiddlewaretoken':$("[name='csrfmiddlewaretoken']").val()
-                        },
-                        success:function () {
-                            window.location.reload()
+                    url: '/report/create_report/',
+                    type: 'post',
+                    traditional: true,
+                    data: {
+                        'li': li,
+                        'csrfmiddlewaretoken': $("[name='csrfmiddlewaretoken']").val()
+                    },
+                    success: function () {
+                        window.location.href = '/report/sucai/'
+                    }
+                })
+            });
+            $(document).on('click', '.lot_check', function () {
+                $('.lot_check').each(function () {
+                    if (!$(this).prop('checked')) {
+                        $('#all_check').prop('checked', false)
+                    }
+                })
+            });
+            $(document).on('click', '#all_check', function () {
+                var x = $(this).prop('checked');
+                if (x) {
+                    $('.lot_check').prop('checked', true)
+                } else {
+                    $('.lot_check').prop('checked', false)
+                }
+            });
+            $(document).on('click', '#lot_del', function () {
+                swal({
+                    title: "确定删除吗?",
+                    text: "一旦删除，数据将无法找回",
+                    icon: "warning",
+                    buttons: ["还是算了", "删了就删了"],
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            var li = [];
+                            $(".lot_check").each(function (i) {
+                                var x = $(this).prop('checked');
+                                {#console.log(x);#}
+                                var v = $(this).prop('name');
+                                {#console.log(v);#}
+                                if (x) {
+                                    li.push(v);
+                                }
+                            });
+                            console.log(li);
+                            $.ajax({
+                                url: '/report/lot_delete/',
+                                type: 'post',
+                                traditional: true,
+                                data: {
+                                    'li': li,
+                                    'csrfmiddlewaretoken': $("[name='csrfmiddlewaretoken']").val()
+                                },
+                                success: function () {
+                                    window.location.reload()
+                                }
+                            })
+                        } else {
+                            swal("数据还是安全的！");
                         }
-                    })
+                    });
+
             });
             $(document).on('click', '#del', function () {
                 var del_id = $(this).attr('del_id');
@@ -211,27 +257,26 @@
                 $.ajax({
                     url: "/report/edit/",
                     type: "post",
-                    data:{
-                        'nid':nid,
-                        'csrfmiddlewaretoken':$("[name='csrfmiddlewaretoken']").val()
+                    data: {
+                        'nid': nid,
+                        'csrfmiddlewaretoken': $("[name='csrfmiddlewaretoken']").val()
                     },
-                    success:function (data) {
+                    success: function (data) {
                         $("#nid").val(data.nid);
                         $("#title").val(data.title);
                         $("#time").val(data.time);
                         $("#source").val(data.source);
                         $("#detail").val(data.detail);
                         $("#art").val(data.content);
-                        if(data.status){
+                        if (data.status) {
                             $("#kind").val("敏感")
                         }
-                        else
-                        {
+                        else {
                             $("#kind").val("非敏感")
                         }
                     }
                 })
-            })
+            });
         })
     </script>
 {% endblock %}
