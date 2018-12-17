@@ -12,7 +12,7 @@ class WeiboPipeline(object):
     def __init__(self):
         self.session = DBSession()
         conn = redis.Redis(host="10.25.116.62", port=6379)
-        self.sensitive_words = conn.smembers("sensitive_words")
+        self.sensitive_words = list(conn.smembers("sensitive_words"))
         self.status = 0
 
     def process_item(self, item, spider):
@@ -23,13 +23,13 @@ class WeiboPipeline(object):
                 author = Author(author=item["author"], author_url=item["author_url"])
                 self.add_data(author)
             if not source:
-                source = Source(source="新浪微博")
+                source = Source(source="新浪微博", source_img="avatars/微博.jpg")
                 self.add_data(source)
             article = self.session.query(Article).filter_by(author_id=author.id,
                                                             create_time=item["article_create_time"]).first()
             if not article:
-                for item in self.sensitive_words:
-                    if item["article_detail"].find(item) != -1:
+                for obj in self.sensitive_words:
+                    if item["article_detail"].find(obj.decode()) != -1:
                         self.status = 1
                         break
                 article = Article(
@@ -39,6 +39,7 @@ class WeiboPipeline(object):
                     url=item["article_url"],
                     author_id=author.id,
                     create_time=item["article_create_time"],
+                    already_read=0,
                     # 此处的状态（是否危险）如何判断?
                     status=self.status,
                     source_id=source.id,
