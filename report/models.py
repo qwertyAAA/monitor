@@ -9,6 +9,9 @@ class Mould(models.Model):
     key = models.CharField(max_length=100)
     status = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.name
+
 
 class Report(models.Model):
     name = models.CharField(max_length=30, default='舆情简报')
@@ -18,3 +21,6 @@ class Report(models.Model):
     sensitive = models.IntegerField()
     no_sensitive = models.IntegerField()
     mould = models.ForeignKey(to=Mould)
+
+    def __str__(self):
+        return self.name
