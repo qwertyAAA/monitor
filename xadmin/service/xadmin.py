@@ -73,7 +73,7 @@ class ModelXAdmin(object):
 
 
         :param request: 当前请求
-        :param instance: 一个QuerySet实例
+        :param instance: model类的对象
         :return: 一个XAdminFrom对象
         """
 
@@ -169,7 +169,6 @@ class ModelXAdmin(object):
             for field in self.fields:
                 # 思路2存在的问题的解决方法：
                 if field in self.cross_table_fields:
-                    print(field)
                     continue
                 else:
                     q.children.append((field.name + "__icontains", keyword))
@@ -185,7 +184,6 @@ class ModelXAdmin(object):
                 for field in self.cross_table_fields:
                     if getattr(obj, field.name).__str__().find(keyword) != -1 and obj not in qs:
                         qs.append(obj)
-            print(self.cross_table_fields)
             data_list = []
             for obj in qs:
                 data = []
