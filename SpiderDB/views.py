@@ -348,7 +348,6 @@ def set_sensitive_words(request):
 def sensitive_words_view(request):
     conn = redis.Redis(host="10.25.116.62", port=6379)
     sensitive_words = list(conn.smembers("sensitive_words"))
-    print(sensitive_words, type(sensitive_words))
     if request.is_ajax():
         ret = {"data": list(sensitive_words)}
         return JsonResponse(ret)
@@ -360,7 +359,6 @@ def delete_sensitive_words(request):
     if request.is_ajax():
         conn = redis.Redis(host="10.25.116.62", port=6379)
         sensitive_words = request.POST.getlist("sensitive_words")
-        print(sensitive_words)
         conn.srem("sensitive_words", *sensitive_words)
         return JsonResponse({"status": True})
 
