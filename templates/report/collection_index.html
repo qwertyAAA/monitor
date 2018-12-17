@@ -24,7 +24,8 @@
             <table class="table table-bordered">
                 <thead>
                 <tr class="warning">
-                    <td>标题</td>
+                    <td><input id="all_check" type="checkbox"></td>
+                    <td class="col-sm-5">标题</td>
                     <td>来源</td>
                     <td>时间</td>
                     <td>操作</td>
@@ -33,20 +34,28 @@
                 <tbody>
                 {% for i in obj %}
                     <tr>
-                        <td>{{ i.article.title }}</td>
+                        <td><input class="lot_check" type="checkbox" name="{{ i.nid }}"></td>
+                        <td class="col-sm-5"><a href="{{ i.article.url }}">{{ i.article.title }}</a></td>
                         <td>{{ i.article.source.source }}</td>
                         <td>{{ i.article.create_time }}</td>
                         <td>
-                            <button type="button" nid="{{ i.article.id }}" class="btn btn-warning ebtn" data-toggle="modal"
+                            <button type="button" nid="{{ i.article.id }}" class="btn btn-warning ebtn"
+                                    data-toggle="modal"
                                     id="edit"
                                     data-target="#myModal">编辑
                             </button>
-                            <a href="" class="btn btn-warning">加入素材</a>
+                            <button type="button" id="append_ma" class="btn btn-warning" nid="{{ i.article.id }}">加入素材
+                            </button>
                         </td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
+            <div class="text-center">
+                {% include 'user_management_html/checkdata_page.html' %}
+            </div>
+            <button type="button" id="lot_del" class="btn btn-danger">删除选中</button>
+            <button type="button" id="lot_append" class="btn btn-success">添加素材</button>
         </div>
     </div>
     <!-- Modal2 -->
@@ -144,8 +153,26 @@
             </div>
         </div>
     </div><!-- /.modal -->
+    <script src="/static/js/sweetalert.min.js"></script>
     <script type="text/javascript">
         $(function () {
+            $(document).on('click', '#append_ma', function () {
+                var nid = $(this).attr('nid');
+                console.log(nid);
+                $.ajax({
+                    url: '/report/append/',
+                    type: 'post',
+                    data: {'nid': nid, 'csrfmiddlewaretoken': $("[name='csrfmiddlewaretoken']").val()},
+                    success: function (data) {
+                        if (data.status) {
+                            alert("添加成功！")
+                        }
+                        else {
+                            alert("已在素材库中！")
+                        }
+                    }
+                })
+            });
             $(document).on('click', '.lot_check', function () {
                 $('.lot_check').each(function () {
                     if (!$(this).prop('checked')) {
@@ -162,6 +189,45 @@
                 }
             });
             $(document).on('click', '#lot_del', function () {
+                swal({
+                    title: "确定删除吗?",
+                    text: "一旦删除，数据将无法找回",
+                    icon: "warning",
+                    buttons: ["还是算了", "删了就删了"],
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            var li = [];
+                            $(".lot_check").each(function (i) {
+                                var x = $(this).prop('checked');
+                                {#console.log(x);#}
+                                var v = $(this).prop('name');
+                                {#console.log(v);#}
+                                if (x) {
+                                    li.push(v);
+                                }
+                            });
+                            console.log(li);
+                            $.ajax({
+                                url: '/report/collection_delete/',
+                                type: 'post',
+                                traditional: true,
+                                data: {
+                                    'li': li,
+                                    'csrfmiddlewaretoken': $("[name='csrfmiddlewaretoken']").val()
+                                },
+                                success: function () {
+                                    window.location.reload()
+                                }
+                            })
+                        } else {
+                            swal("数据还是安全的！");
+                        }
+                    });
+
+            });
+            $(document).on('click', '#lot_append', function () {
                 var li = [];
                 $(".lot_check").each(function (i) {
                     var x = $(this).prop('checked');
@@ -174,7 +240,7 @@
                 });
                 console.log(li);
                 $.ajax({
-                    url: '/report/lot_delete/',
+                    url: '/report/lot_append/',
                     type: 'post',
                     traditional: true,
                     data: {
@@ -182,16 +248,9 @@
                         'csrfmiddlewaretoken': $("[name='csrfmiddlewaretoken']").val()
                     },
                     success: function () {
-                        window.location.reload()
+                        alert("批量添加成功！")
                     }
                 })
-            });
-            $(document).on('click', '#del', function () {
-                var del_id = $(this).attr('del_id');
-                console.log(del_id);
-                var del_name = $(this).attr('del_name');
-                $('#del_id2').val(del_id);
-                $("#del_name2").text(del_name);
             });
             $(document).on('click', '#edit', function () {
                 var nid = $(this).attr('nid');
