@@ -69,13 +69,13 @@ class TiebaPipeline(object):
         print('DB start')
         self.session = DBSession()
         self.sensitive_words=list(conn.smembers('sensitive_words'))
-        self.status = 0
 
     def process_item(self, item, spider):
+        status = 0
         if spider.name=='tieba' or spider.name == 'tieba_all':
             for i in self.sensitive_words:
                 if item['article_detail'].find(i.decode()) != -1:
-                    self.status = 1
+                    status = 1
                     break
             article_url = self.session.query(Article).filter(Article.url == item['article_url']).first()
             # 当文章存在时,判断是否是当前作者写的,如果也是当前作者写的,那么如果关键字不同那么在当前的关键字后面追加新的关键字
@@ -93,7 +93,7 @@ class TiebaPipeline(object):
                 else:
                     article_source = self.session.query(Source).filter(Source.source == item['article_from']).first()
                     if not article_source:
-                        article_source = Source(source=item['article_from'])
+                        article_source = Source(source=item['article_from'],source_img='avtatars/百度.jpg')
                         self.session.add(article_source)
                         self.session.commit()
                     print('DB write')
@@ -105,11 +105,12 @@ class TiebaPipeline(object):
                         author_id=author.id,
                         create_time=item["article_create_time"],
                         # 此处的状态（是否危险）如何判断?
-                        status=0,
+                        status=status,
                         source_id=article_source.id,
                         affected_count=item["affected_count"],
                         keywords=item['keyword'],
                         article_type=item['article_type'],
+
                     )
                     self.session.add(article)
                     self.session.commit()
@@ -134,7 +135,7 @@ class TiebaPipeline(object):
                     author_id=author.id,
                     create_time=item["article_create_time"],
                     # 此处的状态（是否危险）如何判断?
-                    status=0,
+                    status=status,
                     source_id=article_source.id,
                     affected_count=item["affected_count"],
                     keywords=item['keyword'],
