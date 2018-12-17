@@ -1,0 +1,244 @@
+{% extends "base.html" %}
+{% block content %}
+    <script src="/static/js/jquery-2.1.4.min.js"></script>
+    <script src="/static/js/check_box.js"></script>
+    <script src="/static/js/sweetalert.min.js"></script>
+    <h3>敏感词信息：</h3>
+    <br/>
+    <br/>
+    <button class="btn btn-danger" id="batch_delete" style="width: 100px;">批量删除</button>
+    <hr/>
+    <table class="table table-hover table-bordered">
+        <thead>
+        <th>
+            <input type="checkbox" id="check_all"/>
+        </th>
+        <th>
+            <span>敏感词信息</span>
+        </th>
+        <th>
+            <span>操作</span>
+        </th>
+        </thead>
+        <tbody>
+        {% for item in sensitive_words %}
+            <tr>
+                <td>
+                    <input type="checkbox" class="check_item"/>
+                </td>
+                <td>
+                    <span class="sensitive_word">{{ item }}</span><br/>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger single_delete">删除</button>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <br/>
+    <br/>
+    <br/>
+    <button type="button" class="btn btn-success" id="add"><i class="fa fa-plus"></i>添加敏感词</button>
+    <form class="form-horizontal hidden" id="add_sensitive_words">
+        {% csrf_token %}
+        <div class="form-group">
+            <label class="col-sm-2 control-label">所属用户：</label>
+            <div class="col-sm-10">
+                <label class="form-control-static">{{ request.user.username }}</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">敏感词：</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control set_sensitive_word"
+                       placeholder="在这里输入敏感词，例：火灾..."/>
+            </div>
+        </div>
+        <div class="form-group" align="center" id="temp">
+            <button type="button" class="btn btn-success" id="more"><i class="fa fa-plus"></i>添加更多</button>
+        </div>
+        <div class="form-group" align="center">
+            <button type="button" class="btn btn-success" id="save">保存</button>
+            <button type="reset" class="btn btn-warning">取消</button>
+        </div>
+
+    </form>
+    <script>
+        $("body").delegate("input[type='text']", "blur", function () {
+            if ($(this).val() == "") {
+                swal({
+                    title: "敏感词禁止为空！",
+                    icon: "warning",
+                    button: "好的"
+                }).then((willChange) => {
+                    if (willChange)
+                        $(this).focus()
+                })
+            }
+        })
+        $("#add").click(function () {
+            $(this).addClass("hidden")
+            $("#add_sensitive_words").removeClass("hidden")
+        })
+        $("#batch_delete").click(function () {
+            var sensitive_words = new Array()
+            $(".check_item").each(function () {
+                sensitive_words.push($(this).parent().parent().find(".sensitive_word").text())
+            })
+            swal({
+                title: "确定删除吗?",
+                text: "一旦删除，数据将无法找回",
+                icon: "warning",
+                buttons: ["还是算了", "删了就删了"],
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: "post",
+                        url: "/spider/delete_sensitive_words/",
+                        traditional: true,
+                        data: {
+                            "sensitive_words": sensitive_words,
+                            "csrfmiddlewaretoken": "{{ csrf_token }}",
+                        },
+                        success: function (data) {
+                            if (data.status) {
+                                swal({
+                                    title: "数据已经删除了！",
+                                    icon: "success",
+                                });
+                                window.location.reload()
+                            } else {
+                                swal("未知错误！请联系开发者：qwerty")
+                            }
+                        }
+                    })
+                }
+            })
+        })
+        $(".single_delete").click(function () {
+            var text = $(this).parent().parent().find(".sensitive_word").text()
+            var sensitive_words = new Array()
+            sensitive_words.push(text)
+            swal({
+                title: "确定删除吗?",
+                text: "一旦删除，数据将无法找回",
+                icon: "warning",
+                buttons: ["还是算了", "删了就删了"],
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: "post",
+                        url: "/spider/delete_sensitive_words/",
+                        traditional: true,
+                        data: {
+                            "sensitive_words": sensitive_words,
+                            "csrfmiddlewaretoken": "{{ csrf_token }}",
+                        },
+                        success: function (data) {
+                            if (data.status) {
+                                swal({
+                                    title: "数据已经删除了！",
+                                    icon: "success",
+                                });
+                                window.location.reload()
+                            } else {
+                                swal("未知错误！请联系开发者：qwerty")
+                            }
+                        }
+                    })
+                }
+            })
+        })
+        $("body").delegate(".sensitive_word", "click", function () {
+            var text = $(this).text()
+            $(this).parent().html(
+                "<input type=\"text\" class=\"form-control update_sensitive_word\"\n" +
+                "                       placeholder=\"" + text +
+                "\"/>"
+            )
+        })
+        $("body").delegate(".update_sensitive_word", "blur", function () {
+            swal({
+                title: "确定修改吗?",
+                text: "一旦修改，数据将无法找回",
+                icon: "warning",
+                buttons: ["还是算了", "改了就改了"],
+                dangerMode: true,
+            })
+                .then((willUpdate) => {
+                    if (willUpdate) {
+                        var prev_data = $(this).attr("placeholder")
+                        var new_data = $(this).val()
+                        $(this).parent().html(
+                            "<span class=\"sensitive_word\">" + new_data +
+                            "</span><br/>"
+                        )
+                        $.ajax({
+                            type: "post",
+                            url: "/spider/update_sensitive_word/",
+                            data: {
+                                "prev_data": prev_data,
+                                "new_data": new_data,
+                                "csrfmiddlewaretoken": "{{ csrf_token }}",
+                            },
+                            success: function (data) {
+                                if (data.status) {
+                                    swal({
+                                        title: "数据已经修改了！",
+                                        icon: "success",
+                                    });
+                                } else {
+                                    swal(data.error_msg)
+                                }
+                            }
+                        })
+                    } else {
+                        var prev_data = $(this).attr("placeholder")
+                        $(this).parent().html(
+                            "<span class=\"sensitive_word\">" + prev_data +
+                            "</span><br/>"
+                        )
+                        swal("数据还是安全的！");
+                    }
+                })
+        })
+        $("#more").click(function () {
+            $("#temp").before(
+                "<div class=\"form-group\">\n" +
+                "            <label class=\"col-sm-2 control-label\">敏感词：</label>\n" +
+                "            <div class=\"col-sm-10\">\n" +
+                "                <input type=\"text\" class=\"form-control set_sensitive_word\"\n" +
+                "                       placeholder=\"在这里输入敏感词，例：火灾...\"/>\n" +
+                "            </div>\n" +
+                "        </div>"
+            )
+        })
+        $("#save").click(function () {
+            var sensitive_words = new Array();
+            $(".set_sensitive_word").each(function () {
+                sensitive_words.push($(this).val())
+            })
+            $.ajax({
+                type: "post",
+                url: "/spider/set_sensitive_words/",
+                traditional: true,
+                data: {
+                    "sensitive_words": sensitive_words,
+                    "csrfmiddlewaretoken": "{{ csrf_token }}",
+                },
+                success: function (data) {
+                    if (data.status) {
+                        swal({
+                            title: "敏感词添加成功！",
+                            icon: "success",
+                        });
+                        window.location.reload()
+                    }
+                }
+            })
+        })
+    </script>
+{% endblock %}
