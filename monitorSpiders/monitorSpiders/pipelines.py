@@ -65,8 +65,11 @@ class WeiboPipeline(object):
 
 class TiebaPipeline(object):
     def __init__(self):
+        conn=redis.Redis(host='10.25.116.62',port=6379)
         print('DB start')
         self.session = DBSession()
+        self.sensitive_words=list(conn.smembers('sensitive_words'))
+        self.status = 0
 
     def process_item(self, item, spider):
         if spider.name=='tieba' or spider.name == 'tieba_all':
