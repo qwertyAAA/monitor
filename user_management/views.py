@@ -421,7 +421,6 @@ def user_mail(request):
         from_user = request.POST.getlist("from_user")
         status_id = request.POST.get("status_id")  # 默认未读
         user_id = User.objects.filter(email=from_user[0]).values("id").first()
-        print(user_id["id"])
         if user_id:
             Fhsms.objects.create(title=title, content=content, to_user=touser,
                                  status_id_id=status_id, from_user_id=user_id["id"])
