@@ -742,71 +742,73 @@
 
             <!-- 新增员工 -->
             <!-- 小功能下-->
-            <a class="btn btn-xs btn-info" title="批量发送站内信" data-toggle="modal"
-               data-target="#qznmyModal{{ forloop.counter }}">
-                <i class="ace-icon fa fa-envelope-o bigger-120" title="批量发送站内信" style="height: 20px" id="allsmail"></i>
-            </a>
-
-            <div class="modal fade" id="qznmyModal{{ forloop.counter }}" tabindex="-1" role="dialog"
-                 aria-labelledby="myModalLabel">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content mail_modal">
+        <!-- 批量站内信start-->
+{#            <a class="btn btn-xs btn-info" title="批量发送站内信" data-toggle="modal"#}
+{#               data-target="#qznmyModal{{ forloop.counter }}">#}
+{#                <i class="ace-icon fa fa-envelope-o bigger-120" title="批量发送站内信" style="height: 20px" id="allsmail"></i>#}
+{#            </a>#}
+{##}
+{#            <div class="modal fade" id="qznmyModal{{ forloop.counter }}" tabindex="-1" role="dialog"#}
+{#                 aria-labelledby="myModalLabel">#}
+{#                <div class="modal-dialog" role="document">#}
+{#                    <div class="modal-content mail_modal">#}
                         {#                        <form method="post" action="/user_management/all_email/">#}
                         {#                            {% csrf_token %}#}
-                        <div class="modal-header" style="background:whitesmoke">
-                            <button type="button" class="close" data-dismiss="modal"
-                                    aria-label="Close"><span aria-hidden="true" style="color: red">x</span>
-                            </button>
+{#                        <div class="modal-header" style="background:whitesmoke">#}
+{#                            <button type="button" class="close" data-dismiss="modal"#}
+{#                                    aria-label="Close"><span aria-hidden="true" style="color: red">x</span>#}
+{#                            </button>#}
                             {#                                姓名：<input type="text" name="from_user1" value={{ user.user.username }}>#}
                             {#                                邮箱：<input type="email" name="from_user" value={{ user.user.email }}>#}
-
-
-                        </div>
-                        <div class="modal-body">
-                            标题：<input type="text" name="title" class="titles">
-
-                            <input type="text" name="status_id" value="0"
-                                   style="display: none">
-                            <label>文章内容:</label>
-                            <textarea name="content" id="article_content" cols="60"
-                                      rows="20" class="contents"></textarea>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭
-                            </button>
-                            <a class="btn btn-primary" id="allsendmail">发送</a>
-                        </div>
+{##}
+{##}
+{#                        </div>#}
+{#                        <div class="modal-body">#}
+{#                            标题：<input type="text" name="title" class="titles">#}
+{##}
+{#                            <input type="text" name="status_id" value="0"#}
+{#                                   style="display: none">#}
+{#                            <label>文章内容:</label>#}
+{#                            <textarea name="content" id="article_content" cols="60"#}
+{#                                      rows="20" class="contents"></textarea>#}
+{#                        </div>#}
+{#                        <div class="modal-footer">#}
+{#                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭#}
+{#                            </button>#}
+{#                            <a class="btn btn-primary" id="allsendmail">发送</a>#}
+{#                        </div>#}
                         {#                        </form>#}
-                    </div>
-                </div>
-            </div>
-            <script>
-                //$('你的input的class或id').datetimepicker({});
-                KindEditor.ready(function (K) {
-                    window.editor = K.create('#article_content', {
-                        width: "800px",
-                        height: "500px",
-                        resizeType: 0,
-                        uploadJson: '/upload/',
-                        extraFileUploadParams: {
-                            csrfmiddlewaretoken: '{{ csrf_token }}'
-                        },
-                        filePostName: 'upload_img',
-                        items: [
-                            'source', '|', 'undo', 'redo', '|', 'preview', 'print', 'template', 'code', 'cut', 'copy', 'paste',
-                            'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
-                            'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
-                            'superscript', 'clearhtml', 'quickformat', 'selectall', '|', 'fullscreen', '/',
-                            'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
-                            'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'multiimage',
-                            'flash', 'media', 'insertfile', 'table', 'hr', 'emoticons', 'baidumap', 'pagebreak',
-                            'anchor', 'link', 'unlink', '|', 'about'
-                        ]
-                    });
-                });
-
-
-            </script>
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#            <script>#}
+{#                //$('你的input的class或id').datetimepicker({});#}
+{#                KindEditor.ready(function (K) {#}
+{#                    window.editor = K.create('#article_content', {#}
+{#                        width: "800px",#}
+{#                        height: "500px",#}
+{#                        resizeType: 0,#}
+{#                        uploadJson: '/upload/',#}
+{#                        extraFileUploadParams: {#}
+{#                            csrfmiddlewaretoken: '{{ csrf_token }}'#}
+{#                        },#}
+{#                        filePostName: 'upload_img',#}
+{#                        items: [#}
+{#                            'source', '|', 'undo', 'redo', '|', 'preview', 'print', 'template', 'code', 'cut', 'copy', 'paste',#}
+{#                            'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',#}
+{#                            'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',#}
+{#                            'superscript', 'clearhtml', 'quickformat', 'selectall', '|', 'fullscreen', '/',#}
+{#                            'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',#}
+{#                            'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'multiimage',#}
+{#                            'flash', 'media', 'insertfile', 'table', 'hr', 'emoticons', 'baidumap', 'pagebreak',#}
+{#                            'anchor', 'link', 'unlink', '|', 'about'#}
+{#                        ]#}
+{#                    });#}
+{#                });#}
+{##}
+{##}
+{#            </script>#}
+        <!-- 批量站内信end-->
 
 
             <!-- 群发短信start-->

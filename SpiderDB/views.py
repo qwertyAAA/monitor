@@ -9,9 +9,8 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 import json
 import redis
-
-
-def yuqinglist(request, id):
+from Myutils.pageutil import Page
+def yuqinglist(request,id):
     rule_id = id
     rule_obj = models.Rule.objects.get(id=rule_id)
     if request.method == 'GET':
@@ -97,7 +96,30 @@ def yuqinglist(request, id):
 
         # return render(request,'fei/index.html')
 
-        return render(request, 'yuqing.html', locals())
+        # return render(request, 'yuqing.html', locals())
+        # import itertools
+        #
+        # obj = models.Article.objects.filter()
+        # for i in list_ke:
+        #     message_list = itertools.chain(i,i+1)
+        # status_mess=1
+        # obj2=None
+        obj2=models.Article.objects.all()
+        for index,i in enumerate(list_ke):
+            if index == 0 :
+                obj2 = i
+            else:
+                obj2 = obj2 | i
+
+        message_list = obj2
+        print(message_list)
+        material = models.Material.objects.all()
+        page = Page(message_list, request, 10, 10)
+        sum = page.Sum()
+        # keywords = Material.objects.filter(id=material[0].id).values('keywords')
+        return render(request, 'mail_pictures/Spider_message/spider_message.html',
+                      {'message_list': sum[0], 'page_html': sum[1], 'material': material,'rule_obj':rule_obj},)
+
 
 
 def edit_rule(request, id):

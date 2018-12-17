@@ -5,7 +5,8 @@
     <link href="/static/mail/spider_message/message_header.css" rel="stylesheet">
     <link href="/static/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
     <div>
-        <span>******</span>
+        <h3>方案：<span>{{ rule_obj.title }}</span></h3>
+
         <a href="#" style="margin-left: 900px">标准视图</a> | <a href="#">精简视图</a>
     </div>
     <div class="message_header">
@@ -79,8 +80,6 @@
                   onclick="changeKeywordProvince(0,this)">*全部*</span>
             <span id="message_source_2" role="button" class="spans" onclick="changeKeywordProvince(1,this)">省内</span>
             <span id="message_source_3" role="button" class="spans" onclick="changeKeywordProvince(2,this)">省外</span>
-            &nbsp;<i class="fa fa-question-circle" aria-hidden="true" data-toggle="tooltip" data-placement="bottom"
-                     title="二期完成"></i>
             <div class="span_right">
                 <div class="matching_right">
                     <span>匹配方式:</span>
@@ -111,7 +110,7 @@
             </span>
         </div>
     </div>
-    <div class="source_message">
+    <div class="source_message" style="display: none">
         <span>来源信息<span>(多选)</span>:</span>
         <span id="source_message_1" role="button" class="spans click">全部()</span>
         <span id="source_message_2" role="button" class="spans">微信()</span>
@@ -182,8 +181,8 @@
                             </button>
                             <div class="query_text">
                                 <input type="text" class="form-control" placeholder="在搜索结果中显示，支持单个字符"
-                                       style="width: 250px">
-                                <button type="button" class="btn btn-default">搜索</button>
+                                       id="obang_input" style="width: 250px">
+                                <button type="button" class="btn btn-default" id="obang">搜索</button>
                             </div>
                         </td>
                     </tr>
@@ -205,7 +204,7 @@
                                     <span class="content_50">{{ message.detail|safe }}</span><br>
                                     <span>涉及词：{{ message.keywords }}</span><br>
                                     <span>信源区域：北京</span><span>行业： 其他  招生招聘 </span>
-                                    <div class="one_button" style="float: right">
+                                    <div class="one_button" style="float: right;">
                                         <button type="button" class="btn"
                                                 data-toggle="tooltip" data-placement="bottom"
                                                 id="in_heart_one" name="in_heart_one" title="加入收藏夹"
