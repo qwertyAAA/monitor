@@ -70,6 +70,10 @@ class TiebaPipeline(object):
 
     def process_item(self, item, spider):
         if spider.name=='tieba' or spider.name == 'tieba_all':
+            for i in self.sensitive_words:
+                if item['article_detail'].find(i.decode()) != -1:
+                    self.status = 1
+                    break
             article_url = self.session.query(Article).filter(Article.url == item['article_url']).first()
             # 当文章存在时,判断是否是当前作者写的,如果也是当前作者写的,那么如果关键字不同那么在当前的关键字后面追加新的关键字
             if article_url:
