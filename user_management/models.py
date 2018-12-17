@@ -38,9 +38,8 @@ class Mail_list(models.Model):
         return self.mail_name
 
 
-
 class System_setup(models.Model):
-    Scheme_name = models.CharField(max_length=16,  verbose_name="方案名称")
+    Scheme_name = models.CharField(max_length=16, verbose_name="方案名称")
     warning_content = models.CharField(max_length=32, default='name', verbose_name="预警内容", null=True)
     warning_type = models.CharField(max_length=255, null=True, verbose_name="预警类型")
     warning_mode = models.CharField(max_length=255, null=True, verbose_name="预警方式")
@@ -48,4 +47,3 @@ class System_setup(models.Model):
 
     def __str__(self):
         return self.Scheme_name
-
