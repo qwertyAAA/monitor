@@ -20,10 +20,16 @@ class Article(models.Model):
     keywords = models.CharField(max_length=2048, default="")  # 该文章涉及的关键字
     article_type = models.CharField(max_length=32, default="")  # 该文章的类型，分为纯文本、图文、视频
 
+    def __str__(self):
+        return self.title
+
 
 class Author(models.Model):
     author = models.CharField(max_length=32)
     author_url = models.CharField(max_length=1024)
+
+    def __str__(self):
+        return self.author
 
 
 # 文章的来源    （来源于微博或贴吧等）
@@ -31,12 +37,17 @@ class Source(models.Model):
     source = models.CharField(max_length=32)
     source_img = models.FileField(upload_to="avatars/", default="")
 
+    def __str__(self):
+        return self.source
+
 
 # 分类表
 class Classify(models.Model):
     title = models.CharField(max_length=32)  # 分类名
     user = models.ManyToManyField(to=User)  # 与用户多对多   页面显示当前用户的所有分类列表
 
+    def __str__(self):
+        return self.title
 
 # 方案表
 class Rule(models.Model):
@@ -45,6 +56,9 @@ class Rule(models.Model):
     keyword = models.CharField(max_length=4096)
     exclude_keyword = models.CharField(max_length=1024)
     articles=models.ManyToManyField(to='Article')
+
+    def __str__(self):
+        return self.title
 
 
 # 素材表
