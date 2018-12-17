@@ -70,7 +70,8 @@
         $("#batch_delete").click(function () {
             var sensitive_words = new Array()
             $(".check_item").each(function () {
-                sensitive_words.push($(this).parent().parent().find(".sensitive_word").text())
+                if ($(this).prop("checked"))
+                    sensitive_words.push($(this).parent().parent().find(".sensitive_word").text())
             })
             swal({
                 title: "确定删除吗?",
@@ -151,11 +152,16 @@
                 swal({
                     title: "敏感词禁止为空！",
                     icon: "warning",
-                    button: "好的"
+                    buttons: ["那不改了", "好的"]
                 }).then((willChange) => {
                     if (willChange)
                         $(this).focus()
                 })
+                var prev_data = $(this).attr("placeholder")
+                $(this).parent().html(
+                    "<span class=\"sensitive_word\">" + prev_data +
+                    "</span><br/>"
+                )
                 return false
             }
             swal({
@@ -250,6 +256,11 @@
                             icon: "success",
                         });
                         window.location.reload()
+                    } else {
+                        swal({
+                            title: "敏感词重复了！",
+                            icon: "warning",
+                        })
                     }
                 }
             })
