@@ -16,5 +16,6 @@ urlpatterns = [
     url(r'spider_add_tags_all/', mail_vi.spider_add_tags_all),
     url(r'spider_change_see/', mail_vi.spider_change_see),
     url(r'spider_add_heart_all/', mail_vi.spider_add_heart_all),
+    url(r'obang_new_tbody/', mail_vi.obang_new_tbody),
     url(r'article/id=(\d+)/$', mail_vi.article_detail),
 ]

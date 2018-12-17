@@ -26,7 +26,7 @@ class Starter(object):
 
     def start_tieba(self):
         os.chdir("D:\\monitor\\monitorSpiders\\monitorSpiders")
-        os.system("scrapy crawl tieba")
+        os.system("scrapy crawl tieba --nolog")
 
 
 
