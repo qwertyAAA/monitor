@@ -105,7 +105,7 @@ def reset_pwd(request):
 
 # 首页
 def index(request):
-    return render(request, "index.html")
+    return redirect('/index/spider_message/')
 
 
 # Ajax验证邮箱是否注册
