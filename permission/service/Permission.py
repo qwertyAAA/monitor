@@ -1,5 +1,7 @@
 from permission.models import Role
 from permission.models import Permission
+from permission.models import RoleGroup
+from django.db.models import Q
 def init_permission(user_obj, request):
     print(user_obj.is_superuser)
     if user_obj.is_superuser:
@@ -10,6 +12,26 @@ def init_permission(user_obj, request):
         role_obj.permissions.add(*permisson_list)
         user_obj.role_set.clear()
         user_obj.role_set.add(role_obj)
+    else:
+        #如果是普通用户登录
+        print(1)
+        print(user_obj.role_set.all().count())
+        print(user_obj.role_set.all().exists())
+        print(type(user_obj.role_set.all()))
+
+        if user_obj.role_set.all().exists():
+            #如果该用户有对应的角色
+            print(2)
+            pass
+
+        else:                   #注册后第一次登录，没有对应的角色
+            print(3)
+            role_obj2=Role.objects.filter(title='游客').first()
+            permission_list2=Permission.objects.filter(Q(action='list') | Q(action='list_second'))
+            role_obj2.permissions.clear()
+            role_obj2.permissions.add(*permission_list2)
+            user_obj.role_set.add(role_obj2)
+
     # 方案1
     # request.session['user_id'] = user_obj.pk
     # # 查询当前用户的所有的权限  放在session中
