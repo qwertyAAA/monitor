@@ -56,10 +56,10 @@ def edit(request):
         dfunc = request.POST.get("func", None)
         duser = request.POST.get("user", None)
         dtips = request.POST.get("tips", None)
-        obj = models.Department.objects.filter(name=did).first()
         top_obj = models.Department.objects.filter(name=dtop_dep).first()
         user = m2.User.objects.filter(username=duser).first()
-        if obj:
+        if did:
+            obj = models.Department.objects.filter(id=did).first()
             obj.name = dname
             obj.en_name = den_name
             obj.top_department = top_obj
