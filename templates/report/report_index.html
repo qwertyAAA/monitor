@@ -119,8 +119,8 @@
                             maxvalue = tieba_num;
                         }
                         XDoc.server = "http://www.xdocin.com";
-                        XDoc.key = "6nhllqttojfr7e3p6u2ifxrclm";
-                        XDoc.run("./模板1.docx",
+                        XDoc.key = key;
+                        XDoc.run(url1,
                             ReportType, {
                                 "标题": "舆情简报",
                                 "编号": id,
@@ -134,7 +134,7 @@
                                 "！非敏感比": no_sensitive / (sensitive + no_sensitive),
                                 "贴数": tieba_num,
                                 "微博数": blog_num,
-                                '_filename': "舆情简报" + create_time
+                                '_filename': "舆情简报"+ id + create_time
                             },
                             "_blank");
                         maxname = '';
