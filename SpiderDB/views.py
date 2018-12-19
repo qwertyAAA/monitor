@@ -123,7 +123,19 @@ def yuqinglist(request,id):
                       {'message_list': sum[0], 'page_html': sum[1], 'material': material,'rule_obj':rule_obj},)
 
 
-
+def net_user(request):
+    net_user_lists=models.Article.objects.all().order_by('affected_count').reverse()[:10]
+    print(net_user_lists)
+    sum=0
+    title_list=[]
+    aff_count=[]
+    for i in net_user_lists:
+        sum+=i.affected_count
+        title_list.append(i.title)
+        aff_count.append(i.affected_count)
+    print(title_list)
+    print(aff_count)
+    return render(request,'net_user_viewpoint.html',locals())
 
 
 

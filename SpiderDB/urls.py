@@ -10,6 +10,8 @@ urlpatterns=[
     url(r'^delete_rule/(\d+)/$',views.delete_rule),
     url(r'^edit_rule/(\d+)/$',views.edit_rule),
     url(r'^yuqinglist/(\d+)/$',views.yuqinglist),
+    url(r'^net_user/$',views.net_user),
+
 
 
 ]
