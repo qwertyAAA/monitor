@@ -65,7 +65,7 @@ DOWNLOADER_MIDDLEWARES = {
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
 ITEM_PIPELINES = {
-    # 'monitorSpiders.pipelines.TiebaPipeline': 300,
+    'monitorSpiders.pipelines.TiebaPipeline': 300,
     'monitorSpiders.pipelines.WeiboPipeline': 301,
 }
 
