@@ -73,7 +73,7 @@ class TiebaPipeline(object):
 
     def process_item(self, item, spider):
         status = 0
-        if spider.name!='tieba' and spider.name != 'tieba_all':
+        if spider.name != 'tieba':
             return item
         for i in self.sensitive_words:
             if item['article_detail'].find(i.decode()) != -1:
@@ -148,6 +148,4 @@ class TiebaPipeline(object):
 
     def close_spider(self, spider):
         print('DB close_spider')
-        conn=redis.Redis(host='127.0.0.1',port=6379)
-        conn.delete('newkeywords')
         self.session.close()

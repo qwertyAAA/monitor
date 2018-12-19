@@ -67,8 +67,10 @@ def register(request):
 
         # 调用auth登录
         auth.login(request, user)
+        request.session['user_id'] = user.id
+        init_permission(user, request)
         # 重定向到首页
-        return redirect("/index/")
+        return redirect("/index/spider_message/")
     else:
         context = {"islogin": False}
     return render(request, "login.html", locals())
@@ -105,7 +107,7 @@ def reset_pwd(request):
 
 # 首页
 def index(request):
-    return render(request, "index.html")
+    return redirect('/index/spider_message/')
 
 
 # Ajax验证邮箱是否注册
