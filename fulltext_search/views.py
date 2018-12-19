@@ -15,7 +15,7 @@ import time
 想法1:通过线程
 想法2:通过调用多个爬虫,首先调用爬取页数少的,之后通过前端的定时器或者其他别的方法自动启动另一个爬虫在后台运行
 '''
-key = redis.Redis(host="10.25.116.62", port=6379, max_connections=1000)
+key = redis.Redis(host="127.0.0.1", port=6379, max_connections=1000)
 
 
 t1 = threading.Thread(target=tieba.start_tieba)
