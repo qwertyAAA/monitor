@@ -191,7 +191,8 @@ def edit_second_menu(request, id):
 def del_first_menu(request, id):
     del_id = id
     del_menu = models.First_Menu.objects.get(nid=del_id)
-    per_group = per_models.PermissionGroup.objects.filter(title=del_menu.action).first()
+    per_group = per_models.Permission.objects.filter(title=del_menu.action).first()
+    print(per_group)
     if per_group:
         per_group.is_del = True
         per_group.save()
