@@ -10,7 +10,7 @@ from w3lib.html import remove_tags
 import redis
 key=redis.Redis(host="10.25.116.62",port=6379,max_connections=1000)
 try:
-    keywords = [key.get('newkeywords1').decode()]
+    keywords = [key.get('newkeywords').decode()]
 except Exception:
     keywords = []
 key_word_redislist=key.lrange('exists_keywords',0,-1)
@@ -42,7 +42,7 @@ class TiebaSpider(scrapy.Spider):
     article_url = []
 
     def start_requests(self):
-        print('开始')
+        print('开始_tieba')
         print(self.key_words)
         for key_word in self.key_words:
             urls = ['http://tieba.baidu.com/f/search/res?ie=utf-8&qw=%s']
@@ -50,6 +50,11 @@ class TiebaSpider(scrapy.Spider):
             for url in urls:
                 yield Request(url=url % key_word)
 
+
+
+    #爬取的数量应该和当前关键词热度挂钩,并不是所有关键词都应该
+    #爬取一样的页数,这样会造成资源的浪费或者紧缺
+    #应该需要一个算法暂时还无法实现
     def parse(self, response):
         print('解析')
         # 直接获取当前页面下的所有分页

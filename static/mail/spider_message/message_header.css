@@ -115,8 +115,8 @@
 
 .query_text input {
     position: absolute;
-    top: 464px;
-    left: 870px;
+    top: 14.5%;
+    left: 67%;
 }
 
 .span_span {
@@ -132,8 +132,8 @@
 
 .query_text button {
     position: absolute;
-    top: 459px;
-    left: 1125px;
+    top: 14.5%;
+    left: 88%;
 }
 
 .content_50 img {

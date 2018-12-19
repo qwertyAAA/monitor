@@ -11,7 +11,11 @@ urlpatterns=[
     url(r'^edit_rule/(\d+)/$',views.edit_rule),
     url(r'^yuqinglist/(\d+)/$',views.yuqinglist),
     url(r'^net_user/$',views.net_user),
-
-
-
+  
+  
+    url(r'^set_sensitive_words/$', views.set_sensitive_words),
+    url(r'^update_sensitive_word/$', views.update_sensitive_words),
+    url(r'^delete_sensitive_words/$', views.delete_sensitive_words),
+    url(r'^sensitive_words_view/$', views.sensitive_words_view)
 ]
+

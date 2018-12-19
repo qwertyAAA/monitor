@@ -128,6 +128,8 @@ $("#img_upload").click(function () {
                 type:"post",
                 traditional:true,
                 success:function (data) {
+                    alert("上传成功！");
+                    window.location.reload();
                 }
             })
         }

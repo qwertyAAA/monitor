@@ -83,8 +83,6 @@
                   onclick="changeKeywordProvince(0,this)">*全部*</span>
             <span id="message_source_2" role="button" class="spans" onclick="changeKeywordProvince(1,this)">省内</span>
             <span id="message_source_3" role="button" class="spans" onclick="changeKeywordProvince(2,this)">省外</span>
-            &nbsp;<i class="fa fa-question-circle" aria-hidden="true" data-toggle="tooltip" data-placement="bottom"
-                     title="二期完成"></i>
             <div class="span_right">
                 <div class="matching_right">
                     <span>匹配方式:</span>
@@ -115,7 +113,7 @@
             </span>
         </div>
     </div>
-    <div class="source_message">
+    <div class="source_message" style="display: none">
         <span>来源信息<span>(多选)</span>:</span>
         <span id="source_message_1" role="button" class="spans click">全部()</span>
         <span id="source_message_2" role="button" class="spans">微信()</span>
@@ -186,8 +184,8 @@
                             </button>
                             <div class="query_text">
                                 <input type="text" class="form-control" placeholder="在搜索结果中显示，支持单个字符"
-                                       style="width: 250px">
-                                <button type="button" class="btn btn-default">搜索</button>
+                                       id="obang_input" style="width: 250px">
+                                <button type="button" class="btn btn-default" id="obang">搜索</button>
                             </div>
                         </td>
                     </tr>
@@ -205,11 +203,16 @@
                                     <a href="/index/{{ message.title }}/article/id={{ message.id }}/">
                                         <img src="/media/{{ message.source.source_img }}" class="img-circle"
                                              style="width:50px;height: 50px;"></a>
-                                    <a href="/index/article/id={{ message.id }}/"><span>{{ message.title|safe }}</span></a><br>
+                                    <a href="/index/article/id={{ message.id }}/"><span>{{ message.title|safe }}</span></a>
+                                    {% if message.status == 0 %}
+                                        <button style="background-color: #f1d153;color: black">非敏感</button><br>
+                                    {% else %}
+                                        <button style="background-color: red;color: black">敏感</button><br>
+                                    {% endif %}
                                     <span class="content_50">{{ message.detail|safe }}</span><br>
                                     <span>涉及词：{{ message.keywords }}</span><br>
                                     <span>信源区域：北京</span><span>行业： 其他  招生招聘 </span>
-                                    <div class="one_button" style="float: right">
+                                    <div class="one_button" style="float: right;">
                                         <button type="button" class="btn"
                                                 data-toggle="tooltip" data-placement="bottom"
                                                 id="in_heart_one" name="in_heart_one" title="加入收藏夹"
