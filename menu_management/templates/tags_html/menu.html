@@ -8,7 +8,7 @@
             </li>
             {% for first in first_menu %}
                 <li>
-                    <a href="#"><i class="fa fa-sitemap"></i><b>{{ first.title }}</b> <span class="fa arrow"></span></a>
+                    <a href="#" class="hover_li"><i class="fa fa-sitemap"></i><b>{{ first.title }}</b> <span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         {% for second in second_menu %}
                             {% if second.first_menu_id == first.nid %}
