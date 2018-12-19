@@ -249,7 +249,7 @@ def edit_rule(request, id):
             str2 += ' e-v-e-n-t-0 ' + event_key + ' e-v-e-n-t-0 '
         str3 = str1 + ' | ' + str2
         key_all = event_key + ' ' + person_key + ' ' + area_key
-        conn = redis.Redis(host="10.25.116.62", port=6379)
+        conn = redis.Redis(host="127.0.0.1", port=6379)
         list_huo = key_huo.split()
         for i in list_huo:
             conn.rpush("exists_keywords", i)
@@ -301,7 +301,7 @@ def add_rule2(request, id):
         # print(str3)
         del_key = request.POST.get('del_key')
         key_all = event_key + ' ' + person_key + ' ' + area_key
-        conn = redis.Redis(host="10.25.116.62", port=6379)
+        conn = redis.Redis(host="127.0.0.1", port=6379)
         list_huo = key_huo.split()
         for i in list_huo:
             conn.rpush("exists_keywords", i)
@@ -351,7 +351,7 @@ def classify(request):
 def set_sensitive_words(request):
     if request.is_ajax():
         sensitive_words = request.POST.getlist("sensitive_words")
-        conn = redis.Redis(host="10.25.116.62", port=6379)
+        conn = redis.Redis(host="127.0.0.1", port=6379)
         ret = {"status": True}
         if conn.sadd("sensitive_words", *sensitive_words):
             return JsonResponse(ret)
@@ -362,7 +362,7 @@ def set_sensitive_words(request):
 
 # 敏感词的view函数
 def sensitive_words_view(request):
-    conn = redis.Redis(host="10.25.116.62", port=6379)
+    conn = redis.Redis(host="127.0.0.1", port=6379)
     sensitive_words = list(conn.smembers("sensitive_words"))
     if request.is_ajax():
         ret = {"data": list(sensitive_words)}
@@ -373,7 +373,7 @@ def sensitive_words_view(request):
 # 删除敏感词信息
 def delete_sensitive_words(request):
     if request.is_ajax():
-        conn = redis.Redis(host="10.25.116.62", port=6379)
+        conn = redis.Redis(host="127.0.0.1", port=6379)
         sensitive_words = request.POST.getlist("sensitive_words")
         conn.srem("sensitive_words", *sensitive_words)
         return JsonResponse({"status": True})
@@ -384,7 +384,7 @@ def update_sensitive_words(request):
     if request.is_ajax():
         ret = {"status": False}
         try:
-            conn = redis.Redis(host="10.25.116.62", port=6379)
+            conn = redis.Redis(host="127.0.0.1", port=6379)
             prev_data = request.POST.get("prev_data")
             new_data = request.POST.get("new_data")
             conn.srem("sensitive_words", prev_data)
