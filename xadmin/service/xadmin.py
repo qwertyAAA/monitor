@@ -6,10 +6,10 @@ from django import forms
 from django.db.models import OneToOneField, ForeignKey, ManyToManyField
 import datetime
 from django.contrib.auth.hashers import make_password
-import locale
+# import locale
 from Myutils.pageutil import Page
 
-locale.setlocale(locale.LC_CTYPE, 'chinese')
+# locale.setlocale(locale.LC_CTYPE, 'chinese')
 
 
 class ModelXAdmin(object):
@@ -201,7 +201,7 @@ class ModelXAdmin(object):
                 for item in data:
                     # 此处为返回前端的数据进行过滤
                     item = item[:40:] if isinstance(item, str) else item
-                    item = item.strftime("%Y年%m月%d日 %H:%M") if isinstance(item, datetime.datetime) else item
+                    # item = item.strftime("%Y年%m月%d日 %H:%M") if isinstance(item, datetime.datetime) else item
                     # try:
                     #     item = item.strftime("%Y{0}%m{1}%d{2} %H:%M".format("年", "月", "日"))
                     # except Exception as e:
