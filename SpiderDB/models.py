@@ -61,6 +61,7 @@ class Rule(models.Model):
         return self.title
 
 
+
 # 素材表
 class Material(models.Model):
     nid = models.AutoField(primary_key=True)

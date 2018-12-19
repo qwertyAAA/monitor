@@ -1,3 +1,14 @@
+''' 数据分析库'''
+''' 在matplotlib的图中设置中文标签 start'''
+from matplotlib.font_manager import FontProperties
+
+font = FontProperties(fname=r"c:\windows\fonts\simsun.ttc", size=15)
+'''在matplotlib的图中设置中文标签 end '''
+import numpy as np
+from datetime import datetime
+import matplotlib.pyplot as plt
+from pandas import Series, DataFrame
+import pandas as pd
 # Create your views here.
 from django.shortcuts import render, redirect, HttpResponse
 from django.http import JsonResponse
@@ -7,6 +18,7 @@ from middlewares.all_requests import all_requests
 from .Myutilss.pageutil import Page
 from permission.models import Role
 from mail.models import Fhsms
+from SpiderDB.models import Article
 
 ''' 发送站内信需要导入的包'''
 from mail.models import Fhsms, StatusMail
@@ -29,15 +41,17 @@ def search_user(request):
 
 
 ''' 添加用户'''
+
+
 def aadd_user(request):
     if request.method == "POST":
         user_id = request.POST.get('user_id')
         user_name = request.POST.get('user_name')
         user_number = request.POST.get('adduser_number')
-        user_id_card = request.POST.get('user_id_card')
+        user_id_card = request.POST.get('ckuser_id_card')
         user_stay_years = request.POST.get('user_stay_years')
         user_gender = request.POST.get('user_gender')
-        user_phone = request.POST.get('user_phone')
+        user_phone = request.POST.get('ckuser_phone')
         user_age = request.POST.get('user_age')
         user_remarks = request.POST.get('user_remarks')
         titlelist = request.POST.getlist('titlelist')
@@ -69,6 +83,8 @@ def main(request):
 
 
 ''' 用户角色'''
+
+
 def user_info(request):
     # user_list = models.UserInfo.objects.all()
     from permission.service.DataPermission import has_data
@@ -92,6 +108,8 @@ def user_info(request):
 
 
 ''' 编辑页面'''
+
+
 def edit_user(request, user_id):
     print('编辑页面')
     edit_user = models.UserInfo.objects.filter(pk=user_id).first()
@@ -130,6 +148,8 @@ def edit_user(request, user_id):
 
 
 ''' 删除页面'''
+
+
 def delete_user(request, num=None):
     if num:
         '''  对于删除先删除第三张表再删除作者表 id  注意页面的格式问题'''
@@ -147,6 +167,8 @@ def delete_user(request, num=None):
 
 
 ''' 用户详情'''
+
+
 def details_user(request, editemp_id):
     edit_staff = models.UserInfo.objects.filter(pk=editemp_id).first()
     result = models.Department.objects.all()
@@ -154,6 +176,8 @@ def details_user(request, editemp_id):
 
 
 ''' 模糊查询'''
+
+
 def user_search(request):
     if request.method == "POST":
         search_key = request.POST.get("search_key")
@@ -302,6 +326,8 @@ def check_usercard(request):
 #             print('xxxxxxxxxccccccccccccccccccccccccccccccc')
 #         return JsonResponse(ret)
 ''' 在线查询'''
+
+
 def online_users_search_data(request):
     if request.is_ajax():
         keyword = request.POST.get("keyword")
@@ -354,6 +380,8 @@ def online_users_search_data(request):
 
 
 ''' 批量下线'''
+
+
 def online_users_batch_delete(request):
     if request.is_ajax():
         delete_id_list = request.POST.getlist("delete_id_list")
@@ -367,6 +395,8 @@ def online_users_batch_delete(request):
 
 
 '''  单个下线'''
+
+
 def online_users_delete(request, delete_id):
     for item in all_requests.requests_list:
         if item.user.pk == int(delete_id):
@@ -411,6 +441,8 @@ def online_users_delete(request, delete_id):
 #
 
 ''' 单一发送站内信'''
+
+
 def user_mail(request):
     status_list = StatusMail.objects.all()
     if request.method == 'POST':
@@ -470,6 +502,8 @@ def allemail(request):
 
 
 '''群发站内信 '''
+
+
 def all_email(request):
     print('开始群发站内信')
     from user_management import allEmail
@@ -511,6 +545,8 @@ def all_email(request):
 
 
 ''' 发送短信'''
+
+
 def send_message(request):
     from user_management import message
     if request.method == 'POST':
@@ -525,6 +561,8 @@ def send_message(request):
 
 
 ''' 群发信息'''
+
+
 def group_sms(request):
     print('群发站信cccccccccccccccccccccccccccccc')
     from user_management import message
@@ -540,12 +578,13 @@ def group_sms(request):
 
 
 ''' 舆情'''
+
+
 def serach_emotion(request):
     return render(request, "user_management_html/search_emotion.html")
 
 
 def erach_emotions(request):
-
     if request.method == "POST":
         search_key = request.POST.get("search_key")
         if search_key:
@@ -614,8 +653,7 @@ def delete_mail(request, num=None):
     return JsonResponse({"status": False})
 
 
-
-def edit_mail(request,mail_id):
+def edit_mail(request, mail_id):
     print('welcome new  world')
     print(mail_id)
     if request.method == 'POST':
@@ -628,12 +666,12 @@ def edit_mail(request,mail_id):
         mailss = models.Mail_list.objects.filter(pk=mail_id)
         print(mailss)
         mailss.update(
-            mail_phone = mail_phone,
-            mail_name = mail_name,
-            mail_email = mail_email,
-            mail_weixin_number = mail_weixin_number,
-            mail_remarks = mail_remarks,
-            mail_company = mail_company
+            mail_phone=mail_phone,
+            mail_name=mail_name,
+            mail_email=mail_email,
+            mail_weixin_number=mail_weixin_number,
+            mail_remarks=mail_remarks,
+            mail_company=mail_company
 
         )
         return redirect("/user_management/mails")
@@ -713,21 +751,22 @@ def delete_system(request, num=None):
         return redirect('/user_management/System_setup/')
 
 
-
 '''添加预警信息'''
+
+
 def yujing(request):
     print('添加添加')
-    if request.method=='POST':
-        Scheme_name=request.POST.get('rule_name')
+    if request.method == 'POST':
+        Scheme_name = request.POST.get('rule_name')
         print(Scheme_name)
         source = request.POST.get('source_type')
         print(source)
         switch = request.POST.get('switch')
 
         print(switch)
-        warningcontent =request.POST.get('contents')
+        warningcontent = request.POST.get('contents')
         print(warningcontent)
-        warning_mode=request.POST.get('type')
+        warning_mode = request.POST.get('type')
 
         print(warning_mode)
         Content = models.System_setup.objects.create(
@@ -744,9 +783,10 @@ def yujing(request):
     return render(request, "user_management_html/emotion_info.html", locals())
 
 
-
 ''' 修改预警信息'''
-def edit_emotion(request,system_id):
+
+
+def edit_emotion(request, system_id):
     if request.method == 'POST':
         Scheme_name = request.POST.get('Scheme_name')
         warning_type = request.POST.get('warning_type')
@@ -756,14 +796,77 @@ def edit_emotion(request,system_id):
         emotion = models.System_setup.objects.filter(pk=system_id)
         print(emotion)
         emotion.update(
-            Scheme_name = Scheme_name,
-            warning_type = warning_type,
-            switch = switch,
-            warning_mode = warning_mode,
-            warning_content = warning_content,
+            Scheme_name=Scheme_name,
+            warning_type=warning_type,
+            switch=switch,
+            warning_mode=warning_mode,
+            warning_content=warning_content,
 
         )
         return redirect("/user_management/System_setup")
 
     return render(request, "user_management_html/emotion_info.html", locals())
+
+
+
+def count_user(request):
+    net_user_lists = Article.objects.filter(id__gt=0)
+    affected_sum = 0
+    art_sum = 0
+    cre_time = []
+    for i in net_user_lists:
+        affected_sum += i.affected_count
+        art_sum += i.source_id
+        cre_time.append(i.create_time)
+    times=Series([cre_time])
+    print(type(times))
+    art_sums=list(range(art_sum))
+    affected_sums=list(range(affected_sum))
+
+
+    '''
+    name_attribute = ['NumberID','UserID','ModuleID','StartDate','EndDate','Frequent']
+    writerCSV=pd.DataFrame(columns=name_attribute,data=data)
+    test=pd.DataFrame(columns=name,data=list)
+    writerCSV.to_csv('./no_fre.csv',encoding='utf-8')
+    这种方法通过pandas模块的to_csv方法实现将二维的list转为csv，但是同样
+
+    '''
+    ''' 不能是data = [[art_sums],[affected_sums]] 因为art_sums 本身就是集合
+        这样是错误的加上给列加上名字因为data里面的的集合有多少就要指明几列，这样显然是不对的
+    '''
+    # data = [art_sums,affected_sums]
+    # name_attribute = ['art_sum','affected_sum']
+    # writerCSV = pd.DataFrame( data=data)
+    # writerCSV.to_csv('art_sums.csv', encoding='utf-8')
+
+
+
+    # # s1 = Series([art_sums, affected_sums], index=['art_sums', 'affected_sums'])
+    # s1 = Series([art_sums,affected_sums],index=None)
+    # # s1 = Series([times], index=['times'])
+    #
+    # plt.title(u"文章影响率", fontproperties=font)
+    # # 并转图 kind='pie', subplots=True
+    # s1.plot(grid=True, label='s1',)
+    # plt.xlabel('文章数', fontproperties=font)
+    # plt.ylabel('受影响的人数', fontproperties=font)
+    #
+    # plt.legend()
+    # # plt.savefig('xy标题标签')
+    # plt.show()
+    return HttpResponse(affected_sum)
+
+def datacount(request):
+    art_sums = pd.read_csv('art_sums.csv')
+    # print(art_sums.head(2))
+    # art_sums.head(2).plot(grid=True, title='alijd', label='alibaba', )
+    # art_sums.plot(grid=True, title='alijd', label='alibaba',)
+    art_sums['0'].plot(grid=True, title='alijd', label='alibaba', )
+    plt.xlabel('文章数', fontproperties=font)
+    plt.ylabel('受影响的人数', fontproperties=font)
+    plt.legend()
+    # plt.savefig('京东阿里')
+    plt.show()
+    return HttpResponse("hello  new  world")
 
