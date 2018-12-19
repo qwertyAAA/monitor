@@ -324,6 +324,8 @@ def get_data_list(qs):
             if field == "content":
                 continue
             data[field] = getattr(item, field)
+            if isinstance(data[field], datetime.datetime):
+                data[field] = datetime.datetime.strftime(data[field], "%Y-%m-%d %H:%M")
         if data["detail"] == "":
             continue
         data_list.append(data)

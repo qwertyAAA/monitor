@@ -199,7 +199,12 @@
                                     <a href="/index/{{ message.title }}/article/id={{ message.id }}/">
                                         <img src="/media/{{ message.source.source_img }}" class="img-circle"
                                              style="width:50px;height: 50px;"></a>
-                                    <a href="/index/article/id={{ message.id }}/"><span>{{ message.title|safe }}</span></a><br>
+                                    <a href="/index/article/id={{ message.id }}/"><span>{{ message.title|safe }}</span></a>
+                                    {% if message.status == 0 %}
+                                        <button style="background-color: #f1d153;color: black">非敏感</button><br>
+                                    {% else %}
+                                        <button style="background-color: red;color: black">敏感</button><br>
+                                    {% endif %}
                                     <span class="content_50">{{ message.detail|safe }}</span><br>
                                     <span>涉及词：{{ message.keywords }}</span><br>
                                     <span>信源区域：北京</span><span>行业： 其他  招生招聘 </span>

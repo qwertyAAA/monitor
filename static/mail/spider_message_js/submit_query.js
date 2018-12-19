@@ -22,6 +22,25 @@ $("#submit_query").click(function () {
             $('tbody').empty();
             var new_tr = "";
             $.each(data, function (item) {
+                var new_btn = "";
+                var new_read = "";
+                // console.log(this.status);
+                if (this.status === false){
+                    new_btn = '<button style="background-color: #f1d153;color: black">'+ "非敏感" +'</button><br>'
+                }
+                else {
+                    new_btn = '<button style="background-color: red;color: black">'+ "敏感" +'</button><br>'
+                }
+                if (this.already_read === false){
+                    new_read = '<button type="button" class="btn" data-toggle="tooltip" data-placement="bottom" name="in_eye" data-original-title="标已读">' +
+                        '<i class="fa fa-eye-slash" aria-hidden="true"></i>' +
+                        '</button>'
+                }
+                else {
+                    new_read = '<button type="button" class="btn" data-toggle="tooltip" data-placement="bottom" name="in_eye" data-original-title="已读" style="background-color: #f1d153">' +
+                        '<i class="fa fa-eye" aria-hidden="true"></i>' +
+                        '</button>'
+                }
                 if (item < 10) {
                     new_tr += "<tr>" +
                         "<td class='input_checkbox line_height'>" +
@@ -34,7 +53,7 @@ $("#submit_query").click(function () {
                         '</a>' +
                         '<a href="/index/' + this.title + '/article/id=' + this.id + '/">' +
                         '<span>' + this.title + '</span>' +
-                        '</a><br>' +
+                        '</a>' + new_btn +
                         '<span class="content_50">' + this.detail + '</span><br>' +
                         '<span>' + "涉及词：" + this.keywords + '</span><br>' +
                         '<div class="one_button" style="float:right">' +
@@ -56,9 +75,7 @@ $("#submit_query").click(function () {
                         '<i class="fa fa-link fa-lg"></i>' +
                         '</button>' +
                         // 判断语句********************************
-                        '<button type="button" class="btn" data-toggle="tooltip" data-placement="bottom" name="in_eye" data-original-title="标已读">' +
-                        '<i class="fa fa-eye-slash" aria-hidden="true"></i>' +
-                        '</button>' +
+                        new_read +
                         // ************************************
                         '</div>' + '</div>' + '</td>' +
                         '<td class="line_height"><span>' + 1 + '</span></td>' +
