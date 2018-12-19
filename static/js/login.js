@@ -170,7 +170,7 @@ $("#btn-login").click(function () {
 
                     function refer() {
                         if (i == 0) {
-                            window.location.replace("/index/");
+                            window.location.replace("/index/spider_message/");
                             clearInterval(intervalid);
                         }
                         $("#ls3s").text(i);
