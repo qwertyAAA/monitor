@@ -47,6 +47,7 @@ class Rule(models.Model):
     articles=models.ManyToManyField(to='Article')
 
 
+
 # 素材表
 class Material(models.Model):
     nid = models.AutoField(primary_key=True)
