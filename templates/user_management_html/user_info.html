@@ -89,7 +89,7 @@
                         <i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>
                         最近登陆
                     </th>
-                    <th class="center">上次登录IP</th>
+{#                    <th class="center">上次登录IP</th>#}
                     <th class="center">操作</th>
                 </tr>
                 <tbody>
@@ -117,7 +117,7 @@
                         </td>
                         <td style="width: 200px"> {{ user.user.last_login }} </td>
 
-                        <td style="width: 90px">{{ user.user_recent_ip }}</td>
+{#                        <td style="width: 90px">{{ user.user_recent_ip }}</td>#}
 
                         <td style="width: 200px">
 
@@ -266,70 +266,70 @@
                             <!-- 详情信息 end0 -->
                             <!-- 站内信 start -->
 
-                            <a class="btn btn-xs btn-info" title="发送站内信" data-toggle="modal"
-                               data-target="#znmyModal{{ forloop.counter }}">
-                                <i class="ace-icon fa fa-envelope-o bigger-120" title="发送站内信"></i>
-                            </a>
-
-                            <div class="modal fade" id="znmyModal{{ forloop.counter }}" tabindex="-1" role="dialog"
-                                 aria-labelledby="myModalLabel">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content mail_modal">
-                                        <form method="post" action="/user_management/user_mail/">
-                                            {% csrf_token %}
-                                            <div class="modal-header">
-
-
-                                                姓名：<input type="text" name="from_user1" value={{ user.user.username }}>
-                                                邮箱：<input type="email" name="from_user" value={{ user.user.email }}>
-
-
-                                            </div>
-                                            <div class="modal-body">
-                                                标题：<input type="text" name="title">
-
-                                                <input type="text" name="status_id" value="0"
-                                                       style="display: none">
-                                                <label>文章内容:</label>
-                                                <textarea name="content" id="article_content" cols="60"
-                                                          rows="20"></textarea>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
-                                                </button>
-                                                <button type="submit" class="btn btn-primary" id="sendmail">发送</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                            <script>
-                                //$('你的input的class或id').datetimepicker({});
-                                KindEditor.ready(function (K) {
-                                    window.editor = K.create('#article_content', {
-                                        width: "800px",
-                                        height: "500px",
-                                        resizeType: 0,
-                                        uploadJson: '/upload/',
-                                        extraFileUploadParams: {
-                                            csrfmiddlewaretoken: '{{ csrf_token }}'
-                                        },
-                                        filePostName: 'upload_img',
-                                        items: [
-                                            'source', '|', 'undo', 'redo', '|', 'preview', 'print', 'template', 'code', 'cut', 'copy', 'paste',
-                                            'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
-                                            'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
-                                            'superscript', 'clearhtml', 'quickformat', 'selectall', '|', 'fullscreen', '/',
-                                            'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
-                                            'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'multiimage',
-                                            'flash', 'media', 'insertfile', 'table', 'hr', 'emoticons', 'baidumap', 'pagebreak',
-                                            'anchor', 'link', 'unlink', '|', 'about'
-                                        ]
-                                    });
-                                });
-
-
-                            </script>
+{#                            <a class="btn btn-xs btn-info" title="发送站内信" data-toggle="modal"#}
+{#                               data-target="#znmyModal{{ forloop.counter }}">#}
+{#                                <i class="ace-icon fa fa-envelope-o bigger-120" title="发送站内信"></i>#}
+{#                            </a>#}
+{##}
+{#                            <div class="modal fade" id="znmyModal{{ forloop.counter }}" tabindex="-1" role="dialog"#}
+{#                                 aria-labelledby="myModalLabel">#}
+{#                                <div class="modal-dialog" role="document">#}
+{#                                    <div class="modal-content mail_modal">#}
+{#                                        <form method="post" action="/user_management/user_mail/">#}
+{#                                            {% csrf_token %}#}
+{#                                            <div class="modal-header">#}
+{##}
+{##}
+{#                                                姓名：<input type="text" name="from_user1" value={{ user.user.username }}>#}
+{#                                                邮箱：<input type="email" name="from_user" value={{ user.user.email }}>#}
+{##}
+{##}
+{#                                            </div>#}
+{#                                            <div class="modal-body">#}
+{#                                                标题：<input type="text" name="title">#}
+{##}
+{#                                                <input type="text" name="status_id" value="0"#}
+{#                                                       style="display: none">#}
+{#                                                <label>文章内容:</label>#}
+{#                                                <textarea name="content" id="article_content" cols="60"#}
+{#                                                          rows="20"></textarea>#}
+{#                                            </div>#}
+{#                                            <div class="modal-footer">#}
+{#                                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭#}
+{#                                                </button>#}
+{#                                                <button type="submit" class="btn btn-primary" id="sendmail">发送</button>#}
+{#                                            </div>#}
+{#                                        </form>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <script>#}
+{#                                //$('你的input的class或id').datetimepicker({});#}
+{#                                KindEditor.ready(function (K) {#}
+{#                                    window.editor = K.create('#article_content', {#}
+{#                                        width: "800px",#}
+{#                                        height: "500px",#}
+{#                                        resizeType: 0,#}
+{#                                        uploadJson: '/upload/',#}
+{#                                        extraFileUploadParams: {#}
+{#                                            csrfmiddlewaretoken: '{{ csrf_token }}'#}
+{#                                        },#}
+{#                                        filePostName: 'upload_img',#}
+{#                                        items: [#}
+{#                                            'source', '|', 'undo', 'redo', '|', 'preview', 'print', 'template', 'code', 'cut', 'copy', 'paste',#}
+{#                                            'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',#}
+{#                                            'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',#}
+{#                                            'superscript', 'clearhtml', 'quickformat', 'selectall', '|', 'fullscreen', '/',#}
+{#                                            'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',#}
+{#                                            'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'multiimage',#}
+{#                                            'flash', 'media', 'insertfile', 'table', 'hr', 'emoticons', 'baidumap', 'pagebreak',#}
+{#                                            'anchor', 'link', 'unlink', '|', 'about'#}
+{#                                        ]#}
+{#                                    });#}
+{#                                });#}
+{##}
+{##}
+{#                            </script>#}
                             <!-- 站内信 end -->
                             <!-- 短信start-->
                             <a class="btn btn-xs btn-warning" title="发送短信" data-toggle="modal"
