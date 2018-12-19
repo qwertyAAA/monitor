@@ -146,6 +146,4 @@ class TiebaPipeline(object):
 
     def close_spider(self, spider):
         print('DB close_spider')
-        conn=redis.Redis(host='10.25.116.62',port=6379)
-        conn.delete('newkeywords')
         self.session.close()
