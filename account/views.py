@@ -68,7 +68,7 @@ def register(request):
         # 调用auth登录
         auth.login(request, user)
         # 重定向到首页
-        return redirect("/index/")
+        return redirect("/index/spider_message/")
     else:
         context = {"islogin": False}
     return render(request, "login.html", locals())
