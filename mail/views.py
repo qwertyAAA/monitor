@@ -353,212 +353,290 @@ def submit_query(request):
         matching_right = arr_click[8]  # 匹配方式
         blog_content = arr_click[9]  # 微博内容
         source_website = arr_click[10]  # 来源网站
-        # source_message = arr_click[11]    # 来源信息
-        if time_size == "今日":
+        source_message = arr_click[11]    # 来源信息
+
+        if time_size == "全部":
+            if attribute_right == "全部":
+                if time_size == "全部" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "全部":
+                    message_list = get_data_list(Article.objects.filter().order_by("title"))
+                elif time_size == "全部" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "全部":
+                    message_list = get_data_list(Article.objects.filter().order_by("-create_time"))
+                elif time_size == "全部" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "全部":
+                    message_list = get_data_list(Article.objects.filter().order_by("create_time"))
+                elif time_size == "全部" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "全部":
+                    message_list = get_data_list(Article.objects.filter().order_by("id"))
+                elif time_size == "全部" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "贴吧":
+                    message_list = get_data_list(Article.objects.filter(source_id='2').order_by("title"))
+                elif time_size == "全部" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "贴吧":
+                    message_list = get_data_list(
+                        Article.objects.filter(source_id='2').order_by("-create_time"))
+                elif time_size == "全部" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "贴吧":
+                    message_list = get_data_list(Article.objects.filter(source_id='2').order_by("create_time"))
+                elif time_size == "全部" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "贴吧":
+                    message_list = get_data_list(Article.objects.filter(source_id='2').order_by("id"))
+                elif time_size == "全部" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "微博":
+                    message_list = get_data_list(Article.objects.filter(source_id='1').order_by("title"))
+                elif time_size == "全部" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "微博":
+                    message_list = get_data_list(Article.objects.filter(source_id='1').order_by("-create_time"))
+                elif time_size == "全部" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "微博":
+                    message_list = get_data_list(Article.objects.filter(source_id='1').order_by("create_time"))
+                elif time_size == "全部" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "微博":
+                    message_list = get_data_list(Article.objects.filter(source_id='1').order_by("id"))
+            elif attribute_right == "非敏感":
+                if time_size == "全部" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "全部":
+                    message_list = get_data_list(Article.objects.filter(status=0).order_by("title"))
+                elif time_size == "全部" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "全部":
+                    message_list = get_data_list(Article.objects.filter(status=0).order_by("-create_time"))
+                elif time_size == "全部" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "全部":
+                    message_list = get_data_list(Article.objects.filter(status=0).order_by("create_time"))
+                elif time_size == "全部" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "全部":
+                    message_list = get_data_list(Article.objects.filter(status=0).order_by("id"))
+                elif time_size == "全部" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "贴吧":
+                    message_list = get_data_list(Article.objects.filter(source_id='2', status=0).order_by("title"))
+                elif time_size == "全部" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "贴吧":
+                    message_list = get_data_list(Article.objects.filter(source_id='2', status=0).order_by("-create_time"))
+                elif time_size == "全部" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "贴吧":
+                    message_list = get_data_list(Article.objects.filter(source_id='2', status=0).order_by("create_time"))
+                elif time_size == "全部" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "贴吧":
+                    message_list = get_data_list(Article.objects.filter(source_id='2', status=0).order_by("id"))
+                elif time_size == "全部" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "微博":
+                    message_list = get_data_list(Article.objects.filter(source_id='1', status=0).order_by("title"))
+                elif time_size == "全部" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "微博":
+                    message_list = get_data_list(Article.objects.filter(source_id='1', status=0).order_by("-create_time"))
+                elif time_size == "全部" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "微博":
+                    message_list = get_data_list(Article.objects.filter(source_id='1', status=0).order_by("create_time"))
+                elif time_size == "全部" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "微博":
+                    message_list = get_data_list(Article.objects.filter(source_id='1', status=0).order_by("id"))
+            elif attribute_right == "敏感":
+                if time_size == "全部" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "全部":
+                    message_list = get_data_list(Article.objects.filter(status=1).order_by("title"))
+                elif time_size == "全部" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "全部":
+                    message_list = get_data_list(Article.objects.filter(status=1).order_by("-create_time"))
+                elif time_size == "全部" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "全部":
+                    message_list = get_data_list(Article.objects.filter(status=1).order_by("create_time"))
+                elif time_size == "全部" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "全部":
+                    message_list = get_data_list(Article.objects.filter(status=1).order_by("id"))
+                elif time_size == "全部" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "贴吧":
+                    message_list = get_data_list(Article.objects.filter(source_id='2', status=1).order_by("title"))
+                elif time_size == "全部" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "贴吧":
+                    message_list = get_data_list(Article.objects.filter(source_id='2', status=1).order_by("-create_time"))
+                elif time_size == "全部" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "贴吧":
+                    message_list = get_data_list(Article.objects.filter(source_id='2', status=1).order_by("create_time"))
+                elif time_size == "全部" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "贴吧":
+                    message_list = get_data_list(Article.objects.filter(source_id='2', status=1).order_by("id"))
+                elif time_size == "全部" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "微博":
+                    message_list = get_data_list(Article.objects.filter(source_id='1', status=1).order_by("title"))
+                elif time_size == "全部" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "微博":
+                    message_list = get_data_list(Article.objects.filter(source_id='1', status=1).order_by("-create_time"))
+                elif time_size == "全部" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "微博":
+                    message_list = get_data_list(Article.objects.filter(source_id='1', status=1).order_by("create_time"))
+                elif time_size == "全部" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "微博":
+                    message_list = get_data_list(Article.objects.filter(source_id='1', status=1).order_by("id"))
+        elif time_size == "今日":
             if attribute_right == "全部":
                 if time_size == "今日" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h),
-                            new_time]).order_by("title")[:100])
+                            new_time]).order_by("title"))
                 elif time_size == "今日" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h),
-                            new_time]).order_by("-create_time")[:100])
+                            new_time]).order_by("-create_time"))
                 elif time_size == "今日" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h),
-                            new_time]).order_by("create_time")[:100])
+                            new_time]).order_by("create_time"))
                 elif time_size == "今日" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h),
-                            new_time]).order_by("id")[:100])
+                            new_time]).order_by("id"))
                 elif time_size == "今日" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h),
                             new_time],
-                            source_id='2').order_by("title")[:100])
+                            source_id='2').order_by("title"))
                 elif time_size == "今日" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h),
                             new_time],
-                            source_id='2').order_by("-create_time")[:100])
+                            source_id='2').order_by("-create_time"))
                 elif time_size == "今日" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h),
                             new_time],
-                            source_id='2').order_by("create_time")[:100])
+                            source_id='2').order_by("create_time"))
                 elif time_size == "今日" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h),
                             new_time],
-                            source_id='2').order_by("id")[:100])
+                            source_id='2').order_by("id"))
                 elif time_size == "今日" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h),
                             new_time],
-                            source_id='1').order_by("title")[:100])
+                            source_id='1').order_by("title"))
                 elif time_size == "今日" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h),
                             new_time],
-                            source_id='1').order_by("-create_time")[:100])
+                            source_id='1').order_by("-create_time"))
                 elif time_size == "今日" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h),
                             new_time],
-                            source_id='1').order_by("create_time")[:100])
+                            source_id='1').order_by("create_time"))
                 elif time_size == "今日" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h),
                             new_time],
-                            source_id='1').order_by("id")[:100])
+                            source_id='1').order_by("id"))
             elif attribute_right == "非敏感":
                 if time_size == "今日" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h),
-                            new_time], status=0).order_by("title")[:100])
+                            new_time], status=0).order_by("title"))
                 elif time_size == "今日" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h),
-                            new_time], status=0).order_by("-create_time")[:100])
+                            new_time], status=0).order_by("-create_time"))
                 elif time_size == "今日" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h),
-                            new_time], status=0).order_by("create_time")[:100])
+                            new_time], status=0).order_by("create_time"))
                 elif time_size == "今日" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h),
-                            new_time], status=0).order_by("id")[:100])
+                            new_time], status=0).order_by("id"))
                 elif time_size == "今日" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h),
                             new_time],
-                            source_id='2', status=0).order_by("title")[:100])
+                            source_id='2', status=0).order_by("title"))
                 elif time_size == "今日" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h),
                             new_time],
-                            source_id='2', status=0).order_by("-create_time")[:100])
+                            source_id='2', status=0).order_by("-create_time"))
                 elif time_size == "今日" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h),
                             new_time],
-                            source_id='2', status=0).order_by("create_time")[:100])
+                            source_id='2', status=0).order_by("create_time"))
                 elif time_size == "今日" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h),
                             new_time],
-                            source_id='2', status=0).order_by("id")[:100])
+                            source_id='2', status=0).order_by("id"))
                 elif time_size == "今日" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h),
                             new_time],
-                            source_id='1', status=0).order_by("title")[:100])
+                            source_id='1', status=0).order_by("title"))
                 elif time_size == "今日" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h),
                             new_time],
-                            source_id='1', status=0).order_by("-create_time")[:100])
+                            source_id='1', status=0).order_by("-create_time"))
                 elif time_size == "今日" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h),
                             new_time],
-                            source_id='1', status=0).order_by("create_time")[:100])
+                            source_id='1', status=0).order_by("create_time"))
                 elif time_size == "今日" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h),
                             new_time],
-                            source_id='1', status=0).order_by("id")[:100])
+                            source_id='1', status=0).order_by("id"))
             elif attribute_right == "敏感":
                 if time_size == "今日" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h),
-                            new_time], status=1).order_by("title")[:100])
+                            new_time], status=1).order_by("title"))
                 elif time_size == "今日" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h),
-                            new_time], status=1).order_by("-create_time")[:100])
+                            new_time], status=1).order_by("-create_time"))
                 elif time_size == "今日" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h),
-                            new_time], status=1).order_by("create_time")[:100])
+                            new_time], status=1).order_by("create_time"))
                 elif time_size == "今日" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h),
-                            new_time], status=1).order_by("id")[:100])
+                            new_time], status=1).order_by("id"))
                 elif time_size == "今日" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h), new_time],
-                            source_id='2', status=1).order_by("title")[:100])
+                            source_id='2', status=1).order_by("title"))
                 elif time_size == "今日" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h), new_time],
-                            source_id='2', status=1).order_by("-create_time")[:100])
+                            source_id='2', status=1).order_by("-create_time"))
                 elif time_size == "今日" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h), new_time],
-                            source_id='2', status=1).order_by("create_time")[:100])
+                            source_id='2', status=1).order_by("create_time"))
                 elif time_size == "今日" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h), new_time],
-                            source_id='2', status=1).order_by("id")[:100])
+                            source_id='2', status=1).order_by("id"))
                 elif time_size == "今日" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h), new_time],
-                            source_id='1', status=1).order_by("title")[:100])
+                            source_id='1', status=1).order_by("title"))
                 elif time_size == "今日" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h), new_time],
-                            source_id='1', status=1).order_by("-create_time")[:100])
+                            source_id='1', status=1).order_by("-create_time"))
                 elif time_size == "今日" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h), new_time],
-                            source_id='1', status=1).order_by("create_time")[:100])
+                            source_id='1', status=1).order_by("create_time"))
                 elif time_size == "今日" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[
                             new_time - datetime.timedelta(minutes=today_m, seconds=today_s, hours=today_h), new_time],
-                            source_id='1', status=1).order_by("id")[:100])
+                            source_id='1', status=1).order_by("id"))
         elif time_size == '24小时':
             if attribute_right == "全部":
                 if time_size == "24小时" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
-                        create_time__range=[new_time - datetime.timedelta(days=1), new_time]).order_by("title")[:100])
+                        create_time__range=[new_time - datetime.timedelta(days=1), new_time]).order_by("title"))
                 elif time_size == "24小时" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[new_time - datetime.timedelta(days=1), new_time]).order_by("-create_time")[
@@ -569,44 +647,44 @@ def submit_query(request):
                                                  :100])
                 elif time_size == "24小时" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
-                        create_time__range=[new_time - datetime.timedelta(days=1), new_time]).order_by("id")[:100])
+                        create_time__range=[new_time - datetime.timedelta(days=1), new_time]).order_by("id"))
                 elif time_size == "24小时" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=1), new_time],
-                                               source_id='2').order_by("title")[:100])
+                                               source_id='2').order_by("title"))
                 elif time_size == "24小时" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=1), new_time],
-                                               source_id='2').order_by("-create_time")[:100])
+                                               source_id='2').order_by("-create_time"))
                 elif time_size == "24小时" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=1), new_time],
-                                               source_id='2').order_by("create_time")[:100])
+                                               source_id='2').order_by("create_time"))
                 elif time_size == "24小时" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=1), new_time],
-                                               source_id='2').order_by("id")[:100])
+                                               source_id='2').order_by("id"))
                 elif time_size == "24小时" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=1), new_time],
-                                               source_id='1').order_by("title")[:100])
+                                               source_id='1').order_by("title"))
                 elif time_size == "24小时" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=1), new_time],
-                                               source_id='1').order_by("-create_time")[:100])
+                                               source_id='1').order_by("-create_time"))
                 elif time_size == "24小时" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=1), new_time],
-                                               source_id='1').order_by("create_time")[:100])
+                                               source_id='1').order_by("create_time"))
                 elif time_size == "24小时" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=1), new_time],
-                                               source_id='1').order_by("id")[:100])
+                                               source_id='1').order_by("id"))
             elif attribute_right == "非敏感":
                 if time_size == "24小时" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[new_time - datetime.timedelta(days=1), new_time], status=0).order_by(
-                        "title")[:100])
+                        "title"))
                 elif time_size == "24小时" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[new_time - datetime.timedelta(days=1), new_time], status=0).order_by(
@@ -624,40 +702,40 @@ def submit_query(request):
                 elif time_size == "24小时" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=1), new_time],
-                                               source_id='2', status=0).order_by("title")[:100])
+                                               source_id='2', status=0).order_by("title"))
                 elif time_size == "24小时" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=1), new_time],
-                                               source_id='2', status=0).order_by("-create_time")[:100])
+                                               source_id='2', status=0).order_by("-create_time"))
                 elif time_size == "24小时" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=1), new_time],
-                                               source_id='2', status=0).order_by("create_time")[:100])
+                                               source_id='2', status=0).order_by("create_time"))
                 elif time_size == "24小时" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=1), new_time],
-                                               source_id='2', status=0).order_by("id")[:100])
+                                               source_id='2', status=0).order_by("id"))
                 elif time_size == "24小时" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=1), new_time],
-                                               source_id='1', status=0).order_by("title")[:100])
+                                               source_id='1', status=0).order_by("title"))
                 elif time_size == "24小时" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=1), new_time],
-                                               source_id='1', status=0).order_by("-create_time")[:100])
+                                               source_id='1', status=0).order_by("-create_time"))
                 elif time_size == "24小时" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=1), new_time],
-                                               source_id='1', status=0).order_by("create_time")[:100])
+                                               source_id='1', status=0).order_by("create_time"))
                 elif time_size == "24小时" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=1), new_time],
-                                               source_id='1', status=0).order_by("id")[:100])
+                                               source_id='1', status=0).order_by("id"))
             elif attribute_right == "敏感":
                 if time_size == "24小时" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[new_time - datetime.timedelta(days=1), new_time], status=1).order_by(
-                        "title")[:100])
+                        "title"))
                 elif time_size == "24小时" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[new_time - datetime.timedelta(days=1), new_time], status=1).order_by(
@@ -675,40 +753,40 @@ def submit_query(request):
                 elif time_size == "24小时" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=1), new_time],
-                                               source_id='2', status=1).order_by("title")[:100])
+                                               source_id='2', status=1).order_by("title"))
                 elif time_size == "24小时" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=1), new_time],
-                                               source_id='2', status=1).order_by("-create_time")[:100])
+                                               source_id='2', status=1).order_by("-create_time"))
                 elif time_size == "24小时" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=1), new_time],
-                                               source_id='2', status=1).order_by("create_time")[:100])
+                                               source_id='2', status=1).order_by("create_time"))
                 elif time_size == "24小时" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=1), new_time],
-                                               source_id='2', status=1).order_by("id")[:100])
+                                               source_id='2', status=1).order_by("id"))
                 elif time_size == "24小时" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=1), new_time],
-                                               source_id='1', status=1).order_by("title")[:100])
+                                               source_id='1', status=1).order_by("title"))
                 elif time_size == "24小时" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=1), new_time],
-                                               source_id='1', status=1).order_by("-create_time")[:100])
+                                               source_id='1', status=1).order_by("-create_time"))
                 elif time_size == "24小时" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=1), new_time],
-                                               source_id='1', status=1).order_by("create_time")[:100])
+                                               source_id='1', status=1).order_by("create_time"))
                 elif time_size == "24小时" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=1), new_time],
-                                               source_id='1', status=1).order_by("id")[:100])
+                                               source_id='1', status=1).order_by("id"))
         elif time_size == '2天':
             if attribute_right == "全部":
                 if time_size == "2天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
-                        create_time__range=[new_time - datetime.timedelta(days=2), new_time]).order_by("title")[:100])
+                        create_time__range=[new_time - datetime.timedelta(days=2), new_time]).order_by("title"))
                 elif time_size == "2天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[new_time - datetime.timedelta(days=2), new_time]).order_by("-create_time")[
@@ -719,44 +797,44 @@ def submit_query(request):
                                                  :100])
                 elif time_size == "2天" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
-                        create_time__range=[new_time - datetime.timedelta(days=2), new_time]).order_by("id")[:100])
+                        create_time__range=[new_time - datetime.timedelta(days=2), new_time]).order_by("id"))
                 elif time_size == "2天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=2), new_time],
-                                               source_id='2').order_by("title")[:100])
+                                               source_id='2').order_by("title"))
                 elif time_size == "2天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=2), new_time],
-                                               source_id='2').order_by("-create_time")[:100])
+                                               source_id='2').order_by("-create_time"))
                 elif time_size == "2天" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=2), new_time],
-                                               source_id='2').order_by("create_time")[:100])
+                                               source_id='2').order_by("create_time"))
                 elif time_size == "2天" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=2), new_time],
-                                               source_id='2').order_by("id")[:100])
+                                               source_id='2').order_by("id"))
                 elif time_size == "2天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=2), new_time],
-                                               source_id='1').order_by("title")[:100])
+                                               source_id='1').order_by("title"))
                 elif time_size == "2天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=2), new_time],
-                                               source_id='1').order_by("-create_time")[:100])
+                                               source_id='1').order_by("-create_time"))
                 elif time_size == "2天" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=2), new_time],
-                                               source_id='1').order_by("create_time")[:100])
+                                               source_id='1').order_by("create_time"))
                 elif time_size == "2天" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=2), new_time],
-                                               source_id='1').order_by("id")[:100])
+                                               source_id='1').order_by("id"))
             elif attribute_right == "非敏感":
                 if time_size == "2天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[new_time - datetime.timedelta(days=2), new_time], status=0).order_by(
-                        "title")[:100])
+                        "title"))
                 elif time_size == "2天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[new_time - datetime.timedelta(days=2), new_time], status=0).order_by(
@@ -774,40 +852,40 @@ def submit_query(request):
                 elif time_size == "2天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=2), new_time],
-                                               source_id='2', status=0).order_by("title")[:100])
+                                               source_id='2', status=0).order_by("title"))
                 elif time_size == "2天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=2), new_time],
-                                               source_id='2', status=0).order_by("-create_time")[:100])
+                                               source_id='2', status=0).order_by("-create_time"))
                 elif time_size == "2天" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=2), new_time],
-                                               source_id='2', status=0).order_by("create_time")[:100])
+                                               source_id='2', status=0).order_by("create_time"))
                 elif time_size == "2天" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=2), new_time],
-                                               source_id='2', status=0).order_by("id")[:100])
+                                               source_id='2', status=0).order_by("id"))
                 elif time_size == "2天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=2), new_time],
-                                               source_id='1', status=0).order_by("title")[:100])
+                                               source_id='1', status=0).order_by("title"))
                 elif time_size == "2天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=2), new_time],
-                                               source_id='1', status=0).order_by("-create_time")[:100])
+                                               source_id='1', status=0).order_by("-create_time"))
                 elif time_size == "2天" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=2), new_time],
-                                               source_id='1', status=0).order_by("create_time")[:100])
+                                               source_id='1', status=0).order_by("create_time"))
                 elif time_size == "2天" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=2), new_time],
-                                               source_id='1', status=0).order_by("id")[:100])
+                                               source_id='1', status=0).order_by("id"))
             elif attribute_right == "敏感":
                 if time_size == "2天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[new_time - datetime.timedelta(days=2), new_time], status=1).order_by(
-                        "title")[:100])
+                        "title"))
                 elif time_size == "2天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[new_time - datetime.timedelta(days=2), new_time], status=1).order_by(
@@ -825,40 +903,40 @@ def submit_query(request):
                 elif time_size == "2天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=2), new_time],
-                                               source_id='2', status=1).order_by("title")[:100])
+                                               source_id='2', status=1).order_by("title"))
                 elif time_size == "2天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=2), new_time],
-                                               source_id='2', status=1).order_by("-create_time")[:100])
+                                               source_id='2', status=1).order_by("-create_time"))
                 elif time_size == "2天" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=2), new_time],
-                                               source_id='2', status=1).order_by("create_time")[:100])
+                                               source_id='2', status=1).order_by("create_time"))
                 elif time_size == "2天" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=2), new_time],
-                                               source_id='2', status=1).order_by("id")[:100])
+                                               source_id='2', status=1).order_by("id"))
                 elif time_size == "2天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=2), new_time],
-                                               source_id='1', status=1).order_by("title")[:100])
+                                               source_id='1', status=1).order_by("title"))
                 elif time_size == "2天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=2), new_time],
-                                               source_id='1', status=1).order_by("-create_time")[:100])
+                                               source_id='1', status=1).order_by("-create_time"))
                 elif time_size == "2天" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=2), new_time],
-                                               source_id='1', status=1).order_by("create_time")[:100])
+                                               source_id='1', status=1).order_by("create_time"))
                 elif time_size == "2天" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=2), new_time],
-                                               source_id='1', status=1).order_by("id")[:100])
+                                               source_id='1', status=1).order_by("id"))
         elif time_size == '3天':
             if attribute_right == "全部":
                 if time_size == "3天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
-                        create_time__range=[new_time - datetime.timedelta(days=3), new_time]).order_by("title")[:100])
+                        create_time__range=[new_time - datetime.timedelta(days=3), new_time]).order_by("title"))
                 elif time_size == "3天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[new_time - datetime.timedelta(days=3), new_time]).order_by("-create_time")[
@@ -869,44 +947,44 @@ def submit_query(request):
                                                  :100])
                 elif time_size == "3天" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
-                        create_time__range=[new_time - datetime.timedelta(days=3), new_time]).order_by("id")[:100])
+                        create_time__range=[new_time - datetime.timedelta(days=3), new_time]).order_by("id"))
                 elif time_size == "3天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=3), new_time],
-                                               source_id='2').order_by("title")[:100])
+                                               source_id='2').order_by("title"))
                 elif time_size == "3天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=3), new_time],
-                                               source_id='2').order_by("-create_time")[:100])
+                                               source_id='2').order_by("-create_time"))
                 elif time_size == "3天" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=3), new_time],
-                                               source_id='2').order_by("create_time")[:100])
+                                               source_id='2').order_by("create_time"))
                 elif time_size == "3天" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=3), new_time],
-                                               source_id='2').order_by("id")[:100])
+                                               source_id='2').order_by("id"))
                 elif time_size == "3天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=3), new_time],
-                                               source_id='1').order_by("title")[:100])
+                                               source_id='1').order_by("title"))
                 elif time_size == "3天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=3), new_time],
-                                               source_id='1').order_by("-create_time")[:100])
+                                               source_id='1').order_by("-create_time"))
                 elif time_size == "3天" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=3), new_time],
-                                               source_id='1').order_by("create_time")[:100])
+                                               source_id='1').order_by("create_time"))
                 elif time_size == "3天" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=3), new_time],
-                                               source_id='1').order_by("id")[:100])
+                                               source_id='1').order_by("id"))
             elif attribute_right == "非敏感":
                 if time_size == "3天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[new_time - datetime.timedelta(days=3), new_time], status=0).order_by(
-                        "title")[:100])
+                        "title"))
                 elif time_size == "3天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[new_time - datetime.timedelta(days=3), new_time], status=0).order_by(
@@ -924,40 +1002,40 @@ def submit_query(request):
                 elif time_size == "3天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=3), new_time],
-                                               source_id='2', status=0).order_by("title")[:100])
+                                               source_id='2', status=0).order_by("title"))
                 elif time_size == "3天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=3), new_time],
-                                               source_id='2', status=0).order_by("-create_time")[:100])
+                                               source_id='2', status=0).order_by("-create_time"))
                 elif time_size == "3天" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=3), new_time],
-                                               source_id='2', status=0).order_by("create_time")[:100])
+                                               source_id='2', status=0).order_by("create_time"))
                 elif time_size == "3天" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=3), new_time],
-                                               source_id='2', status=0).order_by("id")[:100])
+                                               source_id='2', status=0).order_by("id"))
                 elif time_size == "3天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=3), new_time],
-                                               source_id='1', status=0).order_by("title")[:100])
+                                               source_id='1', status=0).order_by("title"))
                 elif time_size == "3天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=3), new_time],
-                                               source_id='1', status=0).order_by("-create_time")[:100])
+                                               source_id='1', status=0).order_by("-create_time"))
                 elif time_size == "3天" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=3), new_time],
-                                               source_id='1', status=0).order_by("create_time")[:100])
+                                               source_id='1', status=0).order_by("create_time"))
                 elif time_size == "3天" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=3), new_time],
-                                               source_id='1', status=0).order_by("id")[:100])
+                                               source_id='1', status=0).order_by("id"))
             elif attribute_right == "敏感":
                 if time_size == "3天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[new_time - datetime.timedelta(days=3), new_time], status=1).order_by(
-                        "title")[:100])
+                        "title"))
                 elif time_size == "3天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[new_time - datetime.timedelta(days=3), new_time], status=1).order_by(
@@ -966,7 +1044,7 @@ def submit_query(request):
                 elif time_size == "3天" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[new_time - datetime.timedelta(days=3), new_time], status=1).order_by(
-                        "create_time")[:100])
+                        "create_time"))
                 elif time_size == "3天" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[new_time - datetime.timedelta(days=3), new_time], status=1).order_by("id")[
@@ -974,40 +1052,40 @@ def submit_query(request):
                 elif time_size == "3天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=3), new_time],
-                                               source_id='2', status=1).order_by("title")[:100])
+                                               source_id='2', status=1).order_by("title"))
                 elif time_size == "3天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=3), new_time],
-                                               source_id='2', status=1).order_by("-create_time")[:100])
+                                               source_id='2', status=1).order_by("-create_time"))
                 elif time_size == "3天" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=3), new_time],
-                                               source_id='2', status=1).order_by("create_time")[:100])
+                                               source_id='2', status=1).order_by("create_time"))
                 elif time_size == "3天" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=3), new_time],
-                                               source_id='2', status=1).order_by("id")[:100])
+                                               source_id='2', status=1).order_by("id"))
                 elif time_size == "3天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=3), new_time],
-                                               source_id='1', status=1).order_by("title")[:100])
+                                               source_id='1', status=1).order_by("title"))
                 elif time_size == "3天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=3), new_time],
-                                               source_id='1', status=1).order_by("-create_time")[:100])
+                                               source_id='1', status=1).order_by("-create_time"))
                 elif time_size == "3天" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=3), new_time],
-                                               source_id='1', status=1).order_by("create_time")[:100])
+                                               source_id='1', status=1).order_by("create_time"))
                 elif time_size == "3天" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=3), new_time],
-                                               source_id='1', status=1).order_by("id")[:100])
+                                               source_id='1', status=1).order_by("id"))
         elif time_size == "7天":
             if attribute_right == "全部":
                 if time_size == "7天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
-                        create_time__range=[new_time - datetime.timedelta(days=7), new_time]).order_by("title")[:100])
+                        create_time__range=[new_time - datetime.timedelta(days=7), new_time]).order_by("title"))
                 elif time_size == "7天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[new_time - datetime.timedelta(days=7), new_time]).order_by("-create_time")[
@@ -1018,44 +1096,44 @@ def submit_query(request):
                                                  :100])
                 elif time_size == "7天" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
-                        create_time__range=[new_time - datetime.timedelta(days=7), new_time]).order_by("id")[:100])
+                        create_time__range=[new_time - datetime.timedelta(days=7), new_time]).order_by("id"))
                 elif time_size == "7天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=7), new_time],
-                                               source_id='2').order_by("title")[:100])
+                                               source_id='2').order_by("title"))
                 elif time_size == "7天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=7), new_time],
-                                               source_id='2').order_by("-create_time")[:100])
+                                               source_id='2').order_by("-create_time"))
                 elif time_size == "7天" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=7), new_time],
-                                               source_id='2').order_by("create_time")[:100])
+                                               source_id='2').order_by("create_time"))
                 elif time_size == "7天" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=7), new_time],
-                                               source_id='2').order_by("id")[:100])
+                                               source_id='2').order_by("id"))
                 elif time_size == "7天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=7), new_time],
-                                               source_id='1').order_by("title")[:100])
+                                               source_id='1').order_by("title"))
                 elif time_size == "7天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=7), new_time],
-                                               source_id='1').order_by("-create_time")[:100])
+                                               source_id='1').order_by("-create_time"))
                 elif time_size == "7天" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=7), new_time],
-                                               source_id='1').order_by("create_time")[:100])
+                                               source_id='1').order_by("create_time"))
                 elif time_size == "7天" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=7), new_time],
-                                               source_id='1').order_by("id")[:100])
+                                               source_id='1').order_by("id"))
             elif attribute_right == "非敏感":
                 if time_size == "7天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[new_time - datetime.timedelta(days=7), new_time], status=0).order_by(
-                        "title")[:100])
+                        "title"))
                 elif time_size == "7天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[new_time - datetime.timedelta(days=7), new_time], status=0).order_by(
@@ -1073,40 +1151,40 @@ def submit_query(request):
                 elif time_size == "7天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=7), new_time],
-                                               source_id='2', status=0).order_by("title")[:100])
+                                               source_id='2', status=0).order_by("title"))
                 elif time_size == "7天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=7), new_time],
-                                               source_id='2', status=0).order_by("-create_time")[:100])
+                                               source_id='2', status=0).order_by("-create_time"))
                 elif time_size == "7天" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=7), new_time],
-                                               source_id='2', status=0).order_by("create_time")[:100])
+                                               source_id='2', status=0).order_by("create_time"))
                 elif time_size == "7天" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=7), new_time],
-                                               source_id='2', status=0).order_by("id")[:100])
+                                               source_id='2', status=0).order_by("id"))
                 elif time_size == "7天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=7), new_time],
-                                               source_id='1', status=0).order_by("title")[:100])
+                                               source_id='1', status=0).order_by("title"))
                 elif time_size == "7天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=7), new_time],
-                                               source_id='1', status=0).order_by("-create_time")[:100])
+                                               source_id='1', status=0).order_by("-create_time"))
                 elif time_size == "7天" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=7), new_time],
-                                               source_id='1', status=0).order_by("create_time")[:100])
+                                               source_id='1', status=0).order_by("create_time"))
                 elif time_size == "7天" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=7), new_time],
-                                               source_id='1', status=0).order_by("id")[:100])
+                                               source_id='1', status=0).order_by("id"))
             elif attribute_right == "敏感":
                 if time_size == "7天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[new_time - datetime.timedelta(days=7), new_time], status=1).order_by(
-                        "title")[:100])
+                        "title"))
                 elif time_size == "7天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[new_time - datetime.timedelta(days=7), new_time], status=1).order_by(
@@ -1115,7 +1193,7 @@ def submit_query(request):
                 elif time_size == "7天" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[new_time - datetime.timedelta(days=7), new_time], status=1).order_by(
-                        "create_time")[:100])
+                        "create_time"))
                 elif time_size == "7天" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[new_time - datetime.timedelta(days=7), new_time], status=1).order_by("id")[
@@ -1123,40 +1201,40 @@ def submit_query(request):
                 elif time_size == "7天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=7), new_time],
-                                               source_id='2', status=1).order_by("title")[:100])
+                                               source_id='2', status=1).order_by("title"))
                 elif time_size == "7天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=7), new_time],
-                                               source_id='2', status=1).order_by("-create_time")[:100])
+                                               source_id='2', status=1).order_by("-create_time"))
                 elif time_size == "7天" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=7), new_time],
-                                               source_id='2', status=1).order_by("create_time")[:100])
+                                               source_id='2', status=1).order_by("create_time"))
                 elif time_size == "7天" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=7), new_time],
-                                               source_id='2', status=1).order_by("id")[:100])
+                                               source_id='2', status=1).order_by("id"))
                 elif time_size == "7天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=7), new_time],
-                                               source_id='1', status=1).order_by("title")[:100])
+                                               source_id='1', status=1).order_by("title"))
                 elif time_size == "7天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=7), new_time],
-                                               source_id='1', status=1).order_by("-create_time")[:100])
+                                               source_id='1', status=1).order_by("-create_time"))
                 elif time_size == "7天" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=7), new_time],
-                                               source_id='1', status=1).order_by("create_time")[:100])
+                                               source_id='1', status=1).order_by("create_time"))
                 elif time_size == "7天" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=7), new_time],
-                                               source_id='1', status=1).order_by("id")[:100])
+                                               source_id='1', status=1).order_by("id"))
         elif time_size == "10天":
             if attribute_right == "全部":
                 if time_size == "10天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
-                        create_time__range=[new_time - datetime.timedelta(days=10), new_time]).order_by("title")[:100])
+                        create_time__range=[new_time - datetime.timedelta(days=10), new_time]).order_by("title"))
                 elif time_size == "10天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[new_time - datetime.timedelta(days=10), new_time]).order_by("-create_time")[
@@ -1167,44 +1245,44 @@ def submit_query(request):
                                                  :100])
                 elif time_size == "10天" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
-                        create_time__range=[new_time - datetime.timedelta(days=10), new_time]).order_by("id")[:100])
+                        create_time__range=[new_time - datetime.timedelta(days=10), new_time]).order_by("id"))
                 elif time_size == "10天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=10), new_time],
-                                               source_id='2').order_by("title")[:100])
+                                               source_id='2').order_by("title"))
                 elif time_size == "10天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=10), new_time],
-                                               source_id='2').order_by("-create_time")[:100])
+                                               source_id='2').order_by("-create_time"))
                 elif time_size == "10天" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=10), new_time],
-                                               source_id='2').order_by("create_time")[:100])
+                                               source_id='2').order_by("create_time"))
                 elif time_size == "10天" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=10), new_time],
-                                               source_id='2').order_by("id")[:100])
+                                               source_id='2').order_by("id"))
                 elif time_size == "10天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=10), new_time],
-                                               source_id='1').order_by("title")[:100])
+                                               source_id='1').order_by("title"))
                 elif time_size == "10天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=10), new_time],
-                                               source_id='1').order_by("-create_time")[:100])
+                                               source_id='1').order_by("-create_time"))
                 elif time_size == "10天" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=10), new_time],
-                                               source_id='1').order_by("create_time")[:100])
+                                               source_id='1').order_by("create_time"))
                 elif time_size == "10天" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=10), new_time],
-                                               source_id='1').order_by("id")[:100])
+                                               source_id='1').order_by("id"))
             elif attribute_right == "非敏感":
                 if time_size == "10天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[new_time - datetime.timedelta(days=10), new_time], status=0).order_by(
-                        "title")[:100])
+                        "title"))
                 elif time_size == "10天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[new_time - datetime.timedelta(days=10), new_time], status=0).order_by(
@@ -1222,40 +1300,40 @@ def submit_query(request):
                 elif time_size == "10天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=10), new_time],
-                                               source_id='2', status=0).order_by("title")[:100])
+                                               source_id='2', status=0).order_by("title"))
                 elif time_size == "10天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=10), new_time],
-                                               source_id='2', status=0).order_by("-create_time")[:100])
+                                               source_id='2', status=0).order_by("-create_time"))
                 elif time_size == "10天" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=10), new_time],
-                                               source_id='2', status=0).order_by("create_time")[:100])
+                                               source_id='2', status=0).order_by("create_time"))
                 elif time_size == "10天" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=10), new_time],
-                                               source_id='2', status=0).order_by("id")[:100])
+                                               source_id='2', status=0).order_by("id"))
                 elif time_size == "10天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=10), new_time],
-                                               source_id='1', status=0).order_by("title")[:100])
+                                               source_id='1', status=0).order_by("title"))
                 elif time_size == "10天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=10), new_time],
-                                               source_id='1', status=0).order_by("-create_time")[:100])
+                                               source_id='1', status=0).order_by("-create_time"))
                 elif time_size == "10天" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=10), new_time],
-                                               source_id='1', status=0).order_by("create_time")[:100])
+                                               source_id='1', status=0).order_by("create_time"))
                 elif time_size == "10天" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=10), new_time],
-                                               source_id='1', status=0).order_by("id")[:100])
+                                               source_id='1', status=0).order_by("id"))
             elif attribute_right == "敏感":
                 if time_size == "10天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[new_time - datetime.timedelta(days=10), new_time], status=1).order_by(
-                        "title")[:100])
+                        "title"))
                 elif time_size == "10天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "全部":
                     message_list = get_data_list(Article.objects.filter(
                         create_time__range=[new_time - datetime.timedelta(days=10), new_time], status=1).order_by(
@@ -1273,35 +1351,35 @@ def submit_query(request):
                 elif time_size == "10天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=10), new_time],
-                                               source_id='2', status=1).order_by("title")[:100])
+                                               source_id='2', status=1).order_by("title"))
                 elif time_size == "10天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=10), new_time],
-                                               source_id='2', status=1).order_by("-create_time")[:100])
+                                               source_id='2', status=1).order_by("-create_time"))
                 elif time_size == "10天" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=10), new_time],
-                                               source_id='2', status=1).order_by("create_time")[:100])
+                                               source_id='2', status=1).order_by("create_time"))
                 elif time_size == "10天" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "贴吧":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=10), new_time],
-                                               source_id='2', status=1).order_by("id")[:100])
+                                               source_id='2', status=1).order_by("id"))
                 elif time_size == "10天" and article_ranking == "智能排序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=10), new_time],
-                                               source_id='1', status=1).order_by("title")[:100])
+                                               source_id='1', status=1).order_by("title"))
                 elif time_size == "10天" and article_ranking == "时间降序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=10), new_time],
-                                               source_id='1', status=1).order_by("-create_time")[:100])
+                                               source_id='1', status=1).order_by("-create_time"))
                 elif time_size == "10天" and article_ranking == "时间升序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=10), new_time],
-                                               source_id='1', status=1).order_by("create_time")[:100])
+                                               source_id='1', status=1).order_by("create_time"))
                 elif time_size == "10天" and article_ranking == "采集顺序" and micro_blog == "显示" and source_website == "微博":
                     message_list = get_data_list(
                         Article.objects.filter(create_time__range=[new_time - datetime.timedelta(days=10), new_time],
-                                               source_id='1', status=1).order_by("id")[:100])
+                                               source_id='1', status=1).order_by("id"))
     return JsonResponse(message_list, safe=False)
 
 
@@ -1477,16 +1555,16 @@ def obang_new_tbody(request):
                 ret["html"] += """
                 <tr>
                     <td class="input_checkbox line_height">{check_box}</td>
-                    <td><div class="tr_content" style="font-size: 14px;">
+                    <td class="col-sm-8" style="position:relative;"><div class="tr_content" style="font-size: 14px;">
                         {body_all_a1}
                         {body_all_a2}
                         {body_all_span}
                         {body_all}
                         </div>
                     </td>
-                    <td class="line_height"><span>1</span></td>
-                    <td class="line_height"><span>{source}</span></td>
-                    <td class="line_height"><span>{create_time}</span></td>
+                    <td class="col-sm-1 line_height"><span>1</span></td>
+                    <td class="col-sm-1 line_height"><span>{source}</span></td>
+                    <td class="col-sm-2 line_height"><span>{create_time}</span></td>
                 </tr>
                 """.format(
                     check_box=check_box,

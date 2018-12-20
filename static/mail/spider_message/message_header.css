@@ -164,6 +164,12 @@ ul li {
     text-align: left;
 }
 
+.one_button {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+}
+
 .one_button a:link {
     color: black;
 }

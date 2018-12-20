@@ -18,7 +18,9 @@
                 <div class="col-sm-12 time_size">
                     <div class="col-sm-6">
                         <span>时间范围:</span>
-                        <span id="time_1" role="button" class="spans click"
+                        <span id="time_0" role="button" class="spans click"
+                              onclick="selectTimeSubmit('today',0,this)">全部</span>
+                        <span id="time_1" role="button" class="spans"
                               onclick="selectTimeSubmit('today',1,this)">今日</span>
                         <span id="time_2" role="button" class="spans"
                               onclick="selectTimeSubmit('24h',2,this)">24小时</span>
@@ -245,7 +247,7 @@
                                        name='onclick_checkbox'
                                        value="{{ message.id }}">
                             </td>
-                            <td class="col-sm-8">
+                            <td class="col-sm-8" style="position:relative;">
                                 <div class="tr_content" style="font-size: 14px;">
                                     <a href="/index/{{ message.title }}/article/id={{ message.id }}/">
                                         <img src="/media/{{ message.source.source_img }}" class="img-circle"
@@ -259,7 +261,7 @@
                                     <span class="content_50">{{ message.detail|safe }}</span><br>
                                     <span>涉及词：{{ message.keywords }}</span><br>
                                     <span>信源区域：北京</span><span>行业： 其他  招生招聘 </span>
-                                    <div class="one_button" style="float: right;">
+                                    <div class="one_button">
                                         <button type="button" class="btn"
                                                 data-toggle="tooltip" data-placement="bottom"
                                                 id="in_heart_one" name="in_heart_one" title="加入收藏夹"
@@ -314,7 +316,7 @@
                             </td>
                             <td class="col-sm-1 line_height"><span>1</span></td>
                             <td class="col-sm-1 line_height"><span>{{ message.source.source }}</span></td>
-                            <td class="col-sm-1 line_height"><span>{{ message.create_time }}</span></td>
+                            <td class="col-sm-2 line_height"><span>{{ message.create_time }}</span></td>
                         </tr>
                     {% endfor %}
                     </tbody>
