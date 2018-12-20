@@ -6,7 +6,7 @@ import redis
 class Starter(object):
     @staticmethod
     def start_weibo():
-        os.chdir("C:\\Users\\40829\\PycharmProjects\\monitor\\monitorSpiders\\monitorSpiders")
+        os.chdir("/opt/monitor/monitorSpiders/monitorSpiders")
         os.system("scrapy crawl weibo")
 
 

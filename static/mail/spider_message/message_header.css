@@ -110,7 +110,7 @@
 }
 
 .style_title {
-    width: 800px;
+    width: 70%;
 }
 
 .query_text input {
@@ -156,7 +156,7 @@ ul li {
 }
 
 .tr_content {
-    width: 784px;
+    width: 100%;
     text-align: left;
 }
 
