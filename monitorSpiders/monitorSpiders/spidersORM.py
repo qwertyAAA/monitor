@@ -2,7 +2,7 @@ from sqlalchemy import Table, create_engine, MetaData
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.automap import automap_base
 
-engine = create_engine("mysql+pymysql://root:123456@10.25.116.62:3306/monitor")
+engine = create_engine("mysql+pymysql://root:123456@127.0.0.1:3306/monitor")
 # engine = create_engine("mysql+pymysql://root:123456@localhost:3306/monitor")
 metadata = MetaData(engine)
 DBSession = sessionmaker(bind=engine)

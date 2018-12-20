@@ -8,7 +8,7 @@ import requests
 import datetime
 from w3lib.html import remove_tags
 import redis
-key=redis.Redis(host="10.25.116.62",port=6379,max_connections=1000)
+key=redis.Redis(host="127.0.0.1",port=6379,max_connections=1000)
 try:
     keywords = [key.get('newkeywords').decode()]
 except Exception:
