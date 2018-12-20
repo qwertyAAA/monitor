@@ -130,7 +130,6 @@ function AddHeart(num, obj) {
             type: 'post',
             success: function (data) {
                 alert("成功加入收藏");
-                window.location.reload();
             },
             error: function (data) {
                 alert("未知错误！！！")
@@ -153,7 +152,6 @@ function AddTags(num, obj) {
             type: 'post',
             success: function (data) {
                 alert("成功加入简报");
-                window.location.reload();
             },
             error: function (data) {
                 alert("未登录或未知错误！！！")
@@ -181,7 +179,7 @@ function DelOne(num, obj) {
             type: 'post',
             success: function (data) {
                 alert("删除成功");
-                window.location.reload();
+                window.location.reload(true);
             },
             error: function (data) {
                 alert("未知错误！！！")
@@ -204,7 +202,7 @@ function SeeEye(num, obj) {
             },
             type: 'post',
             success: function (data) {
-                window.location.reload();
+                window.location.reload(true);
             },
             error: function (data) {
                 alert("未知错误！！！")
