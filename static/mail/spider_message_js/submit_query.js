@@ -91,7 +91,7 @@ $("#submit_query").click(function () {
             // window.location.reload();
         },
         error: function (data) {
-            alert("未知错误！！！或部分查询信息二期完成")
+            alert("请登录或未知错误！！！")
         }
     })
 });
