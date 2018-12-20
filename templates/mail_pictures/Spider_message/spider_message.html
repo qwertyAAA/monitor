@@ -4,129 +4,171 @@
     <script src="/static/mail/spider_message_js/header_button_js.js"></script>
     <link href="/static/mail/spider_message/message_header.css" rel="stylesheet">
     <link href="/static/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
-    <div>
-        {% if rule_obj %}
-             <h1>方案：<span><a href="/spider/edit_rule/{{ rule_obj.pk }}/">{{ rule_obj.title }}</a></span></h1>
-        {% endif %}
-
-
-        <a href="#" style="margin-left: 900px">标准视图</a> | <a href="#">精简视图</a>
-    </div>
-    <div class="message_header">
-        信息列表
-    </div>
-    <!-- 头部选择按钮 -->
-    <div class="span_header">
-        <div class="time_size">
-            <span>时间范围:</span>
-            <span id="time_1" role="button" class="spans click" onclick="selectTimeSubmit('today',1,this)">今日</span>
-            <span id="time_2" role="button" class="spans" onclick="selectTimeSubmit('24h',2,this)">24小时</span>
-            <span id="time_3" role="button" class="spans" onclick="selectTimeSubmit('2day',3,this)">2天</span>
-            <span id="time_4" role="button" class="spans" onclick="selectTimeSubmit('3day',4,this)">3天</span>
-            <span id="time_5" role="button" class="spans" onclick="selectTimeSubmit('week',5,this)">7天</span>
-            <span id="time_6" role="button" class="spans" onclick="selectTimeSubmit('10day',6,this)">10天</span>
-            <span id="time_7" role="button" class="spans" onclick="selectTimeSubmit('other',7,this)">自定义</span>
-            <div class="span_right">
-                <div class="other_time">
-                    <span>其他时间:</span>
-                    <input type="date" style="height: 21px;">
-                    <span> 到 </span>
-                    <input type="date" style="height: 21px;">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <span>******</span>
+                <a href="#" style="margin-left: 900px">标准视图</a> | <a href="#">精简视图</a>
+            </div>
+            <div class="col-sm-12 message_header">
+                信息列表
+            </div>
+            <!-- 头部选择按钮 -->
+            <div class="col-sm-12 span_header">
+                <div class="col-sm-12 time_size">
+                    <div class="col-sm-6">
+                        <span>时间范围:</span>
+                        <span id="time_1" role="button" class="spans click"
+                              onclick="selectTimeSubmit('today',1,this)">今日</span>
+                        <span id="time_2" role="button" class="spans"
+                              onclick="selectTimeSubmit('24h',2,this)">24小时</span>
+                        <span id="time_3" role="button" class="spans"
+                              onclick="selectTimeSubmit('2day',3,this)">2天</span>
+                        <span id="time_4" role="button" class="spans"
+                              onclick="selectTimeSubmit('3day',4,this)">3天</span>
+                        <span id="time_5" role="button" class="spans"
+                              onclick="selectTimeSubmit('week',5,this)">7天</span>
+                        <span id="time_6" role="button" class="spans"
+                              onclick="selectTimeSubmit('10day',6,this)">10天</span>
+                        <span id="time_7" role="button" class="spans"
+                              onclick="selectTimeSubmit('other',7,this)">自定义</span>
+                    </div>
+                    <div class="col-sm-5 span_right">
+                        <div class="other_time">
+                            <span>其他时间:</span>
+                            <input type="date" style="height: 21px;">
+                            <span> 到 </span>
+                            <input type="date" style="height: 21px;">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 article_ranking">
+                    <div class="col-sm-6">
+                        <span>文章排序:</span>
+                        <span id="sort_1" role="button" class="spans click" onclick="parXuCommon(1,this)">智能排序</span>
+                        <span id="sort_2" role="button" class="spans" onclick="parXuCommon(2,this)">时间降序</span>
+                        <span id="sort_3" role="button" class="spans" onclick="parXuCommon(3,this)">时间升序</span>
+                        <span id="sort_4" role="button" class="spans" onclick="parXuCommon(4,this)">相似文章</span>
+                        <span id="sort_5" role="button" class="spans" onclick="parXuCommon(5,this)">采集顺序</span>
+                    </div>
+                    <div class="col-sm-5 span_right">
+                        <div class="attribute_right">
+                            <span>敏感属性:</span>
+                            <span id="attribute_1" role="button" class="spans2 click"
+                                  onclick="attrbuteACommon(0,this)">全部</span>
+                            <span id="attribute_2" role="button" class="spans2"
+                                  onclick="attrbuteACommon(1,this)">非敏感</span>
+                            <span id="attribute_3" role="button" class="spans2"
+                                  onclick="attrbuteACommon(2,this)">敏感</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 results_show">
+                    <div class="col-sm-6">
+                        <span>结果呈现:</span>
+                        <span id="result_present_1" role="button" class="spans click"
+                              onclick="changeList(0,this)">正常显示</span>
+                        <span id="result_present_2" role="button" class="spans" onclick="changeList(1,this)">精准信息</span>
+                        <span id="result_present_3" role="button" class="spans" onclick="changeList(2,this)">疑似垃圾</span>
+                    </div>
+                    <div class="col-sm-5 span_right">
+                        <div class="merge_right">
+                            <span>相似文章:</span>
+                            <span id="merge_1" role="button" class="spans2 click"
+                                  onclick="changeCombineFlag(0,this)">不合并</span>
+                            <span id="merge_1" role="button" class="spans2"
+                                  onclick="changeCombineFlag(1,this)">合并</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 micro_blog">
+                    <div class="col-sm-6">
+                        <span>转发微博:</span>
+                        <span id="display_1" role="button" class="spans click"
+                              onclick="isSearchRootWb(0,this)">显示</span>
+                        <span id="display_2" role="button" class="spans" onclick="isSearchRootWb(1,this)">不显示</span>
+                    </div>
+                    <div class="col-sm-5 span_right">
+                        <div class="involve_right">
+                            <span>涉及方式:</span>
+                            <span id="involve_1" role="button" class="spans2 click"
+                                  onclick="changeInvolveWay(0,this)">全部</span>
+                            <span id="involve_2" role="button" class="spans2"
+                                  onclick="changeInvolveWay(1,this)">内容涉及</span>
+                            <span id="involve_3" role="button" class="spans2"
+                                  onclick="changeInvolveWay(2,this)">定位涉及</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 region">
+                    <div class="col-sm-6">
+                        <span>信源区域:</span>
+                        <span id="message_source_1" role="button" class="spans click"
+                              onclick="changeKeywordProvince(0,this)">*全部*</span>
+                        <span id="message_source_2" role="button" class="spans"
+                              onclick="changeKeywordProvince(1,this)">省内</span>
+                        <span id="message_source_3" role="button" class="spans"
+                              onclick="changeKeywordProvince(2,this)">省外</span>
+                    </div>
+                    <div class="col-sm-5 span_right">
+                        <div class="matching_right">
+                            <span>匹配方式:</span>
+                            <span id="matching_1" role="button" class="spans2 click"
+                                  onclick="changeMatchingMode(0,this)">按全文</span>
+                            <span id="matching_2" role="button" class="spans2"
+                                  onclick="changeMatchingMode(1,this)">按标题</span>
+                            <span id="matching_3" role="button" class="spans2"
+                                  onclick="changeMatchingMode(2,this)">按正文</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 blog_content">
+                    <div class="col-sm-12">
+                        <span>微博内容:</span>
+                        <span id="content_1" role="button" class="spans click"
+                              onclick="changeWeiboType(0,this)">全部</span>
+                        <span id="content_2" role="button" class="spans" onclick="changeWeiboType(1,this)">按文本</span>
+                        <span id="content_3" role="button" class="spans" onclick="changeWeiboType(2,this)">按图文</span>
+                        <span id="content_4" role="button" class="spans" onclick="changeWeiboType(3,this)">按视频</span>
+                        <span id="content_5" role="button" class="spans" onclick="changeWeiboType(4,this)">按短链</span>
+                    </div>
+                </div>
+                <div class="col-sm-12 source_website">
+                    <div class="col-sm-12">
+                        <span>来源网站:</span>
+                        <span id="source_1" role="button" class="spans click"
+                              onclick="cptWebSiteCommon(0,this)">全部</span>
+                        <span id="source_2" role="button" class="spans" onclick="cptWebSiteCommon(1,this)">贴吧</span>
+                        <span id="source_2" role="button" class="spans" onclick="cptWebSiteCommon(2,this)">微博</span>
+                        <span id="source_3" role="button" class="spans" onclick="cptWebSiteCommon(3,this)">定向信源</span>
+                        <span role="button" class="spans">
+                            <i class="fa fa-pencil" aria-hidden="true" data-toggle="tooltip" data-placement="bottom"
+                               title="点击跳转至定向监测"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 source_message" style="display: none">
+                <span>来源信息<span>(多选)</span>:</span>
+                <span id="source_message_1" role="button" class="spans click">全部()</span>
+                <span id="source_message_2" role="button" class="spans">微信()</span>
+                <span id="source_message_3" role="button" class="spans">网站()</span>
+                <span id="source_message_4" role="button" class="spans">客户端()</span>
+                <span id="source_message_5" role="button" class="spans">论坛()</span>
+            </div>
+            <div class="col-sm-12">
+                <div class="col-sm-12 btn_submit">
+                    <div class="col-sm-6 col-sm-offset-4">
+                        <button type="button" class="btn btn-default btn_query" id="submit_query">查询</button>
+                        <button type="button" class="btn btn-default btn_keep">保存</button>
+                    </div>
+                    <span role="button" class="col-sm-1 spans">基础筛选</span>
+                    <i class="fa fa-question-circle" aria-hidden="true" data-toggle="tooltip"
+                       data-placement="bottom"
+                       title="二期完成"></i>
                 </div>
             </div>
         </div>
-        <div class="article_ranking">
-            <span>文章排序:</span>
-            <span id="sort_1" role="button" class="spans click" onclick="parXuCommon(1,this)">智能排序</span>
-            <span id="sort_2" role="button" class="spans" onclick="parXuCommon(2,this)">时间降序</span>
-            <span id="sort_3" role="button" class="spans" onclick="parXuCommon(3,this)">时间升序</span>
-            <span id="sort_4" role="button" class="spans" onclick="parXuCommon(4,this)">相似文章</span>
-            <span id="sort_5" role="button" class="spans" onclick="parXuCommon(5,this)">采集顺序</span>
-            <div class="span_right">
-                <div class="attribute_right">
-                    <span>敏感属性:</span>
-                    <span id="attribute_1" role="button" class="spans2 click" onclick="attrbuteACommon(0,this)">全部</span>
-                    <span id="attribute_2" role="button" class="spans2" onclick="attrbuteACommon(1,this)">非敏感</span>
-                    <span id="attribute_3" role="button" class="spans2" onclick="attrbuteACommon(2,this)">敏感</span>
-                </div>
-            </div>
-        </div>
-        <div class="results_show">
-            <span>结果呈现:</span>
-            <span id="result_present_1" role="button" class="spans click" onclick="changeList(0,this)">正常显示</span>
-            <span id="result_present_2" role="button" class="spans" onclick="changeList(1,this)">精准信息</span>
-            <span id="result_present_3" role="button" class="spans" onclick="changeList(2,this)">疑似垃圾</span>
-            <div class="span_right">
-                <div class="merge_right">
-                    <span>相似文章:</span>
-                    <span id="merge_1" role="button" class="spans2 click" onclick="changeCombineFlag(0,this)">不合并</span>
-                    <span id="merge_1" role="button" class="spans2" onclick="changeCombineFlag(1,this)">合并</span>
-                </div>
-            </div>
-        </div>
-        <div class="micro_blog">
-            <span>转发微博:</span>
-            <span id="display_1" role="button" class="spans click" onclick="isSearchRootWb(0,this)">显示</span>
-            <span id="display_2" role="button" class="spans" onclick="isSearchRootWb(1,this)">不显示</span>
-            <div class="span_right">
-                <div class="involve_right">
-                    <span>涉及方式:</span>
-                    <span id="involve_1" role="button" class="spans2 click" onclick="changeInvolveWay(0,this)">全部</span>
-                    <span id="involve_2" role="button" class="spans2" onclick="changeInvolveWay(1,this)">内容涉及</span>
-                    <span id="involve_3" role="button" class="spans2" onclick="changeInvolveWay(2,this)">定位涉及</span>
-                </div>
-            </div>
-        </div>
-        <div class="region">
-            <span>信源区域:</span>
-            <span id="message_source_1" role="button" class="spans click"
-                  onclick="changeKeywordProvince(0,this)">*全部*</span>
-            <span id="message_source_2" role="button" class="spans" onclick="changeKeywordProvince(1,this)">省内</span>
-            <span id="message_source_3" role="button" class="spans" onclick="changeKeywordProvince(2,this)">省外</span>
-            <div class="span_right">
-                <div class="matching_right">
-                    <span>匹配方式:</span>
-                    <span id="matching_1" role="button" class="spans2 click"
-                          onclick="changeMatchingMode(0,this)">按全文</span>
-                    <span id="matching_2" role="button" class="spans2" onclick="changeMatchingMode(1,this)">按标题</span>
-                    <span id="matching_3" role="button" class="spans2" onclick="changeMatchingMode(2,this)">按正文</span>
-                </div>
-            </div>
-        </div>
-        <div class="blog_content">
-            <span>微博内容:</span>
-            <span id="content_1" role="button" class="spans click" onclick="changeWeiboType(0,this)">全部</span>
-            <span id="content_2" role="button" class="spans" onclick="changeWeiboType(1,this)">按文本</span>
-            <span id="content_3" role="button" class="spans" onclick="changeWeiboType(2,this)">按图文</span>
-            <span id="content_4" role="button" class="spans" onclick="changeWeiboType(3,this)">按视频</span>
-            <span id="content_5" role="button" class="spans" onclick="changeWeiboType(4,this)">按短链</span>
-        </div>
-        <div class="source_website">
-            <span>来源网站:</span>
-            <span id="source_1" role="button" class="spans click" onclick="cptWebSiteCommon(0,this)">全部</span>
-            <span id="source_2" role="button" class="spans" onclick="cptWebSiteCommon(1,this)">贴吧</span>
-            <span id="source_2" role="button" class="spans" onclick="cptWebSiteCommon(2,this)">微博</span>
-            <span id="source_3" role="button" class="spans" onclick="cptWebSiteCommon(3,this)">定向信源</span>
-            <span role="button" class="spans">
-                <i class="fa fa-pencil" aria-hidden="true" data-toggle="tooltip" data-placement="bottom"
-                   title="点击跳转至定向监测"></i>
-            </span>
-        </div>
-    </div>
-    <div class="source_message" style="display: none">
-        <span>来源信息<span>(多选)</span>:</span>
-        <span id="source_message_1" role="button" class="spans click">全部()</span>
-        <span id="source_message_2" role="button" class="spans">微信()</span>
-        <span id="source_message_3" role="button" class="spans">网站()</span>
-        <span id="source_message_4" role="button" class="spans">客户端()</span>
-        <span id="source_message_5" role="button" class="spans">论坛()</span>
-    </div>
-    <div class="btn_submit">
-        <button type="button" class="btn btn-default btn_query" id="submit_query">查询</button>
-        <button type="button" class="btn btn-default btn_keep">保存</button>
-        <span role="button" class="spans">基础筛选</span>
-        <i class="fa fa-question-circle" aria-hidden="true" data-toggle="tooltip" data-placement="bottom"
-           title="二期完成"></i>
     </div>
     <!-- 查询表 -->
     <div class="container-fluid">
@@ -137,54 +179,59 @@
                     <thead>
                     <tr class="color_tr">
                         <td></td>
-                        <td class="style_title"><span>标题</span></td>
-                        <td><span>相似文章数</span></td>
-                        <td><span>来源</span></td>
-                        <td><span>时间</span></td>
+                        <td class="col-sm-8 style_title"><span>标题</span></td>
+                        <td class="col-sm-1"><span>相似文章数</span></td>
+                        <td class="col-sm-1"><span>来源</span></td>
+                        <td class="col-sm-2"><span>时间</span></td>
                     </tr>
                     <tr>
                         <td style="line-height: 40px"><input type="checkbox" id="checkbox_on"></td>
                         <script src="/static/mail/spider_message_js/js1.js"></script>
-                        <td>批量操作:
-                            <button type="button" class="btn" data-toggle="tooltip" data-placement="bottom"
-                                    id="in_heart" name="in_heart"
-                                    title="加入收藏夹">
-                                <i class="fa fa-heart" aria-hidden="true"></i>
-                            </button>
-                            <button type="button" class="btn" data-toggle="tooltip" data-placement="bottom"
-                                    id="in_tags" name="in_tags"
-                                    data-original-title="加入简报素材">
-                                <i class="fa fa-tags" aria-hidden="true"></i>
-                            </button>
-                            <button type="button" class="btn" data-toggle="tooltip" data-placement="bottom"
-                                    name="in_square"
-                                    data-original-title="转发舆情">
-                                <i class="fa fa-share-square-o" aria-hidden="true"></i>
-                                <i class="fa fa-angle-down" aria-hidden="true"></i>
-                            </button>
-                            <button type="button" class="btn" data-toggle="tooltip" data-placement="bottom"
-                                    id="out_del" name="out_del"
-                                    data-original-title="删除">
-                                <i class="fa fa-trash-o fa-lg"></i>
-                            </button>
-                            <button type="button" class="btn" data-toggle="tooltip" data-placement="bottom"
-                                    id="in_eye" name="in_eye"
-                                    data-original-title="标已读">
-                                <i class="fa fa-eye" aria-hidden="true"></i>
-                            </button>
-                            <button type="button" class="btn" data-toggle="tooltip" data-placement="bottom"
-                                    name="out_out"
-                                    data-original-title="导出">
-                                <i class="fa fa-sign-out" aria-hidden="true"></i>
-                            </button>
-                            <button type="button" class="btn" data-toggle="tooltip" data-placement="bottom"
-                                    name="in_all"
-                                    data-original-title="全选信息加入简报素材(最多1000条)">
-                                <i class="fa fa-arrow-down" aria-hidden="true"></i>
-                            </button>
-                            <div class="query_text">
+                        <td class="col-sm-8" style="white-space: nowrap">
+                            <span class="col-sm-1" style="width: 90px;margin-right: 0;line-height: 34px">批量操作:</span>
+                            <div class="col-sm-6">
+                                <button type="button" class="btn" data-toggle="tooltip" data-placement="bottom"
+                                        id="in_heart" name="in_heart"
+                                        title="加入收藏夹">
+                                    <i class="fa fa-heart" aria-hidden="true"></i>
+                                </button>
+                                <button type="button" class="btn" data-toggle="tooltip" data-placement="bottom"
+                                        id="in_tags" name="in_tags"
+                                        data-original-title="加入简报素材">
+                                    <i class="fa fa-tags" aria-hidden="true"></i>
+                                </button>
+                                <button type="button" class="btn" data-toggle="tooltip" data-placement="bottom"
+                                        name="in_square"
+                                        data-original-title="转发舆情">
+                                    <i class="fa fa-share-square-o" aria-hidden="true"></i>
+                                    <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                </button>
+                                <button type="button" class="btn" data-toggle="tooltip" data-placement="bottom"
+                                        id="out_del" name="out_del"
+                                        data-original-title="删除">
+                                    <i class="fa fa-trash-o fa-lg"></i>
+                                </button>
+                                <button type="button" class="btn" data-toggle="tooltip" data-placement="bottom"
+                                        id="in_eye" name="in_eye"
+                                        data-original-title="标已读">
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                </button>
+                                <button type="button" class="btn" data-toggle="tooltip" data-placement="bottom"
+                                        name="out_out"
+                                        data-original-title="导出">
+                                    <i class="fa fa-sign-out" aria-hidden="true"></i>
+                                </button>
+                                <button type="button" class="btn" data-toggle="tooltip" data-placement="bottom"
+                                        name="in_all"
+                                        data-original-title="全选信息加入简报素材(最多1000条)">
+                                    <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            <div class="col-sm-1 query_text">
                                 <input type="text" class="form-control" placeholder="在搜索结果中显示，支持单个字符"
-                                       id="obang_input" style="width: 250px">
+                                       id="obang_input">
+                            </div>
+                            <div class="col-sm-1 col-sm-push-6 query_text">
                                 <button type="button" class="btn btn-default" id="obang">搜索</button>
                             </div>
                         </td>
@@ -198,7 +245,7 @@
                                        name='onclick_checkbox'
                                        value="{{ message.id }}">
                             </td>
-                            <td>
+                            <td class="col-sm-8">
                                 <div class="tr_content" style="font-size: 14px;">
                                     <a href="/index/{{ message.title }}/article/id={{ message.id }}/">
                                         <img src="/media/{{ message.source.source_img }}" class="img-circle"
@@ -216,23 +263,27 @@
                                         <button type="button" class="btn"
                                                 data-toggle="tooltip" data-placement="bottom"
                                                 id="in_heart_one" name="in_heart_one" title="加入收藏夹"
-                                                value="{{ message.id }}" onclick="AddHeart({{ message.id }},this)">
+                                                value="{{ message.id }}"
+                                                onclick="AddHeart({{ message.id }},this)">
                                             <i class="fa fa-heart" aria-hidden="true"></i>
                                         </button>
                                         <button type="button" class="btn" data-toggle="tooltip"
                                                 data-placement="bottom" id="in_tags_one" name="in_tags"
-                                                data-original-title="加入简报素材" onclick="AddTags({{ message.id }},this)">
+                                                data-original-title="加入简报素材"
+                                                onclick="AddTags({{ message.id }},this)">
                                             <i class="fa fa-tags" aria-hidden="true"></i>
                                         </button>
                                         <button type="button" class="btn" data-toggle="tooltip"
-                                                data-placement="bottom" name="in_square" data-original-title="转发舆情"
+                                                data-placement="bottom" name="in_square"
+                                                data-original-title="转发舆情"
                                                 onclick="SquareOne({{ message.id }},this)">
                                             <i class="fa fa-share-square-o" aria-hidden="true"></i>
                                             <i class="fa fa-angle-down" aria-hidden="true"></i>
                                         </button>
                                         <button type="button" class="btn" data-toggle="tooltip"
                                                 data-placement="bottom" name="out_del_one"
-                                                data-original-title="删除" onclick="DelOne({{ message.id }},this)">
+                                                data-original-title="删除"
+                                                onclick="DelOne({{ message.id }},this)">
                                             <i class="fa fa-trash-o fa-lg"></i>
                                         </button>
                                         <a href="{{ message.url }}">
@@ -261,9 +312,9 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="line_height"><span>1</span></td>
-                            <td class="line_height"><span>{{ message.source.source }}</span></td>
-                            <td class="line_height"><span>{{ message.create_time }}</span></td>
+                            <td class="col-sm-1 line_height"><span>1</span></td>
+                            <td class="col-sm-1 line_height"><span>{{ message.source.source }}</span></td>
+                            <td class="col-sm-2 line_height"><span>{{ message.create_time }}</span></td>
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -276,19 +327,19 @@
     </div>
     <script src="/static/mail/spider_message_js/submit_query.js"></script>
     <script src="/static/mail/spider_message_js/batch_button.js"></script>
-{#    <script>#}
-{#        var color_sp = document.getElementsByName('#tr_content p');#}
-{#        var keywords;#}
-{#        {% for message in message_list %}#}
-{#            keywords ={{ message.keywords }};#}
-{#        {% endfor %}#}
-{#        console.log(keywords);#}
-{#        for (var i = 0; i < color_sp.length; i++) {#}
-{##}
-{#            if (color_sp[i].innerHTML === keywords) {#}
-{#                color_sp[i].css("color", "red");#}
-{#                color_sp[i].css("font-weight", "bold");#}
-{#            }#}
-{#        }#}
-{#    </script>#}
+    {#    <script>#}
+    {#        var color_sp = document.getElementsByName('#tr_content p');#}
+    {#        var keywords;#}
+    {#        {% for message in message_list %}#}
+    {#            keywords ={{ message.keywords }};#}
+    {#        {% endfor %}#}
+    {#        console.log(keywords);#}
+    {#        for (var i = 0; i < color_sp.length; i++) {#}
+    {##}
+    {#            if (color_sp[i].innerHTML === keywords) {#}
+    {#                color_sp[i].css("color", "red");#}
+    {#                color_sp[i].css("font-weight", "bold");#}
+    {#            }#}
+    {#        }#}
+    {#    </script>#}
 {% endblock %}
