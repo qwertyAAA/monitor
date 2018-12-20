@@ -3,6 +3,18 @@
     <div class="container">
         <div class="row">
             <h1>用户角色管理</h1><br><br>
+
+            <div>
+                <h3>
+                    当前角色：
+                    {% for foo in request.user.role_set.all %}
+                        {{ foo.title }}
+                    {% endfor %}
+                </h3>
+            <br>
+            <br>
+            <br>
+            </div>
             <form action="/permission/user_role/" method="post" class="form-horizontal" enctype="multipart/form-data">
                 {% csrf_token %}
                 用户<select id="user" name="user" class="form-control" style="width: 50%">

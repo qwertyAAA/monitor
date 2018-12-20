@@ -152,18 +152,25 @@ def fuzzy_query(request):
         count = 0
         q = Q()
         q.connector = "or"
-        if not search and not action_time and not end_time and select_id == 0:
-            q.children.append(('status_id__icontains', select_id))
-            return JsonResponse(ret)
-        elif not search and not action_time and not end_time and select_id == 1:
-            q.children.append(('status_id__icontains', '未读'))
-            return JsonResponse(ret)
-        elif not search and not action_time and not end_time and select_id == 2:
-            q.children.append(('status_id__icontains', '已读'))
-            return JsonResponse(ret)
-        elif search:
+        if search and select_id == '0':
             q.children.append(('title__icontains', search))
             q.children.append(('to_user__icontains', search))
+        elif search and select_id == '1':
+            q.children.append(('title__icontains', search))
+            q.children.append(('to_user__icontains', search))
+            q.connector = "and"
+            q.children.append(('status_id_id', '0'))
+        elif search and select_id == '2':
+            q.children.append(('title__icontains', search))
+            q.children.append(('to_user__icontains', search))
+            q.connector = "and"
+            q.children.append(('status_id_id', '1'))
+        elif not search and select_id == '0':
+            pass
+        elif not search and select_id == '1':
+            q.children.append(('status_id_id', '0'))
+        elif not search and select_id == '2':
+            q.children.append(('status_id_id', '1'))
         fhsms = Fhsms.objects.filter(q)
         ret["status"] = True
         for obj in fhsms:

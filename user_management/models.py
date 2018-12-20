@@ -21,6 +21,9 @@ class UserInfo(models.Model):
     user_image = models.ImageField(upload_to="avatars/", default="avatars/default.jpg", verbose_name="头像")
     user = models.OneToOneField(to=User)
 
+    def __str__(self):
+        return self.user_name
+
 
 # 通讯录表
 class Mail_list(models.Model):
@@ -31,12 +34,16 @@ class Mail_list(models.Model):
     mail_weixin_number = models.CharField(max_length=16, unique=True, verbose_name="微信号")
     mail_company = models.CharField(max_length=32, default='name', verbose_name="单位", null=True)
 
+    def __str__(self):
+        return self.mail_name
 
 
 class System_setup(models.Model):
-    Scheme_name = models.CharField(max_length=16,  verbose_name="方案名称")
+    Scheme_name = models.CharField(max_length=16, verbose_name="方案名称")
     warning_content = models.CharField(max_length=32, default='name', verbose_name="预警内容", null=True)
     warning_type = models.CharField(max_length=255, null=True, verbose_name="预警类型")
     warning_mode = models.CharField(max_length=255, null=True, verbose_name="预警方式")
     switch = models.CharField(max_length=16, verbose_name="开关")
 
+    def __str__(self):
+        return self.Scheme_name

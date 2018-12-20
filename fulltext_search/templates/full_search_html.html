@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
-        <style type="text/css">
+    <style type="text/css">
         em{
             color: red;
         }
     </style>
     <div class="row">
         <div class="col-lg-6 col-lg-offset-3">
-            <form action="/search/full_search/" method="post">
+            <form action="/search/full_search/" method="post" id="search_form">
                 {% csrf_token %}
                 <div class="form-group">
                     {#                    <label for="inputPassword2" class="col-sm-3 control-label" style="font-size: large">全网搜索:</label>#}
@@ -17,7 +17,7 @@
                     </div>
                 </div>
                 <div class="col-lg-3">
-                    <button class="btn btn-primary" type="submit">提交</button>
+                    <button id="search_btn" class="btn btn-primary" type="submit">提交</button>
                 </div>
 
             </form>
@@ -46,8 +46,8 @@
                     {% for i in result %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
-                        <td>{{ i.title |safe }}</td>
-                        <td>{{ i.detail }}</td>
+                        <td>{{ i.title | safe }}</td>
+                        <td>{{ i.detail | safe }}</td>
                         <td>{{ i.author.author }}</td>
                         <td>{{ i.create_time }}</td>
                         <td>{{ i.source.source }}</td>
@@ -57,8 +57,6 @@
                     {% endfor %}
                 </tbody>
             </table>
-                {% for i in result %}
-                {% endfor %}
             </div>
         </div>
     </div>

@@ -63,7 +63,7 @@ class MonitorspidersDownloaderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the downloader middleware does not modify the
     # passed objects.
-    conn = redis.Redis(host="10.25.116.62", port=6379)
+    conn = redis.Redis(host="127.0.0.1", port=6379)
 
     @classmethod
     def from_crawler(cls, crawler):

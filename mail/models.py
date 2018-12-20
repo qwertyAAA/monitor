@@ -15,6 +15,9 @@ class Pictures(models.Model):
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
     master_id = models.ForeignKey(to=User, verbose_name="图片主人")
 
+    def __str__(self):
+        return self.title
+
 
 class StatusMail(models.Model):
     """

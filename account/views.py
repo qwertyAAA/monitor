@@ -67,8 +67,10 @@ def register(request):
 
         # 调用auth登录
         auth.login(request, user)
+        request.session['user_id'] = user.id
+        init_permission(user, request)
         # 重定向到首页
-        return redirect("/index/")
+        return redirect("/index/spider_message/")
     else:
         context = {"islogin": False}
     return render(request, "login.html", locals())
@@ -270,7 +272,7 @@ def get_valid_img(request):
     # 生成一个图片画笔对象
     draw_obj = ImageDraw.Draw(img_obj)
     # 加载字体文件， 得到一个字体对象
-    font_obj = ImageFont.truetype("static/font/arial.ttf", 28)
+    font_obj = ImageFont.truetype("/opt/monitor/static/fonts/arial.ttf", 28)
     # 开始生成随机字符串并且写到图片上
     tmp_list = []
     for i in range(5):

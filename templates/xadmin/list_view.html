@@ -51,7 +51,7 @@
                         </td>
                         {% for item in data %}
                             <td>
-                                <span>{{ item }}</span>
+                                <span>{{ item | slice:':20' }}</span>
                             </td>
                         {% endfor %}
                         <td>

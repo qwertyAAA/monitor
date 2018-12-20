@@ -36,14 +36,14 @@
             <!-- 查询end-->
             <!-- form 多选-->
 
-            <select name="action" id="" style="width: 200px; padding:5px 8px;   display: inline-block">
-
-                <option value="------">--------</option>
-                <option value="批量删除">批量删除</option>
-
-
-            </select>
-            <button type="submit" class="btn btn-info">执行批量删除</button>
+{#            <select name="action" id="" style="width: 200px; padding:5px 8px;   display: inline-block">#}
+{##}
+{#                <option value="------">--------</option>#}
+{#                <option value="批量删除">批量删除</option>#}
+{##}
+{##}
+{#            </select>#}
+{#            <button type="submit" class="btn btn-info">执行批量删除</button>#}
 
             <table class="table table-hover table-bordered">
                 <thead>
@@ -63,7 +63,7 @@
                         <i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>
                         最近登陆
                     </th>
-                    <th class="center">上次登录IP</th>
+{#                    <th class="center">上次登录IP</th>#}
                     <th class="center">操作</th>
                 </tr>
                 <tbody>
@@ -91,7 +91,7 @@
                         </td>
                         <td style="width: 200px"> {{ user.user.last_login }} </td>
 
-                        <td style="width: 90px">{{ user.user_recent_ip }}</td>
+{#                        <td style="width: 90px"  >{{ user.user_recent_ip }}</td>#}
 
                         <td style="width: 150px">
 
@@ -239,9 +239,9 @@
 
                             <!-- 详情信息 end0 -->
 
-                            <a class="btn btn-xs btn-info" title="发送站内信">
-                                <i class="ace-icon fa fa-envelope-o bigger-120" title="发送站内信"></i>
-                            </a>
+{#                            <a class="btn btn-xs btn-info" title="发送站内信">#}
+{#                                <i class="ace-icon fa fa-envelope-o bigger-120" title="发送站内信"></i>#}
+{#                            </a>#}
 
 
                             <!-- 编辑模态框start-->
@@ -451,19 +451,19 @@
 
 
             <!-- 小功能下-->
-            <a class="btn btn-xs btn-info" title="发送站内信" onclick="sendFhsms('lisi');">
-                <i class="ace-icon fa fa-envelope-o bigger-120" title="发送站内信" style="height: 20px"></i>
-            </a>
-            <a class="btn btn-xs btn-info" title="批量发送电子邮件">
-                <i class="ace-icon fa fa-envelope bigger-120" title="批量发送电子邮件" style="height: 20px"></i>
-            </a>
-            <a class="btn btn-xs btn-warning" title="发送短信" onclick="sendSms('15153203821');">
-                <i class="ace-icon fa fa-envelope-o bigger-120" title="发送短信" style="height: 20px"></i>
-            </a>
-            <a class="btn btn-xs btn-danger" title="删除" data-toggle="modal"
-               data-target="#plmyModal{{ forloop.counter }}">
-                <i class="ace-icon fa fa-trash-o bigger-120" title="删除" style="height: 20px"></i>
-            </a>
+{#            <a class="btn btn-xs btn-info" title="发送站内信" onclick="sendFhsms('lisi');">#}
+{#                <i class="ace-icon fa fa-envelope-o bigger-120" title="发送站内信" style="height: 20px"></i>#}
+{#            </a>#}
+{#            <a class="btn btn-xs btn-info" title="批量发送电子邮件">#}
+{#                <i class="ace-icon fa fa-envelope bigger-120" title="批量发送电子邮件" style="height: 20px"></i>#}
+{#            </a>#}
+{#            <a class="btn btn-xs btn-warning" title="发送短信" onclick="sendSms('15153203821');">#}
+{#                <i class="ace-icon fa fa-envelope-o bigger-120" title="发送短信" style="height: 20px"></i>#}
+{#            </a>#}
+{#            <a class="btn btn-xs btn-danger" title="删除" data-toggle="modal"#}
+{#               data-target="#plmyModal{{ forloop.counter }}">#}
+{#                <i class="ace-icon fa fa-trash-o bigger-120" title="删除" style="height: 20px"></i>#}
+{#            </a>#}
 
 
             <!-- 小功能上-->

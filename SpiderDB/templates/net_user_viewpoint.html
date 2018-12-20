@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div id="main" style="width: 600px;height:400px;"></div>
+    <script type="text/javascript">
+        {#var title_list = {{ title_list }};#}
+        var aff_count ={{ aff_count }};
+        {#console.log(aff_count);#}
+        {#console.log(typeof aff_count)#}
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: '微博网民观点',
+                subtext: '数据来自微博'
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            legend: {
+                data: ['样本数据数量']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'value',
+                boundaryGap: [0, 0.01],
+            },
+            yAxis: {
+                type: 'category',
+                data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            },
+            series: [
+                {
+                    name: '样本数据数量',
+                    type: 'bar',
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'inside'
+                        }
+                    },
+                    data: aff_count,
+                },
+            ]
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+    <div>
+        <h1>媒体观点主要表现在如下几个方面：</h1>
+        <table class="table table-striped">
+            <thead>
+            <th>序号</th>
+            <th>标题</th>
+            <th>影响人数</th>
+            </thead>
+            <tbody>
+            {% for net_user_list in net_user_lists %}
+                <tr>
+                    <td class="col-md-2">
+                        <p>{{ forloop.counter }}</p>
+                    </td>
+                    <td class="col-md-8">
+                        <p style="width: 500px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
+                             <a  data-toggle="modal"
+                           data-target="#net_user{{ forloop.counter }}">{{ net_user_list.title }}</a>
+                        <div class="modal fade" id="net_user{{ forloop.counter }}" tabindex="-1" role="dialog"
+                             aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content" style="height: auto;width: 1000px;">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close"><span
+                                                aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                            {{ net_user_list.author.author }}
+                                            {{ net_user_list.content | safe }}
+                                            {{ net_user_list.detail }}
+                                        </div>
+                                    <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                                            </button>
+                                            <button type="submit" class="btn btn-primary">保存</button>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        </p>
+
+                    </td>
+                    <td>
+                        <p class="col-md-2" style="display: inline-block;">{{ net_user_list.affected_count }}</p>
+                    </td>
+                </tr>
+
+
+            {% endfor %}
+            </tbody>
+
+        </table>
+
+
+    </div>
+
+
+{% endblock %}
