@@ -51,5 +51,8 @@ urlpatterns = [
     url(r"^serch_feedback/$", views.serch_feedback),
     url(r"^edit_emotion/(\d+)/$", views.edit_emotion),
     url(r"^yujing/$", views.yujing),
+    #舆情分析datacount
+    url(r"^count_user/$", views.count_user),
+    url(r"^datacount/$", views.datacount),
 
 ]

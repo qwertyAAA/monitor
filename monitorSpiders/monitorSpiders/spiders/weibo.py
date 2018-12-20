@@ -89,7 +89,7 @@ class WeiboSpider(scrapy.Spider):
 
     def start_requests(self):
         keywords = []
-        conn = redis.Redis(host="10.25.116.62", port="6379")
+        conn = redis.Redis(host="127.0.0.1", port="6379")
         keyword_list = conn.get("new_keywords") if conn.get("new_keywords") else conn.lrange("exists_keywords", 0, -1)
         for keyword in keyword_list:
                 keywords.append(keyword.decode())
@@ -121,13 +121,15 @@ class WeiboSpider(scrapy.Spider):
             keyword = get_normal_keyword(response.request.url) + " "
             author = remove_tags(content.xpath(".//div[@class='act']/div[1]/span[1]").extract_first())
             author_url = content.xpath(".//div[@class='act']/div[1]/span[1]/a/@href").extract_first()
-            author_url = author_url if author_url else ""
+            author_url = author_url if author_url else "#"
             article_title = remove_tags(card_wrap.xpath(".//div[@class='card-article-a']/h3/a").extract_first(),
                                         keep="em")
             article_content, article_type = handle_article_content(content)
             article_detail = remove_tags(content.xpath("./div[@class='detail']/p[@class='txt']").extract_first(),
                                          keep="em").strip()
             article_url = card_wrap.xpath(".//div[@class='card-article-a']/h3/a/@href").extract_first()
+            if not article_url:
+                article_url = "#"
             create_info = content.xpath(".//div[@class='act']")
             create_time = get_time(create_info.xpath(".//div[1]/span[2]/text()").extract_first())
             shares = get_count(create_info.xpath(".//li[1]/a/text()").extract_first())
@@ -157,6 +159,7 @@ class WeiboSpider(scrapy.Spider):
             keyword = get_media_keyword(response.request.url) + " "
             author = content.css(".name::text").extract_first()
             author_url = content.css(".name::attr(href)").extract_first()
+            author_url = author_url if author_url else "#"
             article_title = re.sub(r"\s", "", remove_tags(
                 content.css(".txt").extract_first() if content.css(".txt").extract_first() else "", keep="em")).strip()
             article_content, article_type = handle_article_content(content)
@@ -181,7 +184,7 @@ class WeiboSpider(scrapy.Spider):
                 article_title=article_title,
                 article_content=article_content,
                 article_detail=article_detail,
-                article_url="",
+                article_url="#",
                 article_type=article_type,
                 article_create_time=create_time,
                 affected_count=affected_count,

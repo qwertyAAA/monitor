@@ -82,7 +82,7 @@ class Page():
 
         html_list.append(
             '<li><a href="?pn={}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>'.format(page_add))
-        html_list.append('<li><a href="?pn={}">未页</a></li>'.format(total_page))
+        html_list.append('<li><a href="?pn={}">末页</a></li>'.format(total_page))
         page_html = ''.join(html_list)
 
         return stu, page_html

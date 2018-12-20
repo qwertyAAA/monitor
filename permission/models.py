@@ -15,11 +15,16 @@ class Role(models.Model):
 
 class Data_Per(models.Model):
     title=models.CharField(max_length=32)
+    def __str__(self): return self.title
 
 
 class RoleGroup(models.Model):
     title=models.CharField(max_length=32,verbose_name='角色组名称')
     permissions = models.ManyToManyField(to='Permission')
+
+    def __str__(self):
+        return self.title
+
 
 class Permission(models.Model):
     title=models.CharField(max_length=32,verbose_name="权限名字")

@@ -24,7 +24,7 @@ SECRET_KEY = 'ud%@&3#9@zntn7^mfv!%1!w&bowh+i5q0pel6vteya_cr2rf^7'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*", ]
 
 # Application definition
 
@@ -55,7 +55,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'middlewares.xadminMiddleware.CheckXadminPermission',
-    # 'permission.service.rbac.ValidPermission',
+    'permission.service.rbac.ValidPermission',
     'middlewares.all_requests.PushRequests',
 ]
 
@@ -85,8 +85,8 @@ WSGI_APPLICATION = 'monitor.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  # 数据库的类型
-        'HOST': '10.25.116.62',  # 数据库的地址
-        # 'HOST': 'localhost',  # 数据库的地址
+        # 'HOST': '10.25.116.62',  # 数据库的地址
+        'HOST': 'localhost',  # 数据库的地址
         'PORT': 3306,
         'NAME': 'monitor',
         'USER': 'root',
@@ -143,8 +143,8 @@ USE_TZ = False
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://10.25.116.62:6379/0",
-        # "LOCATION": "redis://127.0.0.1:6379/0",
+        # "LOCATION": "redis://10.25.116.62:6379/0",
+        "LOCATION": "redis://127.0.0.1:6379/0",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }

@@ -10,7 +10,7 @@ from w3lib.html import remove_tags
 import redis
 key=redis.Redis(host="10.25.116.62",port=6379,max_connections=1000)
 try:
-    keywords = [key.get('newkeywords1').decode()]
+    keywords = [key.get('newkeywords').decode()]
 except Exception:
     keywords = []
 key_word_redislist=key.lrange('exists_keywords',0,-1)
@@ -25,7 +25,10 @@ for i in key_word_list:
     key_list+=i.split(' ')
 key_list=set(key_list)
 key_list=list(key_list)
-key_list.remove('')
+try:
+    key_list.remove('')
+except Exception:
+    print('无空字符串')
 
 class TiebaSpider(scrapy.Spider):
     name = 'tieba'
@@ -34,12 +37,12 @@ class TiebaSpider(scrapy.Spider):
     if len(keywords)>0:
         key_words = keywords
     else:
-        key_words =key_list
+        key_words =key_word_list
     page_url = []
     article_url = []
 
     def start_requests(self):
-        print('开始')
+        print('开始_tieba')
         print(self.key_words)
         for key_word in self.key_words:
             urls = ['http://tieba.baidu.com/f/search/res?ie=utf-8&qw=%s']
@@ -47,6 +50,11 @@ class TiebaSpider(scrapy.Spider):
             for url in urls:
                 yield Request(url=url % key_word)
 
+
+
+    #爬取的数量应该和当前关键词热度挂钩,并不是所有关键词都应该
+    #爬取一样的页数,这样会造成资源的浪费或者紧缺
+    #应该需要一个算法暂时还无法实现
     def parse(self, response):
         print('解析')
         # 直接获取当前页面下的所有分页
@@ -75,7 +83,7 @@ class TiebaSpider(scrapy.Spider):
             # 判断内容不是一个回复且不是一个贴吧名字
             if article_title[0:2] != '回复' and not i.xpath('.//p'):
                 article_url = 'http://tieba.baidu.com' + i.xpath('.//span/a/@href').extract_first()
-                article_detail = i.xpath('.//div/text()').extract_first()
+                article_detail = remove_tags(i.css('.p_content').extract_first(),which_ones=('div',))
                 if not article_detail:
                     article_detail='无文章简介'
                 author = i.xpath('.//a[2]/font/text()').extract_first()
